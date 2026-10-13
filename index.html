@@ -299,9 +299,12 @@ button:focus-visible,input:focus-visible{outline:3px solid #fff;outline-offset:2
 .badge.mic{top:-7px;left:-7px;right:auto;bottom:auto;transform:none;background:#46e08c;color:#06301a;padding:2px 3px 1px;line-height:0}
 .badge.mic svg{width:11px;height:11px}
 /* music toggle */
-.musicbtn .slash{display:none}.musicbtn[aria-pressed="false"] .slash{display:inline}
-.musicbtn[aria-pressed="false"]{background:linear-gradient(180deg,#6b6f76,#43474d);border-color:#9aa0a6}
+.musicbtn .slash,.rainbtn .slash{display:none}.musicbtn[aria-pressed="false"] .slash,.rainbtn[aria-pressed="false"] .slash{display:inline}
+.musicbtn[aria-pressed="false"],.rainbtn[aria-pressed="false"]{background:linear-gradient(180deg,#6b6f76,#43474d);border-color:#9aa0a6}
 #lMusic{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);right:14px;z-index:31}
+#lRain{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);right:76px;z-index:31}
+#lMusic,#lRain{width:46px;height:46px}#lRain{right:68px}
+@media (max-width:760px){.sw{padding-top:calc(env(safe-area-inset-top,0px) + 70px)}}
 /* turn timer */
 .tring{position:fixed;pointer-events:none;z-index:4;transform:translate(-50%,-50%)}
 .tring svg{width:100%;height:100%;transform:rotate(-90deg);overflow:visible;display:block}
@@ -388,6 +391,7 @@ a.gbtn{text-decoration:none;display:inline-block}
     <button class="ib" id="tView" aria-label="Top view" aria-pressed="false" title="Top view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/></svg></button>
     <button class="ib" id="tFollow" aria-label="Follow pawn" aria-pressed="true" title="Follow pawn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.5" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></button>
     <button class="ib" id="tLog" aria-label="Game log" aria-pressed="false" title="Game log"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 4h11l3 3v13H5z"/><path d="M9 10h7M9 14h7M9 18h4"/></svg></button>
+    <button class="ib rainbtn" id="tRain" aria-label="Rain sound" aria-pressed="true" title="Rain on"></button>
     <button class="ib musicbtn" id="tMusic" aria-label="Music" aria-pressed="true" title="Music on"></button>
     <button class="ib" id="tSound" aria-label="Sound" aria-pressed="true" title="Sound"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z"/><path class="wave" d="M16 9a4 4 0 010 6M18.5 6.5a7.5 7.5 0 010 11"/></svg></button>
     <button class="ib" id="tNew" aria-label="New game" title="New game"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 2.5-5.8"/><path d="M4 4v5h5"/></svg></button>
@@ -423,6 +427,7 @@ a.gbtn{text-decoration:none;display:inline-block}
 
 <div class="setup" id="setup">
   <div class="sw">
+    <button class="ib rainbtn" id="lRain" aria-label="Rain sound" aria-pressed="true" title="Rain on"></button>
     <button class="ib musicbtn" id="lMusic" aria-label="Music" aria-pressed="true" title="Music on"></button>
     <div class="logo">
       <div class="logo-top">Zinda Dilan-e-Lahore</div>
@@ -1134,7 +1139,7 @@ function applyTheme(key){if(!THEMES[key])key='basant';const T=THEMES[key];clearD
  skyMat.uniforms.top.value.setHex(T.top);skyMat.uniforms.bot.value.setHex(T.bot);skyMat.uniforms.flash.value=0;
  groundMat.color.setHex(T.ground);scene.fog.color.setHex(T.fog);scene.fog.near=Math.max(55,T.fogN);scene.fog.far=T.fogF+50;
  hemiL.color.setHex(T.hemi[0]);hemiL.groundColor.setHex(T.hemi[1]);hemiL.intensity=T.hemi[2];sun.color.setHex(T.sun[0]);sun.intensity=T.sun[1];
- themeTick=T.build(decor)||null;decor.traverse(o=>{if(o.isMesh)o.castShadow=false;});}
+ themeTick=T.build(decor)||null;if(typeof rainLevel==='function')setTimeout(rainLevel,0);decor.traverse(o=>{if(o.isMesh)o.castShadow=false;});}
 const pickTheme=k=>k==='random'||!THEMES[k]?THEME_KEYS[rnd(THEME_KEYS.length)]:k;
 
 /* ---------------- game state ---------------- */
@@ -1451,7 +1456,7 @@ function buildGame(cfg){
 function startGame(){
  const cfg=setup.players.slice(0,setup.n).map(c=>({...c}));const used=new Set();cfg.forEach(c=>{if(used.has(c.pawn))c.pawn=PAWNS.findIndex((_,i)=>!used.has(i)&&!cfg.some(d=>d.pawn===i));used.add(c.pawn);});
  const tk=pickTheme(setup.theme);applyTheme(tk);buildGame(cfg);log(`Game on! Everyone starts with Rs 0. Pass SHURU to earn ${short(GO_PAY)}. Nobody pays anything until their first salary.`);toast(THEMES[tk].name);gameLoop();}
-function newGame(){stopTimer(true);netTeardown();GEN++;tweens.length=0;$('#modal').hidden=true;$('#manage').hidden=true;if(G)G.players.forEach(p=>{if(p.obj){scene.remove(p.obj);disposeObj(p.obj);}});
+function newGame(){stopTimer(true);netTeardown();setTimeout(rainLevel,0);GEN++;tweens.length=0;$('#modal').hidden=true;$('#manage').hidden=true;if(G)G.players.forEach(p=>{if(p.obj){scene.remove(p.obj);disposeObj(p.obj);}});
  G=null;focusObj=null;ring.visible=false;SQ.forEach(s=>{if(s.price){s.owner=null;s.houses=0;s.mort=false;}});markers.forEach(m=>{if(m)m.visible=false;});houseGroups.forEach(h=>{if(h)while(h.children.length)h.remove(h.children[0]);});
  $('#hud').hidden=true;$('#setup').hidden=false;renderSetup();}
 $('#startBtn').addEventListener('click',startGame);
@@ -1559,6 +1564,39 @@ document.querySelectorAll('.musicbtn').forEach(b=>{b.innerHTML=MUSIC_SVG;b.addEv
 setMusic(MUSIC.on,true);
 document.addEventListener('pointerdown',()=>{if(!MUSIC.on||document.hidden)return;if(!MUSIC.playing)musicStart();else if(AC&&AC.state==='suspended')AC.resume();},true);
 document.addEventListener('visibilitychange',()=>{if(document.hidden){MUSIC.wasOn=MUSIC.playing;musicStop();}else if(MUSIC.on&&MUSIC.wasOn)musicStart();});
+
+
+/* ================= rain ambience ================= */
+const RAIN={on:true,playing:false,src:null,gain:null,ac:null,base:.32};
+try{const v=localStorage.getItem('lm-rain');if(v==='0')RAIN.on=false;}catch(e){}
+function rainBuffer(ac){const sr=ac.sampleRate,n=sr*12,buf=ac.createBuffer(2,n,sr);
+ for(let c=0;c<2;c++){const d=buf.getChannelData(c);let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0,br=0;
+  for(let i=0;i<n;i++){const w=Math.random()*2-1;
+   b0=.99886*b0+w*.0555179;b1=.99332*b1+w*.0750759;b2=.969*b2+w*.153852;b3=.8665*b3+w*.3104856;b4=.55*b4+w*.5329522;b5=-.7616*b5-w*.016898;
+   const pink=(b0+b1+b2+b3+b4+b5+b6+w*.5362)*.11;b6=w*.115926;br=(br+.02*w)/1.02;d[i]=pink*.55+br*1.6;}
+  // droplets: tiny decaying pings scattered across the loop
+  const drops=Math.floor(12*55);for(let k=0;k<drops;k++){const at=Math.floor(Math.random()*(n-sr*.05)),f=1800+Math.random()*4200,amp=(.03+Math.random()*.12)*(Math.random()<.5?.6:1),len=Math.floor(sr*(.008+Math.random()*.025));
+   for(let j=0;j<len;j++)d[at+j]+=Math.sin(2*Math.PI*f*j/sr)*amp*Math.exp(-j/(len*.25));}
+  // smooth the loop seam
+  const fade=Math.floor(sr*.25);for(let j=0;j<fade;j++){const a=j/fade;d[j]=d[j]*a+d[n-fade+j]*(1-a);}}
+ return buf;}
+function rainTarget(){return RAIN.base*((typeof themeKey!=='undefined'&&themeKey==='rain'&&G)?1.7:1);}
+function rainStart(){if(!RAIN.on||RAIN.playing)return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();}catch(e){return;}
+ if(AC.state==='suspended')AC.resume();
+ if(!RAIN.src||RAIN.ac!==AC){RAIN.ac=AC;const s=AC.createBufferSource();s.buffer=rainBuffer(AC);s.loop=true;s.loopStart=.25;s.loopEnd=s.buffer.duration;
+  const hp=AC.createBiquadFilter();hp.type='highpass';hp.frequency.value=120;const lp=AC.createBiquadFilter();lp.type='lowpass';lp.frequency.value=6500;
+  const g=AC.createGain();g.gain.value=0;s.connect(hp);hp.connect(lp);lp.connect(g);g.connect(AC.destination);s.start();RAIN.src=s;RAIN.gain=g;}
+ const now=AC.currentTime,g=RAIN.gain.gain;g.cancelScheduledValues(now);g.setValueAtTime(g.value,now);g.linearRampToValueAtTime(rainTarget(),now+3);RAIN.playing=true;}
+function rainStop(){if(!RAIN.playing)return;RAIN.playing=false;if(RAIN.gain&&RAIN.ac){const now=RAIN.ac.currentTime,g=RAIN.gain.gain;g.cancelScheduledValues(now);g.setValueAtTime(g.value,now);g.linearRampToValueAtTime(0,now+.8);}}
+function rainLevel(){if(RAIN.playing&&RAIN.gain){const now=RAIN.ac.currentTime,g=RAIN.gain.gain;g.cancelScheduledValues(now);g.setValueAtTime(g.value,now);g.linearRampToValueAtTime(rainTarget(),now+2);}}
+function setRain(on,init){RAIN.on=on;if(!init)try{localStorage.setItem('lm-rain',on?'1':'0');}catch(e){}
+ document.querySelectorAll('.rainbtn').forEach(b=>{b.setAttribute('aria-pressed',String(on));b.title=on?'Rain on':'Rain off';});
+ if(init)return;if(on)rainStart();else rainStop();}
+const RAIN_SVG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15a4.5 4.5 0 01-.6-8.96A6 6 0 0117.7 7.5 3.75 3.75 0 0117.5 15z"/><path d="M8 18l-1 2.5M12 18l-1 2.5M16 18l-1 2.5"/><path class="slash" d="M3 3l18 18"/></svg>';
+document.querySelectorAll('.rainbtn').forEach(b=>{b.innerHTML=RAIN_SVG;b.addEventListener('click',e=>{e.stopPropagation();setRain(!RAIN.on);});});
+setRain(RAIN.on,true);
+document.addEventListener('pointerdown',()=>{if(RAIN.on&&!RAIN.playing&&!document.hidden)rainStart();},true);
+document.addEventListener('visibilitychange',()=>{if(document.hidden){RAIN.wasOn=RAIN.playing;rainStop();}else if(RAIN.on&&RAIN.wasOn)rainStart();});
 
 /* tools */
 $('#deck').addEventListener('click',()=>{if(!G)return;sfx('card');const M=$('#manage');if(!M.hidden){M.hidden=true;renderDeck();return;}const o=deckOwner();G.mview=o?o.i:G.cur;openManage();});

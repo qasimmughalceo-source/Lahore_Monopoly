@@ -54,6 +54,8 @@ Your properties stack up as cards in the bottom-right corner. Tap the stack to s
 
 Soft lo-fi jazz plays in the background: electric piano, walking bass, brush drums and vinyl crackle. It's generated live in the game, so it never repeats exactly. It starts after your first tap (browsers require that). Turn it on or off with the music-note button on the menu (top right) or in a game (right side). Your choice is remembered.
 
+A soft rain ambience plays underneath, with its own cloud button next to the music button. It gets heavier on the Barish background.
+
 ## Backgrounds
 
 Pick a background on the menu: Basant Sky, Lahore Sunset, Truck Art Mela, Food Street Night, Chand Raat, Barish or Stadium Night. Or choose Random for a surprise each game. In online games everyone sees the host's choice.
