@@ -40,6 +40,10 @@ Good to know:
 - If a friend disconnects, a CPU player takes over their pawn so the game can continue.
 - Players connect directly to each other using PeerJS (free, no account needed). A few strict office or school networks block this kind of connection. If joining fails, try mobile data.
 
+## Your property cards
+
+Your properties stack up as cards in the bottom-right corner. Tap the stack to spread them out. Each card has two buttons: the blue bank button mortgages it for quick cash (or pays the mortgage back), and the green house button builds a house or hotel once you own the whole colour set. When you owe money, the house button sells houses instead.
+
 ## Backgrounds
 
 Pick a background on the menu: Basant Sky, Lahore Sunset, Truck Art Mela, Food Street Night, Chand Raat, Barish or Stadium Night. Or choose Random for a surprise each game. In online games everyone sees the host's choice.

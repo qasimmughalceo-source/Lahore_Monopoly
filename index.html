@@ -152,7 +152,54 @@ button:focus-visible,input:focus-visible{outline:3px solid #fff;outline-offset:2
 .le{padding:5px 0;border-bottom:1px solid rgba(255,255,255,.08);color:#e3efea}
 .le i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:0}
 .le b{color:#fff;font-weight:900}
-#manage{right:76px;top:calc(env(safe-area-inset-top,0px) + 130px);bottom:calc(env(safe-area-inset-bottom,0px) + 200px);width:380px}
+/* property cards: corner stack + dealt-out spread */
+#deck{position:absolute;right:14px;bottom:calc(env(safe-area-inset-bottom,0px) + 16px);width:74px;height:112px;border:0;background:none;padding:0;cursor:pointer;z-index:3}
+#deck .dk{position:absolute;left:4px;top:6px;width:66px;height:88px;border-radius:10px;background:#fbf7ee;border:3px solid #fff;box-shadow:0 4px 0 rgba(0,0,0,.35);overflow:hidden;transition:transform .2s}
+#deck .dk::before{content:"";display:block;height:30%;background:var(--gc);border-bottom:2px solid #1b1b1b}
+#deck .dk::after{content:"";position:absolute;left:9px;right:9px;top:44%;height:5px;border-radius:3px;background:#d8cfb8;box-shadow:0 10px 0 #e6dfcc,0 20px 0 #e6dfcc}
+#deck .dk:nth-child(1){transform:rotate(-11deg) translate(-7px,3px)}
+#deck .dk:nth-child(2){transform:rotate(-3deg)}
+#deck .dk:nth-child(3){transform:rotate(7deg) translate(6px,-1px)}
+#deck:hover .dk:nth-child(1){transform:rotate(-16deg) translate(-11px,3px)}#deck:hover .dk:nth-child(3){transform:rotate(12deg) translate(10px,-1px)}
+#deck .dk.none{background:rgba(0,0,0,.25);border:3px dashed rgba(255,255,255,.45);box-shadow:none}
+#deck .dk.none::before,#deck .dk.none::after{display:none}
+#deck .dkn{position:absolute;top:-4px;right:-6px;min-width:28px;height:28px;border-radius:999px;background:linear-gradient(180deg,var(--gold1),var(--gold2));color:var(--goldInk);font:normal 16px/24px var(--f-game);border:2px solid #fff;box-shadow:0 3px 0 var(--goldE);padding:0 6px;z-index:2}
+#deck .dkl{position:absolute;left:50%;bottom:0;transform:translateX(-50%);font:normal 12px var(--f-game);color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.6);white-space:nowrap;letter-spacing:.04em;background:rgba(5,20,19,.75);padding:2px 8px 1px;border-radius:999px}
+#deck.can .dk:nth-child(3){box-shadow:0 0 0 3px var(--grn1),0 0 18px 4px rgba(70,224,140,.7)}
+#deck.can .dkl{background:var(--grn2)}
+#deck.owe .dk:nth-child(3){box-shadow:0 0 0 3px var(--red1),0 0 18px 4px rgba(255,111,143,.7);animation:shake .5s ease-in-out infinite alternate}
+#deck.owe .dkl{background:var(--red2)}
+@keyframes shake{from{transform:rotate(5deg) translate(6px,-1px)}to{transform:rotate(9deg) translate(6px,-3px)}}
+#manage{position:fixed;inset:0;z-index:16;background:rgba(3,10,9,.8)!important;border:0!important;border-radius:0!important;box-shadow:none!important;display:flex;flex-direction:column;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px);animation:fadeBg .2s ease}
+@keyframes fadeBg{from{background:rgba(3,10,9,0)}}
+#manage .mhead,#manage .mlist{width:100%;max-width:780px;margin:0 auto}
+#manage .mhead{padding:16px 16px 6px}
+#manage .mlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(124px,1fr));gap:14px;padding:10px 16px 28px;overflow:auto;flex:1;align-content:start}
+.pcard{position:relative;background:#fbf7ee;color:#1b1b1b;border-radius:14px;border:3px solid #fff;box-shadow:0 5px 0 #c9bd9e,0 12px 24px rgba(0,0,0,.45);display:flex;flex-direction:column;overflow:hidden}
+.pcard.deal{animation:deal .42s cubic-bezier(.2,1.25,.4,1) both;animation-delay:var(--d)}
+@keyframes deal{0%{opacity:0;transform:translate(42vw,60vh) rotate(24deg) scale(.35)}70%{opacity:1}100%{opacity:1;transform:none}}
+.pch{background:var(--gc);color:#fff;font:normal 15px/1.1 var(--f-game);text-align:center;padding:9px 6px 7px;min-height:48px;display:grid;place-items:center;text-wrap:balance;border-bottom:2px solid #1b1b1b;text-shadow:0 1px 0 rgba(0,0,0,.25)}
+.pcard.lt .pch{color:#1b1b1b;text-shadow:none}
+.pcb{flex:1;padding:7px 8px 4px;display:grid;gap:3px;justify-items:center;text-align:center;align-content:start}
+.pips{display:flex;gap:3px;min-height:16px;align-items:flex-end}
+.pip{width:13px;height:13px;background:#1f9a4f;clip-path:polygon(50% 0,100% 45%,100% 100%,0 100%,0 45%)}
+.pip.htl{width:26px;height:15px;background:#c8202f;clip-path:polygon(15% 0,85% 0,100% 35%,100% 100%,0 100%,0 35%)}
+.pip.no{background:#ddd5c2}
+.prent{font:900 13.5px var(--f-body);font-variant-numeric:tabular-nums}
+.pst{font:700 11.5px/1.25 var(--f-body);color:#5a5a52}
+.pca{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:4px 7px 8px}
+.ic{display:grid;justify-items:center;gap:1px;border:0;border-radius:12px;padding:7px 2px 4px;cursor:pointer;font:normal 11.5px var(--f-game);color:#fff;text-shadow:0 1px 0 rgba(0,0,0,.25);transition:transform .08s}
+.ic svg{width:26px;height:26px}
+.ic.mort{background:linear-gradient(180deg,#5aa7e6,#2f6fb0);box-shadow:0 3px 0 #1d4a78}
+.ic.unm{background:linear-gradient(180deg,var(--gold1),var(--gold2));color:var(--goldInk);text-shadow:none;box-shadow:0 3px 0 var(--goldE)}
+.ic.bld{background:linear-gradient(180deg,var(--grn1),var(--grn2));box-shadow:0 3px 0 var(--grnE)}
+.ic.sell{background:linear-gradient(180deg,#ffb06a,#e2702a);box-shadow:0 3px 0 #9a4512}
+.ic:active:not(:disabled){transform:translateY(3px);box-shadow:none}
+.ic:disabled{filter:grayscale(1);opacity:.38;cursor:not-allowed}
+.pcard.mtg .pch,.pcard.mtg .pcb{filter:grayscale(.85) brightness(.95)}
+.stamp{position:absolute;top:56px;left:50%;transform:translateX(-50%) rotate(-14deg);border:3px solid #c8202f;color:#c8202f;font:normal 14px var(--f-game);padding:2px 7px 0;border-radius:6px;background:rgba(251,247,238,.9);letter-spacing:.06em;pointer-events:none}
+.mlegend{display:flex;gap:14px;flex-wrap:wrap;font:700 12.5px var(--f-body);color:var(--muted)}
+.mlegend i{display:inline-block;width:12px;height:12px;border-radius:4px;vertical-align:-1px;margin-right:4px}
 .mhead{padding:14px 14px 8px;display:grid;gap:8px}
 .mtabs{display:flex;gap:6px;flex-wrap:wrap}
 .mt{background:rgba(0,0,0,.25);color:#fff;border:2px solid transparent;border-bottom:4px solid var(--pc);border-radius:10px;padding:5px 10px 3px;font:normal 14px var(--f-game);cursor:pointer}
@@ -304,7 +351,9 @@ a.gbtn{text-decoration:none;display:inline-block}
   #log{left:12px;right:12px;width:auto;top:calc(env(safe-area-inset-top,0px) + 118px)}
   #comms{left:10px;bottom:calc(env(safe-area-inset-bottom,0px) + 210px);gap:8px}
   #chat{left:8px;right:8px;width:auto;bottom:0;max-height:66vh;border-radius:22px 22px 0 0;padding-bottom:env(safe-area-inset-bottom,0px)}
-  #manage{left:8px;right:8px;width:auto;top:auto;bottom:0;max-height:70vh;border-radius:22px 22px 0 0;padding-bottom:env(safe-area-inset-bottom,0px)}
+  #manage .mlist{grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:10px;padding:8px 12px 24px}
+  #acts{max-width:calc(100vw - 200px)}
+  #deck{right:10px;bottom:calc(env(safe-area-inset-bottom,0px) + 12px)}
   .roll{width:92px;height:92px}.roll svg{width:34px;height:34px}
   .gbtn{font-size:17px;padding:11px 16px 10px}
   .banner b{font-size:18px}
@@ -320,7 +369,7 @@ a.gbtn{text-decoration:none;display:inline-block}
 <div class="hud" id="hud" hidden>
   <div id="players"></div>
   <div id="side">
-    <button class="ib" id="tProps" aria-label="Properties" title="Properties"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></button>
+    <button class="ib" id="tProps" aria-label="Properties" title="Properties" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></button>
     <button class="ib" id="tView" aria-label="Top view" aria-pressed="false" title="Top view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/></svg></button>
     <button class="ib" id="tFollow" aria-label="Follow pawn" aria-pressed="true" title="Follow pawn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.5" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></button>
     <button class="ib" id="tLog" aria-label="Game log" aria-pressed="false" title="Game log"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 4h11l3 3v13H5z"/><path d="M9 10h7M9 14h7M9 18h4"/></svg></button>
@@ -340,6 +389,7 @@ a.gbtn{text-decoration:none;display:inline-block}
     <form id="chatForm" autocomplete="off"><input id="chatIn" maxlength="80" placeholder="Type a message…" aria-label="Chat message"><button class="gbtn small gold" type="submit">Send</button></form>
   </section>
   <section id="log" class="sheet"><div class="sh-h"><h4>Game log</h4><button class="x" id="logClose" aria-label="Close log">×</button></div><div id="logl"></div></section>
+  <button id="deck" aria-label="My property cards"></button>
   <footer id="bar">
     <div id="turn"></div>
     <div id="dice"></div>
@@ -935,7 +985,7 @@ function buildBasant(g){
   const a=new THREE.Mesh(Bx(2*s,2*s,.05),mt(c1,.6,0,null,{side:THREE.DoubleSide}));a.rotation.z=Math.PI/4;pv.add(a);
   const b=new THREE.Mesh(Bx(.9*s,.9*s,.07),mt(c2,.6,0));b.rotation.z=Math.PI/4;pv.add(b);
   const t=new THREE.Mesh(Co(.35*s,.7*s,3),mt(c2,.6,0));t.position.y=-1.7*s;t.rotation.z=Math.PI;pv.add(t);
-  const ang=rr01()*Math.PI*2,front=Math.sin(ang)>.3;const r=front?15+rr01()*8:14+rr01()*20,y=front?9+rr01()*6:4+rr01()*11;
+  const ang=rr01()*Math.PI*2,front=Math.sin(ang)>.3;const r=front?20+rr01()*6:16+rr01()*18,y=front?13+rr01()*5:5+rr01()*10;
   k.position.copy(ringPos(r,ang,y));faceCenter(k);
   const str=new THREE.Line(new THREE.BufferGeometry().setFromPoints([new V3(0,-1.4*s,0),new V3(0,-y-1,r*.35)]),new THREE.LineBasicMaterial({color:0xffffff,transparent:true,opacity:.5}));k.add(str);
   kg.add(k);kites.push({k,pv,y,ph:rr01()*6.28});}
@@ -1130,6 +1180,7 @@ function renderPlayers(){
   const chips=own.map(s=>`<span class="chip ${s.mort?'m':''}" style="background:${s.g?GROUPS[s.g].c:(s.t==='rail'?'#e9e4d4':'#7fb6d8')}"></span>`).join('');
   const badge=p.bankrupt?'<i class="badge">OUT</i>':(p.inJail?'<i class="badge">JAIL</i>':'');
   return `<button class="pl ${p.i===G.cur?'on':''} ${p.bankrupt?'out':''} ${VOICE.talk[p.i]?'talk':''}" style="--pc:${p.color}" data-i="${p.i}" title="${esc(p.name)}: ${money(p.cash)}"><span class="pav">${imgT(p.pawn)}${badge}${p.cpu?'<i class="badge cpu">CPU</i>':''}${p.mic?`<i class="badge mic" title="Mic on">${MIC_SVG}</i>`:''}</span><span class="pn">${esc(p.name)}</span><span class="coin">${COIN}<span>${short(p.cash).replace('Rs ','')}</span></span><span class="chips">${chips}</span></button>`;}).join('');
+ renderDeck();
  G.players.forEach(p=>{if(p._last!=null&&p.cash!==p._last){floatMoney(p,p.cash-p._last);if(soundOn)sfxLocal(p.cash>p._last?'coin':'pay');}p._last=p.cash;});
  schedSync();
 }
@@ -1151,8 +1202,7 @@ $('#acts').addEventListener('click',e=>{const el=e.target.closest('button');if(!
 function choose(p,btns,cpuPick,status,cpuDelay=650){
  if(p.cpu){renderBar(p,[],status);return sleep(cpuDelay).then(()=>cpuPick());}
  if(p.remote){renderBar(p,[],status);bar.status=`Waiting for ${p.name}…`;drawBar();return remoteDecide(p,'ask',{btns,status});}
- const manageBtn={k:'_m',label:'Properties',act:()=>{G.mview=p.i;openManage();}};
- return guard(new Promise(res=>{G.waiting=true;G.actor=p;G.resolve=k=>{G.waiting=false;G.resolve=null;renderBar(p,[],'…');renderManage();res(k);};renderBar(p,[...btns,manageBtn],status);renderManage();}));
+ return guard(new Promise(res=>{G.waiting=true;G.actor=p;G.resolve=k=>{G.waiting=false;G.resolve=null;renderBar(p,[],'…');renderManage();res(k);};renderBar(p,btns,status);renderManage();}));
 }
 
 let modalDone=null;
@@ -1179,22 +1229,49 @@ function deedHTML(s){
 
 /* ---------------- property management ---------------- */
 const canEdit=pl=>{if(!G||pl.bankrupt)return false;if(NET.role==='client')return pl.i===NET.me&&!!NET.myAsk;if(pl.cpu||pl.remote)return false;return G.debt?G.debt.p===pl:(G.waiting&&G.actor===pl);};
-function openManage(){$('#manage').hidden=false;renderManage();}
-function renderManage(){const M=$('#manage');if(M.hidden||!G)return;const pl=G.players[G.mview??G.cur];const ed=canEdit(pl);
+const IC_BANK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-5 9 5"/><path d="M4 9.5h16"/><path d="M6.5 11v6M10.5 11v6M13.5 11v6M17.5 11v6"/><path d="M3 20h18"/></svg>';
+const IC_HOUSE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 9.8V20h14V9.8"/><path d="M12 11.5v6M9 14.5h6"/></svg>';
+const IC_SELL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 9.8V20h14V9.8"/><path d="M9 14.5h6"/></svg>';
+const amt=n=>short(n).replace('Rs ','');
+let dealNext=false;
+function deckOwner(){if(!G)return null;if(NET.role==='client')return G.players[NET.me];
+ if(G.debt&&!G.debt.p.cpu&&!G.debt.p.remote)return G.debt.p;if(G.waiting&&G.actor)return G.actor;
+ const c=G.players[G.cur];if(c&&!c.cpu&&!c.remote)return c;return G.players.find(p=>!p.cpu&&!p.remote&&!p.bankrupt)||c;}
+const cardCol=s=>s.g?GROUPS[s.g].c:(s.t==='rail'?'#e9e4d4':'#cfe6f2');
+const cardLt=s=>s.g?!!GROUPS[s.g].lt:true;
+function renderDeck(){const D=$('#deck');if(!D||!G)return;const pl=deckOwner();if(!pl)return;
+ const own=G.sq.filter(s=>BUYABLE(s)&&s.owner===pl.i);const top=own.slice(-3);
+ const ed=canEdit(pl),owe=!!(G.debt&&G.debt.p===pl),can=ed&&!owe&&own.some(s=>canBuild(pl,s));
+ D.className=owe?'owe':can?'can':'';
+ D.innerHTML=(top.length?top.map(s=>`<i class="dk" style="--gc:${cardCol(s)}"></i>`).join(''):'<i class="dk none"></i>')+
+  `<b class="dkn">${own.length}</b><span class="dkl">${owe?'RAISE CASH':can?'BUILD!':'MY CARDS'}</span>`;
+ D.setAttribute('aria-label',`${pl.name}'s property cards: ${own.length}`);}
+function openManage(){dealNext=true;$('#manage').hidden=false;$('#chat')&&($('#chat').hidden=true);renderManage();}
+function renderManage(){renderDeck();const M=$('#manage');if(M.hidden||!G)return;const pl=G.players[G.mview??G.cur];const ed=canEdit(pl);
+ const owe=!!(G.debt&&G.debt.p===pl);const deal=dealNext;dealNext=false;
  const own=G.sq.filter(s=>BUYABLE(s)&&s.owner===pl.i);
- const rows=own.map(s=>{const col=s.g?GROUPS[s.g].c:(s.t==='rail'?'#e9e4d4':'#7fb6d8');
-  const st=s.mort?'Mortgaged':s.houses===5?'Hotel':s.houses?`${s.houses} house${s.houses>1?'s':''}`:(s.t==='prop'&&ownsGroup(pl.i,s.g)?'Full colour set':'');
-  const rentNow=s.mort?'no rent':(s.t==='util'?(countType(pl.i,'util')===2?'10×':'4×')+' dice':'rent '+short(rentOf(s,7)));
-  let btns='';if(ed){if(s.t==='prop')btns+=`<button data-a="build" data-s="${s.i}" ${canBuild(pl,s)?'':'disabled'}>${s.houses===4?'Build hotel':'+ House'} ${short(s.hc)}</button><button data-a="sell" data-s="${s.i}" ${canSell(s)?'':'disabled'}>Sell house +${short(s.hc/2)}</button>`;
-   btns+=s.mort?`<button data-a="unmort" data-s="${s.i}" ${pl.cash>=unm(s)?'':'disabled'}>Unmortgage ${short(unm(s))}</button>`:`<button data-a="mort" data-s="${s.i}" ${canMort(s)?'':'disabled'}>Mortgage +${short(s.price/2)}</button>`;}
-  return `<div class="mrow"><span class="sw" style="background:${col}"></span><div class="mn"><b>${esc(s.n)}</b><small>${[st,rentNow].filter(Boolean).join(' · ')}</small>${btns?`<div class="mb">${btns}</div>`:''}</div></div>`;}).join('');
- const note=G.debt&&G.debt.p===pl?`Raise <b>${short(G.debt.amt-pl.cash>0?G.debt.amt-pl.cash:0)}</b> more to pay what you owe.`:ed?'Build houses evenly across a full colour set. Mortgage to raise quick cash.':(pl.cpu?'CPU players manage their own property.':'You can manage property during your own turn.');
- M.innerHTML=`<div class="mhead"><h4><span>Properties</span><button class="x" id="mClose" aria-label="Close">×</button></h4>
+ const cards=own.map((s,idx)=>{
+  const st=s.mort?'':s.houses===5?'Hotel':s.houses?`${s.houses} house${s.houses>1?'s':''}`:(s.t==='prop'&&ownsGroup(pl.i,s.g)?'Full colour set ⭐':s.t==='rail'?`${countType(pl.i,'rail')} of 4 stops`:s.t==='util'?`${countType(pl.i,'util')} of 2 utilities`:'');
+  const rentNow=s.mort?'No rent':(s.t==='util'?(countType(pl.i,'util')===2?'10×':'4×')+' dice':'Rent '+short(rentOf(s,7)));
+  const pips=s.t!=='prop'?'':s.houses===5?'<i class="pip htl"></i>':[0,1,2,3].map(k=>`<i class="pip ${k<s.houses?'':'no'}"></i>`).join('');
+  let acts='';
+  if(ed){
+   const mb=s.mort?`<button class="ic unm" data-a="unmort" data-s="${s.i}" ${pl.cash>=unm(s)?'':'disabled'} aria-label="Pay back the mortgage on ${esc(s.n)}" title="Pay back mortgage">${IC_BANK}−${amt(unm(s))}</button>`
+     :`<button class="ic mort" data-a="mort" data-s="${s.i}" ${canMort(s)?'':'disabled'} aria-label="Mortgage ${esc(s.n)}" title="${canMort(s)?'Mortgage':'Sell the houses first'}">${IC_BANK}+${amt(s.price/2)}</button>`;
+   let hb;
+   if(s.t!=='prop')hb=`<button class="ic bld" disabled aria-label="You can't build here" title="You can't build here">${IC_HOUSE}—</button>`;
+   else if(owe||s.houses===5&&canSell(s))hb=`<button class="ic sell" data-a="sell" data-s="${s.i}" ${canSell(s)?'':'disabled'} aria-label="Sell a building on ${esc(s.n)}" title="Sell a house">${IC_SELL}+${amt(s.hc/2)}</button>`;
+   else hb=`<button class="ic bld" data-a="build" data-s="${s.i}" ${canBuild(pl,s)?'':'disabled'} aria-label="Build on ${esc(s.n)}" title="${canBuild(pl,s)?(s.houses===4?'Build a hotel':'Build a house'):'Own the whole colour set and build evenly'}">${IC_HOUSE}${s.houses===4?'Hotel':'−'+amt(s.hc)}</button>`;
+   acts=`<div class="pca">${mb}${hb}</div>`;}
+  return `<div class="pcard ${deal?'deal':''} ${s.mort?'mtg':''} ${cardLt(s)?'lt':''}" style="--gc:${cardCol(s)};--d:${Math.min(idx,14)*45}ms"><div class="pch">${esc(s.n)}</div><div class="pcb"><div class="pips">${pips}</div><div class="prent">${rentNow}</div><div class="pst">${st}</div></div>${acts}${s.mort?'<span class="stamp">MORTGAGED</span>':''}</div>`;}).join('');
+ const note=owe?`You owe money. Raise <b>${short(Math.max(0,G.debt.amt-pl.cash))}</b> more by selling houses or mortgaging.`:ed?'Own a whole colour set to build. Build evenly across the set.':(pl.cpu?'CPU players manage their own cards.':'You can build and mortgage during your own turn.');
+ M.innerHTML=`<div class="mhead"><h4><span>${pl===deckOwner()||pl.name.trim().toLowerCase()==='you'?'Your':esc(pl.name)+'\'s'} cards</span><button class="x" id="mClose" aria-label="Close">×</button></h4>
   <div class="mtabs">${G.players.map(q=>`<button class="mt ${q.i===pl.i?'on':''}" data-v="${q.i}" style="--pc:${q.color}">${esc(q.name)}</button>`).join('')}</div>
-  <div class="mnote">Cash <b>${money(pl.cash)}</b> · Net worth <b>${short(netWorth(pl))}</b>${pl.goojf.length?` · ${pl.goojf.length} get-out-of-jail card`:''}<br>${note}</div></div>
-  <div class="mlist">${rows||'<div class="empty">No property yet. Land on an unowned square to buy it.</div>'}</div>`;}
-$('#manage').addEventListener('click',e=>{const t=e.target;if(t.id==='mClose'){$('#manage').hidden=true;return;}
- if(t.dataset.v!=null){G.mview=+t.dataset.v;renderManage();return;}
+  <div class="mnote">Cash <b>${money(pl.cash)}</b> · Net worth <b>${short(netWorth(pl))}</b>${pl.goojf.length?` · ${pl.goojf.length} get-out-of-jail card`:''}<br>${note}</div>
+  ${ed?`<div class="mlegend"><span><i style="background:#2f6fb0"></i>Mortgage for cash</span><span><i style="background:#1faa5a"></i>Build a house</span>${owe?'<span><i style="background:#e2702a"></i>Sell a house</span>':''}</div>`:''}</div>
+  <div class="mlist">${cards||'<div class="empty">No property cards yet. Land on an unowned square to buy one.</div>'}</div>`;}
+$('#manage').addEventListener('click',e=>{const t=e.target.closest('button')||e.target;if(t.id==='mClose'||e.target===e.currentTarget||e.target.classList.contains('mlist')){$('#manage').hidden=true;renderDeck();return;}
+ if(t.dataset.v!=null){G.mview=+t.dataset.v;dealNext=true;renderManage();return;}
  const a=t.dataset.a;if(!a)return;const pl=G.players[G.mview];if(!canEdit(pl))return;sfx('tap');
  if(NET.role==='client'){send({t:'manage',a,s:+t.dataset.s});return;}
  applyManage(pl,a,G.sq[+t.dataset.s]);});
@@ -1356,6 +1433,7 @@ function newGame(){netTeardown();GEN++;tweens.length=0;$('#modal').hidden=true;$
 $('#startBtn').addEventListener('click',startGame);
 
 /* tools */
+$('#deck').addEventListener('click',()=>{if(!G)return;sfx('card');const M=$('#manage');if(!M.hidden){M.hidden=true;renderDeck();return;}const o=deckOwner();G.mview=o?o.i:G.cur;openManage();});
 let topView=false;
 $('#tView').addEventListener('click',()=>{sfx('tap');topView=!topView;setView(topView);$('#tView').setAttribute('aria-pressed',topView);});
 $('#tFollow').addEventListener('click',()=>{sfx('tap');follow=!follow;$('#tFollow').setAttribute('aria-pressed',follow);cam.user=false;if(!follow){cam.chase=null;cam.ret=0;}});
@@ -1480,7 +1558,7 @@ function applyState(d){G.cur=d.cur;
  focusObj=G.players[G.cur]&&G.players[G.cur].obj;renderPlayers();updateBoard();renderManage();drawClientBar();}
 function clientHop(d){hopBusy++;const g=GEN;hopQ=hopQ.then(async()=>{if(g!==GEN)return;const p=G.players[d.pi];if(!p)return;p.pos=d.idx;p.inJail=!!d.jail;if(d.dur<500)sfx('hop');try{await hop(p,d.idx,d.dur,d.h);}catch(e){}}).finally(()=>{hopBusy--;});}
 function drawClientBar(){if(!G||NET.role!=='client')return;const mine=G.players[NET.me];
- if(NET.myAsk){bar={p:mine,btns:[...NET.myAsk.btns.map(b=>({...b})),{k:'_m',label:'Properties',act:()=>{G.mview=NET.me;openManage();}}],status:NET.myAsk.status};}
+ if(NET.myAsk){bar={p:mine,btns:[...NET.myAsk.btns.map(b=>({...b}))],status:NET.myAsk.status};}
  else{const pi=NET.bar?NET.bar.pi:G.cur;const p=G.players[pi]||mine;bar={p,btns:[],status:p===mine?(NET.bar&&NET.bar.status)||'…':(p.cpu?`${p.name} is thinking…`:`Waiting for ${p.name}…`)};}
  drawBar();}
 function clientOver(d){G.over=true;const w=G.players[d.w];focusObj=w?w.obj:null;sfx('win');
