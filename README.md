@@ -33,6 +33,8 @@ It opens full screen with its own icon.
 3. Send the link with **WhatsApp** or **Copy link**. Friends who open the link only need to type their name and tap **Join**. They can also enter the code on the menu.
 4. Add CPU players if you like (up to 6 players in total), then tap **Start game**.
 
+In the game, the buttons on the left are for **chat** (quick phrases, emojis or typed messages that pop up over your avatar), your **microphone** (tap to talk; a green ring glows on whoever is speaking) and **voices on/off**. Your browser will ask permission the first time you turn the mic on.
+
 Good to know:
 - The host's device runs the game. **The host should keep the game open and the screen on.** If the host locks their phone or switches apps, the game pauses for everyone until they come back.
 - If a friend disconnects, a CPU player takes over their pawn so the game can continue.
