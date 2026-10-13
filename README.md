@@ -40,6 +40,10 @@ Good to know:
 - If a friend disconnects, a CPU player takes over their pawn so the game can continue.
 - Players connect directly to each other using PeerJS (free, no account needed). A few strict office or school networks block this kind of connection. If joining fails, try mobile data.
 
+## Backgrounds
+
+Pick a background on the menu: Basant Sky, Lahore Sunset, Truck Art Mela, Food Street Night, Chand Raat, Barish or Stadium Night. Or choose Random for a surprise each game. In online games everyone sees the host's choice.
+
 ## Play on one device
 
 Tap **Same device**, choose 2 to 6 players (human or CPU) and pass the phone around.
