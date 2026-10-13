@@ -1325,14 +1325,14 @@ const cleanChat=s=>String(s||'').replace(/[\u0000-\u001f<>]/g,'').trim().slice(0
 const isEmojiOnly=s=>/^(\p{Extended_Pictographic}|️|‍|\s){1,6}$/u.test(s);
 const online=()=>NET.role==='host'||NET.role==='client';
 const myIndex=()=>NET.role==='client'?NET.me:0;
-function commsReset(){$('#comms').hidden=!online();$('#chat').hidden=true;chatUnread=0;updDot();
+function commsReset(){$('#comms').hidden=false;$('#cSpk').hidden=!online();$('#chat').hidden=true;chatUnread=0;updDot();
  $('#chatList').innerHTML='<div class="cm empty">Say salaam! Messages pop up over your avatar for everyone.</div>';
  $('#cMic').setAttribute('aria-pressed','false');$('#cSpk').setAttribute('aria-pressed',String(!VOICE.muted));
  if(online())voiceWire();}
 function updDot(){const d=$('#chatDot');d.hidden=!chatUnread;d.textContent=chatUnread>9?'9+':String(chatUnread);}
 function showBubble(pi,x){const el=document.querySelector(`.pl[data-i="${pi}"] .pav`);const p=G&&G.players[pi];if(!el||!p)return;
  const r=el.getBoundingClientRect();const b=document.createElement('div');b.className='bub'+(isEmojiOnly(x)?' big':'');b.textContent=x;b.style.setProperty('--pc',p.color);
- const left=Math.max(90,Math.min(window.innerWidth-90,r.left+r.width/2));b.style.left=left+'px';b.style.top=(r.bottom+44)+'px';
+ const left=Math.max(90,Math.min(window.innerWidth-90,r.left+r.width/2));b.style.left=left+'px';const strip=document.getElementById('players').getBoundingClientRect();b.style.top=(strip.bottom+12)+'px';
  const old=document.querySelector(`.bub[data-i="${pi}"]`);if(old)old.remove();b.dataset.i=pi;$('#bubbles').appendChild(b);setTimeout(()=>b.remove(),3900);}
 function showChat(pi,x){const p=G&&G.players[pi];if(!p)return;x=cleanChat(x);if(!x)return;
  showBubble(pi,x);sfxLocal('tap');
@@ -1342,7 +1342,8 @@ function showChat(pi,x){const p=G&&G.players[pi];if(!p)return;x=cleanChat(x);if(
  if($('#chat').hidden&&pi!==myIndex()){chatUnread++;updDot();}}
 function relayChat(pi,x){bc({t:'chat',pi,x});showChat(pi,x);}
 function sendChat(x){x=cleanChat(x);if(!x||!G)return;
- if(NET.role==='host')relayChat(0,x);else if(NET.role==='client')send({t:'chat',x});}
+ if(NET.role==='host')relayChat(0,x);else if(NET.role==='client')send({t:'chat',x});
+ else{const c=G.players[G.cur];const p=c&&!c.cpu?c:(G.players.find(q=>!q.cpu&&!q.bankrupt)||c);if(p)showChat(p.i,x);}}
 function botSay(p,opts){const x=opts[rnd(opts.length)];setTimeout(()=>{if(!G||p.bankrupt)return;if(NET.role==='host')relayChat(p.i,x);else if(NET.role==='local')showBubble(p.i,x);},500+rnd(700));}
 $('#quick').innerHTML=QUICK.map(q=>`<button type="button">${esc(q)}</button>`).join('');
 $('#emo').innerHTML=EMO.map(q=>`<button type="button" aria-label="Send ${q}">${q}</button>`).join('');
@@ -1369,7 +1370,7 @@ function meterTick(){Object.keys(VOICE.meters).forEach(k=>{const m=VOICE.meters[
   const on=rms>.045&&!(own&&!micOn())&&!(!own&&VOICE.muted);if(!!VOICE.talk[pi]!==on){VOICE.talk[pi]=on;setTalk(pi,on);}});}
 function setTalk(pi,on){const el=document.querySelector(`.pl[data-i="${pi}"]`);if(el)el.classList.toggle('talk',on);}
 const micOn=()=>!!(VOICE.stream&&VOICE.stream.getAudioTracks().some(t=>t.enabled));
-async function setMic(on){if(!online()||!G)return;
+async function setMic(on){if(!G)return;if(!online()){toast('Voice chat works in online games. Pick "Online with friends" on the menu.');return;}
  if(on){if(!VOICE.stream){if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){toast('Voice chat needs the GitHub version on HTTPS');return;}
    try{VOICE.stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true},video:false});}
    catch(e){toast(e&&e.name==='NotAllowedError'?'Microphone blocked. Allow it in your browser settings.':'Could not start the microphone');return;}
