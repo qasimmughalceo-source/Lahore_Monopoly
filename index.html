@@ -260,14 +260,19 @@ button:focus-visible,input:focus-visible{outline:3px solid #fff;outline-offset:2
 .tsel span{flex:1;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tsel b{font-size:13px;transition:transform .2s;color:#ffe08a}
 .tsel[aria-expanded="true"] b{transform:rotate(180deg)}
-.tsw{width:32px;height:32px;border-radius:10px;background:var(--sw);box-shadow:inset 0 0 0 2px rgba(255,255,255,.35);flex:none;display:grid;place-items:center;font-style:normal;font-size:17px}
-.tmenu{position:absolute;left:50%;transform:translateX(-50%);top:calc(100% + 10px);z-index:6;width:270px;max-width:calc(100vw - 32px);background:linear-gradient(180deg,var(--p1),var(--p2));border:3px solid var(--rim);border-radius:18px;padding:6px;display:grid;gap:2px;box-shadow:0 6px 0 var(--edge),0 18px 40px rgba(0,0,0,.55);animation:dropIn .22s cubic-bezier(.2,1.3,.4,1)}
-@keyframes dropIn{0%{opacity:0;transform:translateX(-50%) translateY(-8px) scale(.96)}100%{opacity:1;transform:translateX(-50%)}}
-.topt{display:flex;align-items:center;gap:10px;background:none;border:0;color:#fff;font:normal 16px var(--f-game);padding:6px 10px 6px 6px;border-radius:12px;cursor:pointer;text-align:left;width:100%}
-.topt:hover,.topt:focus-visible{background:rgba(255,255,255,.1)}
-.topt[aria-selected="true"]{background:rgba(242,182,50,.18);color:#ffe08a}
-.topt[aria-selected="true"]::after{content:"✓";margin-left:auto;color:var(--gold1)}
-.tmenu small{display:block;padding:6px 10px 4px;color:var(--muted);font:700 12px var(--f-body);border-top:1px solid rgba(255,255,255,.1);margin-top:4px}
+.tsw{width:46px;height:32px;overflow:hidden;border-radius:10px;background:var(--sw);box-shadow:inset 0 0 0 2px rgba(255,255,255,.35);flex:none;display:grid;place-items:center;font-style:normal;font-size:17px}
+.tmenu{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:45;width:min(460px,calc(100vw - 24px));max-height:calc(100vh - 40px);overflow:auto;background:linear-gradient(180deg,var(--p1),var(--p2));border:3px solid var(--rim);border-radius:22px;padding:14px;display:grid;gap:12px;box-shadow:0 6px 0 var(--edge),0 0 0 100vmax rgba(3,10,9,.6);animation:popC .28s cubic-bezier(.2,1.4,.4,1)}
+@keyframes popC{0%{opacity:0;transform:translate(-50%,-50%) scale(.85)}100%{opacity:1;transform:translate(-50%,-50%)}}
+.tmenu h3{margin:0;font:normal 22px var(--f-game);color:#ffe08a;display:flex;justify-content:space-between;align-items:center;text-shadow:0 2px 0 rgba(0,0,0,.35)}
+.tgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.topt{position:relative;display:grid;gap:6px;background:rgba(0,0,0,.25);border:3px solid transparent;color:#fff;font:normal 15px var(--f-game);padding:6px 6px 8px;border-radius:16px;cursor:pointer;text-align:center;box-shadow:0 3px 0 var(--edge);transition:transform .12s}
+.topt:hover{transform:translateY(-2px)}
+.topt:focus-visible{outline:3px solid #fff}
+.topt[aria-selected="true"]{border-color:var(--gold1);background:rgba(242,182,50,.16);color:#ffe08a}
+.topt[aria-selected="true"]::after{content:"✓";position:absolute;top:2px;right:2px;width:26px;height:26px;border-radius:50%;background:var(--gold1);color:var(--goldInk);display:grid;place-items:center;font:normal 16px var(--f-game);box-shadow:0 2px 0 var(--goldE)}
+.tprev{display:block;width:100%;aspect-ratio:16/10;border-radius:11px;background:var(--sw);background-size:cover;background-position:center;box-shadow:inset 0 0 0 2px rgba(255,255,255,.18);font-style:normal;font-size:34px;display:grid;place-items:center;overflow:hidden}
+.tprev img{width:100%;height:100%;object-fit:cover;display:block}
+.tmenu small{display:block;color:var(--muted);font:700 12.5px var(--f-body);text-align:center}
 /* lobby modes + online room */
 .modes{display:flex;gap:6px;background:rgba(0,0,0,.35);padding:5px;border-radius:999px;justify-self:center;max-width:100%}
 .modes button{border:0;background:transparent;color:var(--muted);font:normal 16px var(--f-game);padding:9px 16px 7px;border-radius:999px;cursor:pointer;text-transform:uppercase;white-space:nowrap}
@@ -1297,13 +1302,18 @@ const setup={n:3,players:NAMES.map((n,i)=>({name:n,cpu:i>0,pawn:DEF[i]}))};
 (function(){try{const v=localStorage.getItem('lm-theme');setup.theme=v&&(v==='random'||THEMES[v])?v:'random';}catch(e){setup.theme='random';}})();
 const swatch=k=>{const T=THEMES[k];const c=n=>'#'+n.toString(16).padStart(6,'0');return `linear-gradient(180deg,${c(T.top)},${c(T.bot)})`;};
 const themeLabel=k=>k==='random'?'Random':THEMES[k].name;
-const themeSw=k=>k==='random'?'<i class="tsw" style="--sw:linear-gradient(135deg,#e2366f,#f2b632,#22b5a5)">🎲</i>':`<i class="tsw" style="--sw:${swatch(k)}"></i>`;
+const THEME_PREV={};
+const RANDOM_SW='linear-gradient(135deg,#e2366f,#f2b632,#22b5a5)';
+const themeSw=k=>k==='random'?`<i class="tsw" style="--sw:${RANDOM_SW}">🎲</i>`:(THEME_PREV[k]?`<i class="tsw" style="--sw:url(${THEME_PREV[k]}) center/cover"></i>`:`<i class="tsw" style="--sw:${swatch(k)}"></i>`);
+const themeTile=k=>k==='random'?`<i class="tprev" style="--sw:${RANDOM_SW}">🎲</i>`:`<i class="tprev" style="--sw:${swatch(k)}">${THEME_PREV[k]?`<img src="${THEME_PREV[k]}" alt="">`:''}</i>`;
 function renderThemePick(open){const ks=['random',...THEME_KEYS];
- $('#themePick').innerHTML=`<button class="tsel" id="tSel" type="button" aria-haspopup="listbox" aria-expanded="${!!open}">${themeSw(setup.theme)}<span>${esc(themeLabel(setup.theme))}</span><b>▼</b></button>`+
-  (open?`<div class="tmenu" role="listbox" aria-label="Background">${ks.map(k=>`<button class="topt" type="button" role="option" data-th="${k}" aria-selected="${setup.theme===k}">${themeSw(k)}${esc(themeLabel(k))}</button>`).join('')}<small>Online games use the host's background.</small></div>`:'');
+ $('#themePick').innerHTML=`<button class="tsel" id="tSel" type="button" aria-haspopup="dialog" aria-expanded="${!!open}">${themeSw(setup.theme)}<span>${esc(themeLabel(setup.theme))}</span><b>▼</b></button>`+
+  (open?`<div class="tmenu" role="dialog" aria-label="Choose a background"><h3>Choose a background<button class="x" type="button" data-close="1" aria-label="Close">×</button></h3><div class="tgrid" role="listbox">${ks.map(k=>`<button class="topt" type="button" role="option" data-th="${k}" aria-selected="${setup.theme===k}">${themeTile(k)}<span>${esc(themeLabel(k))}</span></button>`).join('')}</div><small>Online games use the host's background.</small></div>`:'');
  if(open){const sel=$('#themePick .topt[aria-selected="true"]');if(sel)sel.focus({preventScroll:true});}}
 $('#themePick').addEventListener('click',e=>{e.stopPropagation();const o=e.target.closest('[data-th]');
  if(o){sfx('tap');setup.theme=o.dataset.th;try{localStorage.setItem('lm-theme',setup.theme);}catch(x){}renderThemePick(false);$('#tSel').focus({preventScroll:true});return;}
+ if(e.target.closest('[data-close]')){renderThemePick(false);return;}
+ if(e.target.closest('.tmenu')&&!e.target.closest('[data-th]'))return;
  if(e.target.closest('#tSel')){sfx('tap');renderThemePick($('#tSel').getAttribute('aria-expanded')!=='true');}});
 document.addEventListener('click',()=>{const b=document.getElementById('tSel');if(b&&b.getAttribute('aria-expanded')==='true')renderThemePick(false);});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){const b=document.getElementById('tSel');if(b&&b.getAttribute('aria-expanded')==='true'){renderThemePick(false);$('#tSel').focus();}}});
@@ -1599,9 +1609,15 @@ canvas.addEventListener('pointerup',e=>{if(!downAt||!G)return;const moved=Math.h
  const g=GEN;modal(deedHTML(G.sq[i]),[{k:'close',label:'Close',primary:1}],null,true).then(()=>{if(G&&g===GEN)G.infoOpen=false;}).catch(()=>{});});
 
 /* boot */
+async function genThemePreviews(){const cv=document.createElement('canvas');cv.width=320;cv.height=200;const cx=cv.getContext('2d');
+ for(const k of THEME_KEYS){try{renderer.setSize(640,400,false);camera.aspect=1.6;camera.updateProjectionMatrix();applyTheme(k);if(themeTick)themeTick(3);
+   camera.position.set(0,18.5,22.5);controls.target.set(0,0,1.2);camera.lookAt(controls.target);renderer.render(scene,camera);
+   cx.drawImage(renderer.domElement,0,0,320,200);THEME_PREV[k]=cv.toDataURL('image/jpeg',.82);}catch(e){console.warn(e);}
+  await rawSleep(30);}
+ resize();setView(false);applyTheme('basant');const open=document.getElementById('tSel')&&$('#tSel').getAttribute('aria-expanded')==='true';renderThemePick(open);}
 resize();setView(false);applyTheme('basant');renderThemePick();requestAnimationFrame(frame);renderSetup();
 const fontsReady=document.fonts&&document.fonts.load?Promise.all([document.fonts.load('80px "Rozha One"'),document.fonts.load('800 24px Mukta'),document.fonts.load('600 24px Mukta')]):Promise.resolve();
-Promise.race([fontsReady,rawSleep(2500)]).catch(()=>{}).then(()=>paintBoard());
+Promise.race([fontsReady,rawSleep(2500)]).catch(()=>{}).then(()=>{paintBoard();setTimeout(()=>{if(!G)genThemePreviews();},400);});
 paintBoard();
 setTimeout(genThumbs,60);
 })();
