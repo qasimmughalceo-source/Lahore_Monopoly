@@ -50,6 +50,10 @@ A green ring counts down around the current player's avatar and the Roll button.
 
 Your properties stack up as cards in the bottom-right corner. Tap the stack to spread them out. Each card has two buttons: the blue bank button mortgages it for quick cash (or pays the mortgage back), and the green house button builds a house or hotel once you own the whole colour set. When you owe money, the house button sells houses instead.
 
+## Music
+
+Soft lo-fi jazz plays in the background: electric piano, walking bass, brush drums and vinyl crackle. It's generated live in the game, so it never repeats exactly. It starts after your first tap (browsers require that). Turn it on or off with the music-note button on the menu (top right) or in a game (right side). Your choice is remembered.
+
 ## Backgrounds
 
 Pick a background on the menu: Basant Sky, Lahore Sunset, Truck Art Mela, Food Street Night, Chand Raat, Barish or Stadium Night. Or choose Random for a surprise each game. In online games everyone sees the host's choice.
