@@ -391,7 +391,6 @@ a.gbtn{text-decoration:none;display:inline-block}
     <button class="ib" id="tView" aria-label="Top view" aria-pressed="false" title="Top view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/></svg></button>
     <button class="ib" id="tFollow" aria-label="Follow pawn" aria-pressed="true" title="Follow pawn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.5" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></button>
     <button class="ib" id="tLog" aria-label="Game log" aria-pressed="false" title="Game log"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 4h11l3 3v13H5z"/><path d="M9 10h7M9 14h7M9 18h4"/></svg></button>
-    <button class="ib rainbtn" id="tRain" aria-label="Rain sound" aria-pressed="true" title="Rain on"></button>
     <button class="ib musicbtn" id="tMusic" aria-label="Music" aria-pressed="true" title="Music on"></button>
     <button class="ib" id="tSound" aria-label="Sound" aria-pressed="true" title="Sound"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z"/><path class="wave" d="M16 9a4 4 0 010 6M18.5 6.5a7.5 7.5 0 010 11"/></svg></button>
     <button class="ib" id="tNew" aria-label="New game" title="New game"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 2.5-5.8"/><path d="M4 4v5h5"/></svg></button>
@@ -427,7 +426,6 @@ a.gbtn{text-decoration:none;display:inline-block}
 
 <div class="setup" id="setup">
   <div class="sw">
-    <button class="ib rainbtn" id="lRain" aria-label="Rain sound" aria-pressed="true" title="Rain on"></button>
     <button class="ib musicbtn" id="lMusic" aria-label="Music" aria-pressed="true" title="Music on"></button>
     <div class="logo">
       <div class="logo-top">Zinda Dilan-e-Lahore</div>
@@ -1557,8 +1555,8 @@ function musicStart(){if(!MUSIC.on||MUSIC.playing)return;try{AC=AC||new(window.A
 function musicStop(){if(!MUSIC.playing)return;MUSIC.playing=false;if(MUSIC.timer){clearInterval(MUSIC.timer);MUSIC.timer=0;}
  if(MUSIC.master&&MUSIC.ac){const g=MUSIC.master.gain,now=MUSIC.ac.currentTime;g.cancelScheduledValues(now);g.setValueAtTime(g.value,now);g.linearRampToValueAtTime(0,now+.6);}}
 function setMusic(on,init){MUSIC.on=on;if(!init)try{localStorage.setItem('lm-music',on?'1':'0');}catch(e){}
- document.querySelectorAll('.musicbtn').forEach(b=>{b.setAttribute('aria-pressed',String(on));b.title=on?'Music on':'Music off';});
- if(init)return;if(on)musicStart();else musicStop();}
+ document.querySelectorAll('.musicbtn').forEach(b=>{b.setAttribute('aria-pressed',String(on));b.title=on?'Jazz & rain on':'Jazz & rain off';b.setAttribute('aria-label','Jazz and rain music');});
+ if(init)return;RAIN.on=on;if(on){musicStart();rainStart();}else{musicStop();rainStop();}}
 const MUSIC_SVG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V6l11-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/><path class="slash" d="M3 3l18 18"/></svg>';
 document.querySelectorAll('.musicbtn').forEach(b=>{b.innerHTML=MUSIC_SVG;b.addEventListener('click',e=>{e.stopPropagation();setMusic(!MUSIC.on);});});
 setMusic(MUSIC.on,true);
@@ -1568,7 +1566,7 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden){MUSIC.wasO
 
 /* ================= rain ambience ================= */
 const RAIN={on:true,playing:false,src:null,gain:null,ac:null,base:.32};
-try{const v=localStorage.getItem('lm-rain');if(v==='0')RAIN.on=false;}catch(e){}
+RAIN.on=MUSIC.on;
 function rainBuffer(ac){const sr=ac.sampleRate,n=sr*12,buf=ac.createBuffer(2,n,sr);
  for(let c=0;c<2;c++){const d=buf.getChannelData(c);let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0,br=0;
   for(let i=0;i<n;i++){const w=Math.random()*2-1;
@@ -1594,8 +1592,7 @@ function setRain(on,init){RAIN.on=on;if(!init)try{localStorage.setItem('lm-rain'
  if(init)return;if(on)rainStart();else rainStop();}
 const RAIN_SVG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15a4.5 4.5 0 01-.6-8.96A6 6 0 0117.7 7.5 3.75 3.75 0 0117.5 15z"/><path d="M8 18l-1 2.5M12 18l-1 2.5M16 18l-1 2.5"/><path class="slash" d="M3 3l18 18"/></svg>';
 document.querySelectorAll('.rainbtn').forEach(b=>{b.innerHTML=RAIN_SVG;b.addEventListener('click',e=>{e.stopPropagation();setRain(!RAIN.on);});});
-setRain(RAIN.on,true);
-document.addEventListener('pointerdown',()=>{if(RAIN.on&&!RAIN.playing&&!document.hidden)rainStart();},true);
+document.addEventListener('pointerdown',()=>{if(MUSIC.on&&!RAIN.playing&&!document.hidden){RAIN.on=true;rainStart();}},true);
 document.addEventListener('visibilitychange',()=>{if(document.hidden){RAIN.wasOn=RAIN.playing;rainStop();}else if(RAIN.on&&RAIN.wasOn)rainStart();});
 
 /* tools */
