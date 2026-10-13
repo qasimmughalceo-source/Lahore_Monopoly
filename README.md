@@ -40,6 +40,12 @@ Good to know:
 - If a friend disconnects, a CPU player takes over their pawn so the game can continue.
 - Players connect directly to each other using PeerJS (free, no account needed). A few strict office or school networks block this kind of connection. If joining fails, try mobile data.
 
+## Money rules and turn timer
+
+Everyone starts with Rs 0 and earns Rs 5 Lac each time they pass SHURU. Until a player gets their first salary, they pay nothing: no taxes, fees, fines or rent.
+
+A green ring counts down around the current player's avatar and the Roll button. It turns yellow, then red, and ticks for the last 5 seconds. If time runs out, the game plays that move automatically (rolls, skips buying, or ends the turn). Building or mortgaging resets the timer. Choose 10s, 20s, 30s or Off on the menu; online games use the host's setting.
+
 ## Your property cards
 
 Your properties stack up as cards in the bottom-right corner. Tap the stack to spread them out. Each card has two buttons: the blue bank button mortgages it for quick cash (or pays the mortgage back), and the green house button builds a house or hotel once you own the whole colour set. When you owe money, the house button sells houses instead.

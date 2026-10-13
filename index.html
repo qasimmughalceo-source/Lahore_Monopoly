@@ -298,11 +298,22 @@ button:focus-visible,input:focus-visible{outline:3px solid #fff;outline-offset:2
 .pl.talk .pav{box-shadow:0 0 0 3px #46e08c,0 0 16px 5px #46e08c!important}
 .badge.mic{top:-7px;left:-7px;right:auto;bottom:auto;transform:none;background:#46e08c;color:#06301a;padding:2px 3px 1px;line-height:0}
 .badge.mic svg{width:11px;height:11px}
+/* turn timer */
+.tring{position:fixed;pointer-events:none;z-index:4;transform:translate(-50%,-50%)}
+.tring svg{width:100%;height:100%;transform:rotate(-90deg);overflow:visible;display:block}
+.tring circle{fill:none;stroke-linecap:round}
+.tring .bg{stroke:rgba(0,0,0,.45)}
+.tring .fg{stroke:var(--tc,#46e08c);filter:drop-shadow(0 0 4px var(--tc,#46e08c))}
+.tring b{position:absolute;right:-10px;top:-10px;min-width:26px;height:26px;border-radius:999px;background:var(--tc,#46e08c);color:#06201a;font:normal 15px/24px var(--f-game);text-align:center;border:2px solid #fff;padding:0 4px}
+#tring2{z-index:4}
+.tmrseg{display:flex;gap:4px;background:rgba(0,0,0,.35);padding:4px;border-radius:999px}
+.tmrseg button{border:0;background:transparent;color:var(--muted);font:normal 15px var(--f-game);padding:7px 12px 5px;border-radius:999px;cursor:pointer}
+.tmrseg button[aria-pressed="true"]{background:linear-gradient(180deg,var(--grn1),var(--grn2));color:#fff;box-shadow:0 3px 0 var(--grnE)}
 /* background picker (dropdown) */
 .bgrow{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
-.bglabel{font:normal 21px var(--f-game);color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.4)}
+.bglabel{min-width:118px;text-align:right;font:normal 21px var(--f-game);color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.4)}
 .tdrop{position:relative}
-.tsel{display:flex;align-items:center;gap:10px;width:250px;max-width:100%;background:linear-gradient(180deg,#2a6d69,#184745);border:3px solid var(--rim);border-radius:16px;padding:6px 14px 6px 6px;color:#fff;font:normal 17px var(--f-game);cursor:pointer;box-shadow:inset 0 2px 0 rgba(255,255,255,.15),0 4px 0 var(--edge)}
+.tsel{display:flex;align-items:center;gap:10px;width:212px;max-width:100%;background:linear-gradient(180deg,#2a6d69,#184745);border:3px solid var(--rim);border-radius:16px;padding:6px 14px 6px 6px;color:#fff;font:normal 17px var(--f-game);cursor:pointer;box-shadow:inset 0 2px 0 rgba(255,255,255,.15),0 4px 0 var(--edge)}
 .tsel:active{transform:translateY(2px);box-shadow:inset 0 2px 0 rgba(255,255,255,.15),0 2px 0 var(--edge)}
 .tsel span{flex:1;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tsel b{font-size:13px;transition:transform .2s;color:#ffe08a}
@@ -400,6 +411,8 @@ a.gbtn{text-decoration:none;display:inline-block}
 <div id="manage" class="sheet" hidden></div>
 <div id="splash" aria-hidden="true"><span></span></div>
 <div id="bubbles" aria-live="polite"></div>
+<div class="tring" id="tring1" hidden><svg viewBox="0 0 100 100"><circle class="bg" cx="50" cy="50" r="46" stroke-width="8"/><circle class="fg" cx="50" cy="50" r="46" stroke-width="8"/></svg></div>
+<div class="tring" id="tring2" hidden><svg viewBox="0 0 100 100"><circle class="bg" cx="50" cy="50" r="47" stroke-width="5"/><circle class="fg" cx="50" cy="50" r="47" stroke-width="5"/></svg><b hidden></b></div>
 <div id="toast" role="status" aria-live="polite"></div>
 <div class="modal" id="modal" hidden><div class="mcard" id="mcard"></div></div>
 
@@ -414,10 +427,12 @@ a.gbtn{text-decoration:none;display:inline-block}
     <div class="facts">
       <span class="fact">Start <b>Rs 0</b></span>
       <span class="fact">Pass SHURU <b>+Rs 5 Lac</b></span>
+      <span class="fact">No tax <b>before first salary</b></span>
       <span class="fact">Bagarian <b>Rs 6 Lac</b></span>
       <span class="fact">DHA Phase 6 <b>Rs 40 Lac</b></span>
     </div>
     <div class="bgrow"><span class="bglabel">Background</span><div class="tdrop" id="themePick"></div></div>
+    <div class="bgrow"><span class="bglabel">Turn timer</span><div class="tmrseg" id="tmrPick" role="group" aria-label="Turn timer"></div></div>
     <div class="modes" role="group" aria-label="Game mode"><button id="mLocal" aria-pressed="true">Same device</button><button id="mOnline" aria-pressed="false">Online with friends</button></div>
     <div class="pane" id="localPane">
       <div class="sec">
@@ -690,7 +705,7 @@ function runTweens(now){for(let i=tweens.length-1;i>=0;i--){const tw=tweens[i];c
 let follow=true, focusObj=null; const tmpV=new V3();
 const ring=new THREE.Mesh(new THREE.TorusGeometry(.5,.04,10,48),mt(0xf2b632,.3,.2,0x8a5a00));ring.rotation.x=Math.PI/2;ring.visible=false;scene.add(ring);
 const setupEl=document.getElementById('setup');
-function frame(now){requestAnimationFrame(frame);runTweens(now);if(!setupEl.hidden)return;if(themeTick)try{themeTick(now/1000);}catch(e){themeTick=null;}
+function frame(now){requestAnimationFrame(frame);runTweens(now);if(!setupEl.hidden)return;if(themeTick)try{themeTick(now/1000);}catch(e){themeTick=null;}try{updateRings(now);}catch(e){}
  if(focusObj){ring.visible=true;ring.position.set(focusObj.position.x,.03,focusObj.position.z);const s=1+.08*Math.sin(now/260);ring.scale.set(s,s,s);
 }
  const dt=Math.min(.05,Math.max(0,(now-(cam.last||now))/1000));cam.last=now;
@@ -1167,6 +1182,8 @@ function sfx(t){if(NET.role==='host'&&SHARED_SFX.has(t))bc({t:'sfx',x:t});if(!so
  if(t==='turn')tone(784,.12,'triangle',.07);
  if(t==='win')[523,659,784,1047,1319,1568].forEach((f,i)=>tone(f,.3,'triangle',.1,i*.12));
  if(t==='tap')tone(900,.04,'sine',.05);
+ if(t==='tick')tone(1250,.05,'square',.04);
+ if(t==='tock')tone(700,.12,'square',.06);
  if(t==='pop'){tone(180+Math.random()*120,.18,'triangle',.05);tone(1400+Math.random()*600,.25,'sine',.02,.05);}
  if(t==='thunder'){tone(55,1.1,'sawtooth',.07);tone(38,1.4,'triangle',.12,.05);tone(80,.5,'square',.03,.02);}
 }catch(e){}}
@@ -1202,7 +1219,7 @@ $('#acts').addEventListener('click',e=>{const el=e.target.closest('button');if(!
 function choose(p,btns,cpuPick,status,cpuDelay=650){
  if(p.cpu){renderBar(p,[],status);return sleep(cpuDelay).then(()=>cpuPick());}
  if(p.remote){renderBar(p,[],status);bar.status=`Waiting for ${p.name}…`;drawBar();return remoteDecide(p,'ask',{btns,status});}
- return guard(new Promise(res=>{G.waiting=true;G.actor=p;G.resolve=k=>{G.waiting=false;G.resolve=null;renderBar(p,[],'…');renderManage();res(k);};renderBar(p,btns,status);renderManage();}));
+ return guard(new Promise(res=>{G.waiting=true;G.actor=p;G.resolve=k=>{stopTimer();G.waiting=false;G.resolve=null;renderBar(p,[],'…');renderManage();res(k);};renderBar(p,btns,status);renderManage();startTimer(p,()=>{if(G&&G.resolve)G.resolve(autoPick(btns));});}));
 }
 
 let modalDone=null;
@@ -1280,7 +1297,7 @@ function applyManage(pl,a,s){if(!s)return;
  if(a==='sell'&&canSell(s)){s.houses--;pl.cash+=s.hc/2;log(`${nm(pl)} sold a house on ${esc(s.n)}`,pl);}
  if(a==='mort'&&canMort(s)){s.mort=true;pl.cash+=s.price/2;log(`${nm(pl)} mortgaged ${esc(s.n)}`,pl);}
  if(a==='unmort'&&s.mort&&pl.cash>=unm(s)){pl.cash-=unm(s);s.mort=false;log(`${nm(pl)} paid off the mortgage on ${esc(s.n)}`,pl);}
- updateBoard();renderPlayers();renderManage();drawBar();if(pl.remote)refreshAsk(pl);}
+ updateBoard();renderPlayers();renderManage();drawBar();if(pl.remote)refreshAsk(pl);bumpTimer();}
 
 function updateBoard(){schedSync();G.sq.forEach(s=>{if(!BUYABLE(s))return;const m=markers[s.i];if(s.owner==null){m.visible=false;}else{m.visible=true;m.material.color.set(G.players[s.owner].color);m.material.opacity=s.mort?.3:1;}if(s.t==='prop')rebuildHouses(s);});}
 
@@ -1293,7 +1310,7 @@ async function rollDice(forced){const v=forced||[1+rnd(6),1+rnd(6)];if(NET.role=
  await tween(950,k=>{const e=1-Math.pow(1-k,3);data.forEach(o=>{o.d.position.lerpVectors(o.from,o.to,e);o.d.position.y=o.to.y+4.2*(1-e)*(1-e)+Math.abs(Math.sin(k*Math.PI*3))*(1-k)*.9;o.d.quaternion.copy(o.qf).multiply(q.setFromAxisAngle(o.axis,(1-e)*o.spin));});});
  $('#dice').innerHTML=dieSVG(v[0])+dieSVG(v[1])+`<span>${v[0]+v[1]}</span>`;return v;}
 const LAND_PAUSE=200;
-async function moveBy(p,n,dur){dur=dur||(p.cpu?281:347);const dir=Math.sign(n);for(let s=0;s<Math.abs(n);s++){const ni=(p.pos+dir+40)%40;p.pos=ni;sfx('hop');await hop(p,ni,dur);if(dir>0&&ni===0){p.cash+=GO_PAY;log(`${nm(p)} passed SHURU and collected ${short(GO_PAY)}`,p);toast(`${p.name} +${short(GO_PAY)}`);renderPlayers();}}
+async function moveBy(p,n,dur){dur=dur||(p.cpu?281:347);const dir=Math.sign(n);for(let s=0;s<Math.abs(n);s++){const ni=(p.pos+dir+40)%40;p.pos=ni;sfx('hop');await hop(p,ni,dur);if(dir>0&&ni===0){p.cash+=GO_PAY;if(!p.salaried){p.salaried=true;log(`${nm(p)} got their first salary. Taxes and fees apply from now on.`,p);}log(`${nm(p)} passed SHURU and collected ${short(GO_PAY)}`,p);toast(`${p.name} +${short(GO_PAY)}`);renderPlayers();}}
  if(n)await sleep(LAND_PAUSE);}
 async function moveTo(p,target){let n=(target-p.pos+40)%40;if(n===0)n=40;await moveBy(p,n,215);}
 async function sendToJail(p){p.inJail=true;p.jailTurns=0;p.pos=10;log(`${nm(p)} was sent to jail`,p);sfx('jail');if(p.cpu&&Math.random()<.5)botSay(p,['Yaar nahi! 😭','Ghalat hua 😡','Bail karwao 🙏']);buzz([40,60,40]);toast(`${p.name} goes to jail!`);await hop(p,10,1238,3);renderPlayers();await sleep(LAND_PAUSE);}
@@ -1303,7 +1320,7 @@ const completes=(p,s)=>s.t==='prop'&&groupOf(s.g).every(x=>x===s||x.owner===p.i)
 async function offerBuy(p,s){const can=p.cash>=s.price;
  if(p.cpu){await sleep(350);if(can&&(p.cash-s.price>=20*L||completes(p,s)))buy(p,s);else log(`${nm(p)} passed on ${esc(s.n)}`,p);return;}
  const html=deedHTML(s)+(can?'':`<p class="warn">You need ${short(s.price-p.cash)} more to buy this.</p>`),bb=[{k:'buy',label:`Buy for ${short(s.price)}`,primary:1,dis:!can},{k:'skip',label:'Skip'}];
- const k=p.remote?await remoteDecide(p,'modal',{html,btns:bb},'skip'):await modal(html,bb);
+ let k;if(p.remote)k=await remoteDecide(p,'modal',{html,btns:bb},'skip');else{const mp=modal(html,bb);startTimer(p,()=>{if(modalDone)modalDone('skip');});k=await mp;stopTimer();}
  if(k==='buy')buy(p,s);else log(`${nm(p)} passed on ${esc(s.n)}`,p);}
 async function land(p,sum,o={}){const s=G.sq[p.pos];
  if(BUYABLE(s)){if(s.owner==null)await offerBuy(p,s);
@@ -1317,9 +1334,10 @@ async function drawCard(p,type){const deck=G.decks[type];const idx=deck.shift();
  const html=`<div class="gcard"><div class="gh" style="background:${head[1]}">${head[0]}</div><p>${esc(card.t)}</p><div class="who">Drawn by ${esc(p.name)}</div></div>`;
  log(`${nm(p)} drew ${head[0]}: ${esc(card.t)}`,p);sfx('card');
  if(NET.role==='host')bc({t:'card',html});
- if(p.cpu||p.remote)await modal(html,[{k:'ok',label:'OK'}],{k:'ok',ms:p.remote?2400:1900});else await modal(html,[{k:'ok',label:'OK',primary:1}]);
+ if(p.cpu||p.remote)await modal(html,[{k:'ok',label:'OK'}],{k:'ok',ms:p.remote?2400:1900});else{const mp=modal(html,[{k:'ok',label:'OK',primary:1}]);startTimer(p,()=>{if(modalDone)modalDone('ok');});await mp;stopTimer();}
  if(card.keep){p.goojf.push({type,idx});renderPlayers();return;}await card.a(p);}
 async function payTo(p,o,amt,why){if(p.bankrupt)return false;
+ if(!p.salaried){log(`${nm(p)} pays nothing for ${esc(why)}: no salary earned yet`,p);toast(`${p.name}: free until first salary`);return true;}
  if(p.cash<amt){const ok=await raiseCash(p,amt,o,why);if(!ok){await bankrupt(p,o);return false;}}
  p.cash-=amt;if(o)o.cash+=amt;if(o&&o.cpu&&amt>=50*K&&Math.random()<.4)botSay(o,['Shukriya! 🤑','Rent nikalo 😂','Aur aao 😎','Mazaa aa gaya 🔥']);log(`${nm(p)} paid ${short(amt)}${o?' to '+nm(o):''} for ${esc(why)}`,p);renderPlayers();renderManage();return true;}
 function cpuLiquidate(p,amt){let guardN=200;while(p.cash<amt&&guardN--){const sel=G.sq.filter(s=>s.owner===p.i&&canSell(s)).sort((a,b)=>b.houses-a.houses)[0];if(sel){sel.houses--;p.cash+=sel.hc/2;continue;}
@@ -1367,7 +1385,7 @@ async function gameLoop(){try{while(true){const p=cur();if(!p.bankrupt)await pla
   const alive=G.players.filter(q=>!q.bankrupt);if(alive.length<=1){G.over=true;showWinner(alive[0]);return;}
   do{G.cur=(G.cur+1)%G.players.length;}while(G.players[G.cur].bankrupt);}}
  catch(e){if(e!==ABORT){console.error(e);toast('Something went wrong. Start a new game.');}}}
-function showWinner(w){focusObj=w?w.obj:null;renderPlayers();renderBar(w||G.players[0],[{k:'_n',label:'New game',primary:1,act:()=>newGame()}],'Game over.');
+function showWinner(w){stopTimer();focusObj=w?w.obj:null;renderPlayers();renderBar(w||G.players[0],[{k:'_n',label:'New game',primary:1,act:()=>newGame()}],'Game over.');
  const rank=[...G.players].sort((a,b)=>netWorth(b)-netWorth(a));
  if(NET.role==='host')bc({t:'over',w:w?w.i:-1,rank:rank.map(q=>q.i),nw:w?netWorth(w):0});
  sfx('win');modal(`<div class="panel win"><div class="trophy">🏆</div><div class="eyebrow">Game over</div><h2>${esc(w?w.name:'Nobody')} owns Lahore</h2><p>Final net worth ${short(w?netWorth(w):0)}</p><p style="margin-top:10px;font-size:13px">${rank.map(q=>esc(q.name)+(q.bankrupt?' (bankrupt)':'')).join(' · ')}</p></div>`,[{k:'new',label:'Play again',primary:1},{k:'x',label:'Look at the board'}]).then(k=>{if(k==='new')newGame();}).catch(()=>{});}
@@ -1418,7 +1436,7 @@ $('#pkClose').addEventListener('click',()=>{$('#picker').hidden=true;});
 function buildGame(cfg){
  GEN++;tweens.length=0;
  SQ.forEach(s=>{if(s.price){s.owner=null;s.houses=0;s.mort=false;}});
- G={sq:SQ,players:cfg.map((c,i)=>({i,name:(c.name||'').trim()||`Player ${i+1}`,cpu:!!c.cpu,remote:!!c.remote,conn:c.conn||null,pawn:c.pawn,color:PCOL[i],cash:START,pos:0,inJail:false,jailTurns:0,goojf:[],bankrupt:false})),
+ G={sq:SQ,players:cfg.map((c,i)=>({i,name:(c.name||'').trim()||`Player ${i+1}`,cpu:!!c.cpu,remote:!!c.remote,conn:c.conn||null,pawn:c.pawn,color:PCOL[i],cash:START,salaried:false,pos:0,inJail:false,jailTurns:0,goojf:[],bankrupt:false})),
   cur:0,dbl:0,decks:{chance:shuffle([...CHANCE.keys()]),chest:shuffle([...CHEST.keys()])},mview:0,over:false,waiting:false,debt:null};
  G.players.forEach(p=>{p.obj=buildPlayerObj(p);p.obj.position.copy(posFor(p,0));p.obj.rotation.y=yawFor(p,0);scene.add(p.obj);});
  $('#logl').innerHTML='';$('#dice').innerHTML='';
@@ -1426,11 +1444,42 @@ function buildGame(cfg){
  $('#setup').hidden=true;$('#picker').hidden=true;$('#hud').hidden=false;$('#manage').hidden=true;setView(false);commsReset();}
 function startGame(){
  const cfg=setup.players.slice(0,setup.n).map(c=>({...c}));const used=new Set();cfg.forEach(c=>{if(used.has(c.pawn))c.pawn=PAWNS.findIndex((_,i)=>!used.has(i)&&!cfg.some(d=>d.pawn===i));used.add(c.pawn);});
- const tk=pickTheme(setup.theme);applyTheme(tk);buildGame(cfg);log(`Game on! Everyone starts with Rs 0. Pass SHURU to earn ${short(GO_PAY)}.`);toast(THEMES[tk].name);gameLoop();}
-function newGame(){netTeardown();GEN++;tweens.length=0;$('#modal').hidden=true;$('#manage').hidden=true;if(G)G.players.forEach(p=>{if(p.obj){scene.remove(p.obj);disposeObj(p.obj);}});
+ const tk=pickTheme(setup.theme);applyTheme(tk);buildGame(cfg);log(`Game on! Everyone starts with Rs 0. Pass SHURU to earn ${short(GO_PAY)}. Nobody pays anything until their first salary.`);toast(THEMES[tk].name);gameLoop();}
+function newGame(){stopTimer(true);netTeardown();GEN++;tweens.length=0;$('#modal').hidden=true;$('#manage').hidden=true;if(G)G.players.forEach(p=>{if(p.obj){scene.remove(p.obj);disposeObj(p.obj);}});
  G=null;focusObj=null;ring.visible=false;SQ.forEach(s=>{if(s.price){s.owner=null;s.houses=0;s.mort=false;}});markers.forEach(m=>{if(m)m.visible=false;});houseGroups.forEach(h=>{if(h)while(h.children.length)h.remove(h.children[0]);});
  $('#hud').hidden=true;$('#setup').hidden=false;renderSetup();}
 $('#startBtn').addEventListener('click',startGame);
+
+
+/* ================= turn timer ================= */
+let TURN_S=20;
+(function(){try{const v=localStorage.getItem('lm-timer');if(v!=null&&['0','10','20','30'].includes(v))TURN_S=+v;}catch(e){}})();
+const TIMER={id:0,cb:null,p:null,view:null,lastSec:-1};
+function timerOn(){return TURN_S>0;}
+function startTimer(p,cb){stopTimer(true);if(!timerOn()||!G)return;const ms=TURN_S*1000;TIMER.p=p;TIMER.cb=cb;TIMER.id=setTimeout(fireTimer,ms);
+ TIMER.view={pi:p.i,end:performance.now()+ms,ms};TIMER.lastSec=-1;if(NET.role==='host')bc({t:'timer',pi:p.i,ms});}
+function stopTimer(quiet){if(TIMER.id)clearTimeout(TIMER.id);TIMER.id=0;TIMER.cb=null;TIMER.p=null;TIMER.view=null;
+ if(!quiet&&NET.role==='host')bc({t:'timer',pi:-1});}
+function bumpTimer(){if(TIMER.id&&TIMER.cb&&TIMER.p){const cb=TIMER.cb,p=TIMER.p;startTimer(p,cb);}}
+function fireTimer(){const cb=TIMER.cb,p=TIMER.p;stopTimer();if(!cb||!G)return;sfxLocal('tock');if(p)toast(`${p.name} ran out of time`);try{cb();}catch(e){console.error(e);}}
+function autoPick(btns){const ok=b=>b&&!b.act&&!(typeof b.dis==='function'?b.dis():b.dis);
+ if(G&&G.debt&&btns.some(b=>b.k==='pay')){cpuLiquidate(G.debt.p,G.debt.amt);const pay=btns.find(b=>b.k==='pay');return ok(pay)?'pay':'bk';}
+ for(const k of ['roll','end','skip','ok']){const b=btns.find(x=>x.k===k);if(ok(b))return k;}
+ const b=btns.find(x=>ok(x)&&!x.danger);return b?b.k:(btns.find(ok)||btns[btns.length-1]||{}).k;}
+function placeRing(el,target,size){if(!target){el.hidden=true;return false;}const r=target.getBoundingClientRect();if(!r.width){el.hidden=true;return false;}
+ const s=size||Math.max(r.width,r.height)+14;el.style.width=s+'px';el.style.height=s+'px';el.style.left=(r.left+r.width/2)+'px';el.style.top=(r.top+r.height/2)+'px';el.hidden=false;return true;}
+function updateRings(now){const v=TIMER.view,r1=document.getElementById('tring1'),r2=document.getElementById('tring2');
+ if(!v||!G||$('#hud').hidden){r1.hidden=true;r2.hidden=true;return;}
+ const left=Math.max(0,v.end-now),frac=left/v.ms,sec=Math.ceil(left/1000);
+ const col=frac>.5?'#46e08c':frac>.25?'#f2c21b':'#ff4d6d';
+ [r1,r2].forEach(el=>{el.style.setProperty('--tc',col);const fg=el.querySelector('.fg');const C=2*Math.PI*+fg.getAttribute('r');fg.style.strokeDasharray=C;fg.style.strokeDashoffset=C*(1-frac);});
+ placeRing(r1,document.querySelector(`.pl[data-i="${v.pi}"] .pav`));
+ const tgt=(bar.p&&bar.p.i===v.pi)?(document.querySelector('#acts .roll')||document.querySelector('.banner img')):null;placeRing(r2,tgt);
+ const badge=r2.querySelector('b');badge.hidden=sec>5;badge.textContent=sec;
+ if(sec!==TIMER.lastSec){TIMER.lastSec=sec;const mine=NET.role==='local'||v.pi===myIndex();if(sec<=5&&sec>0&&mine&&soundOn){sfxLocal('tick');if(sec<=3)buzz(20);}}}
+function renderTimerPick(){$('#tmrPick').innerHTML=[[10,'10s'],[20,'20s'],[30,'30s'],[0,'Off']].map(([v,l])=>`<button type="button" data-tm="${v}" aria-pressed="${TURN_S===v}">${l}</button>`).join('');}
+$('#tmrPick').addEventListener('click',e=>{const b=e.target.closest('[data-tm]');if(!b)return;sfx('tap');TURN_S=+b.dataset.tm;try{localStorage.setItem('lm-timer',String(TURN_S));}catch(x){}renderTimerPick();});
+renderTimerPick();
 
 /* tools */
 $('#deck').addEventListener('click',()=>{if(!G)return;sfx('card');const M=$('#manage');if(!M.hidden){M.hidden=true;renderDeck();return;}const o=deckOwner();G.mview=o?o.i:G.cur;openManage();});
@@ -1462,7 +1511,8 @@ function schedSync(){if(NET.role!=='host'||!G||syncT)return;syncT=setTimeout(()=
 const serBtns=btns=>btns.filter(b=>!b.act).map(b=>({k:b.k,label:b.label,primary:b.primary?1:0,danger:b.danger?1:0,dis:(typeof b.dis==='function'?b.dis():b.dis)?1:0}));
 function remoteDecide(p,kind,payload,fallback){const id=++NET.askId;
  const fb=fallback||((payload.btns.find(b=>!b.act&&!(typeof b.dis==='function'?b.dis():b.dis))||{}).k)||'bk';
- return guard(new Promise(res=>{NET.pending[id]={p,kind,btns:payload.btns,status:payload.status,html:payload.html,res,fallback:fb};pushDecision(id);}));}
+ return guard(new Promise(res=>{NET.pending[id]={p,kind,btns:payload.btns,status:payload.status,html:payload.html,res,fallback:fb};pushDecision(id);
+  startTimer(p,()=>{const pd=NET.pending[id];if(!pd)return;delete NET.pending[id];const k=kind==='modal'?fb:autoPick(pd.btns);try{p.conn&&p.conn.send({t:'timeout',id});}catch(e){}pd.res(k);});}));}
 function pushDecision(id){const pd=NET.pending[id];if(!pd||!pd.p.conn)return;
  const debt=G&&G.debt&&G.debt.p===pd.p?G.debt.amt:0;
  try{if(pd.kind==='ask')pd.p.conn.send({t:'ask',id,btns:serBtns(pd.btns),status:pd.status||'',debt});else pd.p.conn.send({t:'modal',id,html:pd.html,btns:serBtns(pd.btns)});}catch(e){}}
@@ -1502,7 +1552,7 @@ function hostData(conn,d){if(!d||typeof d!=='object')return;
  if(d.t==='chat'){const now=Date.now();if(now-(pl._chatAt||0)<700)return;pl._chatAt=now;const x=cleanChat(d.x);if(x)relayChat(pl.i,x);return;}
  if(d.t==='mic'){pl.mic=!!d.on;bc({t:'mic',pi:pl.i,on:pl.mic?1:0});renderPlayers();return;}
  if(d.t==='answer'){const pd=NET.pending[d.id];if(!pd||pd.p!==pl)return;const b=pd.btns.find(b=>b.k===d.k&&!b.act);if(!b)return;
-  if(typeof b.dis==='function'?b.dis():b.dis)return;delete NET.pending[d.id];pd.res(d.k);return;}
+  if(typeof b.dis==='function'?b.dis():b.dis)return;delete NET.pending[d.id];stopTimer();pd.res(d.k);return;}
  if(d.t==='manage'){if(!canEditRemote(pl))return;applyManage(pl,String(d.a),G.sq[+d.s]);return;}}
 function hostClose(conn){NET.conns=NET.conns.filter(c=>c!==conn);
  if(!G){const i=NET.lobby.findIndex(e=>e.conn===conn);if(i>0){NET.lobby.splice(i,1);lobbyChanged();}return;}
@@ -1515,7 +1565,7 @@ function hostStart(){if(NET.role!=='host'||NET.lobby.length<2)return;
  const tk=pickTheme(setup.theme);applyTheme(tk);
  buildGame(cfg);toast(THEMES[tk].name);
  NET.lobby.forEach((e,i)=>{if(e.conn)try{e.conn.send({t:'start',players:cfg.map(c=>({name:c.name,pawn:c.pawn,cpu:c.cpu})),me:i,roster:NET.roster,theme:tk});}catch(x){}});
- log(`Online game on! Room ${NET.code}. Everyone starts with Rs 0. Pass SHURU to earn ${short(GO_PAY)}.`);setTimeout(gameLoop,500);}
+ log(`Online game on! Room ${NET.code}. Everyone starts with Rs 0. Pass SHURU to earn ${short(GO_PAY)}. Nobody pays anything until their first salary.`);setTimeout(gameLoop,500);}
 
 /* client */
 function joinRoom(raw){const code=String(raw||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
@@ -1549,6 +1599,8 @@ function clientData(d){if(!d||typeof d!=='object')return;
  case 'gone':if(G){const p=G.players[d.pi];const o=p&&p.obj;if(o)tween(600,k=>{const s=1-k;o.scale.set(s,s,s);}).then(()=>scene.remove(o)).catch(()=>{});}break;
  case 'chat':if(G)showChat(d.pi,d.x);break;
  case 'mic':if(G&&G.players[d.pi]){G.players[d.pi].mic=!!d.on;renderPlayers();}break;
+ case 'timer':TIMER.view=d.pi>=0?{pi:d.pi,end:performance.now()+d.ms,ms:d.ms}:null;TIMER.lastSec=-1;break;
+ case 'timeout':if(NET.myAsk&&NET.myAsk.id===d.id){NET.myAsk=null;drawClientBar();renderManage();}if(modalDone&&!$('#modal').hidden)modalDone('__timeout');toast('Time up!');break;
  case 'over':if(G)clientOver(d);break;}}
 function applyState(d){G.cur=d.cur;
  d.pl.forEach((x,i)=>{const p=G.players[i];if(!p)return;p.cash=x[0];p.inJail=!!x[1];p.bankrupt=!!x[2];p.goojf=new Array(x[3]).fill(0);p.cpu=!!x[4];
