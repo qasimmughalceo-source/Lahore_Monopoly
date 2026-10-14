@@ -1690,7 +1690,7 @@ $('#intro').addEventListener('click',introGo);
 $('#intro').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();introGo();}});
 
 
-/* ================= rotating how-to-play line (every 3 s) ================= */
+/* ================= rotating how-to-play line (every 5 s) ================= */
 const FUN_LINES=[
  'Roll the dice, move your pawn, buy what you land on. Simple, yaar! 🎲',
  'Pass SHURU to collect your Rs 5 Lac salary. Payday! 💸',
@@ -1717,7 +1717,7 @@ function nextFunLine(){FUN.i=(FUN.i+1)%FUN.order.length;const txt=FUN_LINES[FUN.
  document.querySelectorAll('.funline').forEach(p=>{if(p.offsetParent===null&&!p.closest('#intro')){p.firstElementChild.textContent=txt;return;}
   const s=p.firstElementChild;s.className='out';setTimeout(()=>{s.textContent=txt;s.className='in';},250);});}
 document.querySelectorAll('.funline span').forEach(s=>{s.textContent=FUN_LINES[FUN.order[0]];s.className='in';});
-setInterval(()=>{if(!document.hidden&&(!$('#intro').hidden||!$('#setup').hidden))nextFunLine();},3000);
+setInterval(()=>{if(!document.hidden&&(!$('#intro').hidden||!$('#setup').hidden))nextFunLine();},5000);
 
 /* tools */
 $('#deck').addEventListener('click',()=>{if(!G)return;sfx('card');const M=$('#manage');if(!M.hidden){M.hidden=true;renderDeck();return;}const o=deckOwner();G.mview=o?o.i:G.cur;openManage();});
