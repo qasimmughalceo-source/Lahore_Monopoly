@@ -1,7 +1,7 @@
 {
-  "name": "Lahore Monopoly",
-  "short_name": "Lahore Mono",
-  "description": "3D Lahore Monopoly in Pakistani Rupees. Play on one device or online with friends.",
+  "name": "PolyStar",
+  "short_name": "PolyStar",
+  "description": "PolyStar: Become a Raees of Lahore. A 3D property game in Pakistani Rupees. Play on one device or online with friends.",
   "start_url": "./",
   "scope": "./",
   "display": "fullscreen",

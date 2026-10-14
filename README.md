@@ -1,6 +1,8 @@
-# Lahore Monopoly
+# PolyStar
 
-A 3D Monopoly game set in Lahore, priced in Pakistani Rupees. Shahdara is the cheapest square (Rs 6 Lac) and DHA Phase 6 the most expensive (Rs 40 Lac). There are 100 pawns, CPU opponents and sound effects. You can play on one device or online with friends.
+**Become a Raees of Lahore.**
+
+A 3D property-trading game set in Lahore, priced in Pakistani Rupees. Shahdara is the cheapest square (Rs 6 Lac) and DHA Phase 6 the most expensive (Rs 40 Lac). There are 100 pawns, CPU opponents and sound effects. You can play on one device or online with friends.
 
 ## Put it online with GitHub Pages (free, about 5 minutes)
 

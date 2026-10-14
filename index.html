@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Lahore Monopoly: a 3D board game in Pakistani Rupees. Play on one device or online with friends.">
-<title>Lahore Monopoly</title>
+<meta name="description" content="PolyStar: Become a Raees of Lahore. A 3D property game in Pakistani Rupees. Play on one device or online with friends.">
+<title>PolyStar</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <meta name="theme-color" content="#0b1c1a">
@@ -223,7 +223,10 @@ button:focus-visible,input:focus-visible{outline:3px solid #fff;outline-offset:2
 .logo{text-align:center;display:grid;justify-items:center;gap:6px}
 .logo-top{background:var(--rose);color:#fff;font:normal 14px var(--f-game);letter-spacing:.08em;text-transform:uppercase;padding:6px 16px 4px;border-radius:999px;box-shadow:0 4px 0 var(--redE)}
 .logo h1{margin:0;font:normal clamp(56px,15vw,96px)/.92 var(--f-game);color:var(--gold1);text-shadow:0 5px 0 var(--goldE),0 10px 0 #4a2a00,0 18px 30px rgba(0,0,0,.5);text-transform:uppercase;letter-spacing:.01em}
-.logo h1 span{color:#fff;text-shadow:0 5px 0 var(--red2),0 10px 0 #5a0a26,0 18px 30px rgba(0,0,0,.5);font-size:.62em}
+.logo h1 span{color:#fff;text-shadow:0 5px 0 var(--red2),0 10px 0 #5a0a26,0 18px 30px rgba(0,0,0,.5);font-size:1em}
+.tagline{font:normal clamp(17px,4.6vw,24px) var(--f-game);color:#fff;letter-spacing:.03em;text-shadow:0 3px 0 rgba(0,0,0,.45);margin-top:6px}
+.tagline::before,.tagline::after{content:'★';color:var(--gold1);margin:0 .45em;font-size:.8em;vertical-align:.08em}
+.ilogo .tagline{animation:dropIn2 .6s .6s both}
 .logo-sub{color:var(--muted);font-weight:800;font-size:15px}
 .strip{height:8px;border-radius:4px;background:var(--truck);width:min(260px,70%);margin:4px auto 0}
 .facts{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
@@ -309,7 +312,7 @@ button:focus-visible,input:focus-visible{outline:3px solid #fff;outline-offset:2
 .ilogo{display:grid;justify-items:center;gap:6px}
 .ilogo .logo-top{animation:dropIn2 .7s .1s cubic-bezier(.2,1.5,.4,1) both}
 .ilogo h1{margin:0;font:normal clamp(58px,16vw,110px)/.9 var(--f-game);color:var(--gold1);text-transform:uppercase;text-shadow:0 5px 0 var(--goldE),0 10px 0 #4a2a00,0 20px 34px rgba(0,0,0,.55);animation:logoPop .9s .25s cubic-bezier(.2,1.6,.4,1) both}
-.ilogo h1 span{display:block;margin-top:.18em;color:#fff;font-size:.6em;text-shadow:0 5px 0 var(--red2),0 10px 0 #5a0a26,0 20px 34px rgba(0,0,0,.55);animation:logoPop .9s .45s cubic-bezier(.2,1.6,.4,1) both}
+.ilogo h1 span{color:#fff;font-size:1em;text-shadow:0 5px 0 var(--red2),0 10px 0 #5a0a26,0 20px 34px rgba(0,0,0,.55);animation:logoPop .9s .45s cubic-bezier(.2,1.6,.4,1) both}
 @keyframes logoPop{0%{opacity:0;transform:scale(.3) rotate(-8deg)}100%{opacity:1;transform:none}}
 @keyframes dropIn2{0%{opacity:0;transform:translateY(-40px)}100%{opacity:1;transform:none}}
 .idice{display:flex;gap:26px;perspective:600px;height:70px;align-items:center;animation:dropIn2 .7s .6s both}
@@ -444,7 +447,7 @@ a.gbtn{text-decoration:none;display:inline-block}
 </head>
 <body>
 
-<canvas id="gl" aria-label="3D Lahore Monopoly board"></canvas>
+<canvas id="gl" aria-label="3D PolyStar board"></canvas>
 
 <div class="hud" id="hud" hidden>
   <div id="players"></div>
@@ -488,18 +491,18 @@ a.gbtn{text-decoration:none;display:inline-block}
 <div id="cardView" hidden><div class="cvin" id="cvin"></div></div>
 <div class="modal" id="modal" hidden><div class="mcard" id="mcard"></div></div>
 
-<div id="intro" role="button" tabindex="0" aria-label="Lahore Monopoly is loading. Tap to start when ready.">
+<div id="intro" role="button" tabindex="0" aria-label="PolyStar is loading. Tap to start when ready.">
   <div class="stars"></div>
   <span class="ikite" style="left:8%;top:12%;--a:#e2366f;--b:#f2b632"><i></i></span>
-  <span class="ikite" style="right:10%;top:20%;--a:#22b5a5;--b:#fbf7ee;animation-delay:-2s"><i></i></span>
+  <span class="ikite" style="right:8%;top:6%;--a:#22b5a5;--b:#fbf7ee;animation-delay:-2s"><i></i></span>
   <span class="ikite" style="left:6%;top:64%;--a:#8f5cff;--b:#f08a1c;animation-delay:-1s;width:30px;height:30px"><i></i></span>
   <span class="ikite" style="right:8%;top:70%;--a:#1f8a4c;--b:#e2366f;animation-delay:-3s;width:34px;height:34px"><i></i></span>
   <div class="ic-wrap">
-    <div class="ilogo"><div class="logo-top">Zinda Dilan-e-Lahore</div><h1>Lahore<span>Monopoly</span></h1></div>
+    <div class="ilogo"><div class="logo-top">Zinda Dilan-e-Lahore</div><h1>Poly<span>Star</span></h1><div class="tagline">Become a Raees of Lahore</div></div>
     <div class="idice"><div class="d3" id="dA"></div><div class="d3" id="dB"></div></div>
     <div class="iload" id="iload"><div class="ibar"><i id="ibarFill"></i></div></div>
     <div class="itap" id="itap" hidden>Tap to start</div>
-    <p class="funline" aria-live="polite"><span>Roll the dice, buy Lahore, become a tycoon! 🎲</span></p>
+    <p class="funline" aria-live="polite"><span>Roll the dice and become a Raees of Lahore! 🎲</span></p>
   </div>
   <div class="iskyline"><svg viewBox="0 0 400 120" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
     <g fill="#0a1a18" opacity=".55">
@@ -525,10 +528,11 @@ a.gbtn{text-decoration:none;display:inline-block}
     <button class="ib musicbtn" id="lMusic" aria-label="Music" aria-pressed="true" title="Music on"></button>
     <div class="logo">
       <div class="logo-top">Zinda Dilan-e-Lahore</div>
-      <h1>Lahore<br><span>Monopoly</span></h1>
+      <h1>Poly<span>Star</span></h1>
+      <div class="tagline">Become a Raees of Lahore</div>
       <div class="strip"></div>
       <div class="logo-sub">3D board game · Pakistani Rupees · 100 pawns</div>
-      <p class="funline" aria-live="polite"><span>Roll the dice, buy Lahore, become a tycoon! 🎲</span></p>
+      <p class="funline" aria-live="polite"><span>Roll the dice and become a Raees of Lahore! 🎲</span></p>
     </div>
     <div class="facts">
       <span class="fact">Start <b>Rs 0</b></span>
@@ -794,8 +798,8 @@ function drawCenter(x){
  deck(S*.29,S*.29,'#d93d8c','Qismat','CHANCE');deck(S*.71,S*.71,'#22a597','Mohalla','CHEST');
  x.save();x.translate(S/2,S/2);x.rotate(Math.PI/4);x.textAlign='center';x.textBaseline='middle';
  x.fillStyle='#1b1b1b';rr(x,-412,-122,824,244,30);x.fill();x.fillStyle='#c8202f';rr(x,-400,-110,800,220,24);x.fill();x.lineWidth=8;x.strokeStyle='#fbf7ee';rr(x,-384,-94,768,188,18);x.stroke();
- x.fillStyle='#fbf7ee';x.font='170px "Rozha One", Georgia, serif';x.fillText('LAHORE',0,14);
- x.fillStyle='#1b1b1b';x.font='800 60px Mukta, sans-serif';x.fillText('M O N O P O L Y',0,176);
+ x.fillStyle='#fbf7ee';{let fs=170;x.font=fs+'px "Rozha One", Georgia, serif';while(x.measureText('PolyStar').width>700&&fs>90){fs-=6;x.font=fs+'px "Rozha One", Georgia, serif';}}x.fillText('PolyStar',0,14);
+ x.fillStyle='#1b1b1b';x.font='800 48px Mukta, sans-serif';x.fillText('★ RAEES OF LAHORE ★',0,172);
  x.fillStyle='#1f8a4c';x.font='600 30px Mukta, sans-serif';x.fillText('ZINDA DILAN-E-LAHORE',0,-160);x.restore();
 }
 function drawBoard(){
@@ -1511,7 +1515,7 @@ async function gameLoop(){try{while(true){const p=cur();if(!p.bankrupt)await pla
 function showWinner(w){stopTimer();focusObj=w?w.obj:null;renderPlayers();renderBar(w||G.players[0],[{k:'_n',label:'New game',primary:1,act:()=>newGame()}],'Game over.');
  const rank=[...G.players].sort((a,b)=>netWorth(b)-netWorth(a));
  if(NET.role==='host')bc({t:'over',w:w?w.i:-1,rank:rank.map(q=>q.i),nw:w?netWorth(w):0});
- sfx('win');modal(`<div class="panel win"><div class="trophy">🏆</div><div class="eyebrow">Game over</div><h2>${esc(w?w.name:'Nobody')} owns Lahore</h2><p>Final net worth ${short(w?netWorth(w):0)}</p><p style="margin-top:10px;font-size:13px">${rank.map(q=>esc(q.name)+(q.bankrupt?' (bankrupt)':'')).join(' · ')}</p></div>`,[{k:'new',label:'Play again',primary:1},{k:'x',label:'Look at the board'}]).then(k=>{if(k==='new')newGame();}).catch(()=>{});}
+ sfx('win');modal(`<div class="panel win"><div class="trophy">🏆</div><div class="eyebrow">Game over</div><h2>${esc(w?w.name:'Nobody')} is the Raees of Lahore! 👑</h2><p>Final net worth ${short(w?netWorth(w):0)}</p><p style="margin-top:10px;font-size:13px">${rank.map(q=>esc(q.name)+(q.bankrupt?' (bankrupt)':'')).join(' · ')}</p></div>`,[{k:'new',label:'Play again',primary:1},{k:'x',label:'Look at the board'}]).then(k=>{if(k==='new')newGame();}).catch(()=>{});}
 
 /* ---------------- setup screen ---------------- */
 const NAMES=['You','Ayesha','Bilal','Zara','Hamza','Mahnoor'];
@@ -1719,7 +1723,7 @@ const TIPS=['Loading the streets of Lahore…','Tip: own a whole colour set to b
 function introProgress(){const th=THUMBS.filter(Boolean).length/PAWNS.length,pv=Object.keys(THEME_PREV).length/THEME_KEYS.length;return Math.min(1,(INTRO.fonts?.15:0)+.45*th+.4*pv);}
 const introTimer=setInterval(()=>{if(INTRO.done){clearInterval(introTimer);return;}const el=performance.now()-INTRO.t0;let p=introProgress();
  if(el>9000)p=1;document.getElementById('ibarFill').style.width=Math.round(Math.max(p,Math.min(.92,el/6000))*100)+'%';
- if(!INTRO.ready&&p>=1&&el>1800){INTRO.ready=true;$('#iload').hidden=true;$('#itap').hidden=false;$('#intro').setAttribute('aria-label','Tap to start Lahore Monopoly');}},120);
+ if(!INTRO.ready&&p>=1&&el>1800){INTRO.ready=true;$('#iload').hidden=true;$('#itap').hidden=false;$('#intro').setAttribute('aria-label','Tap to start PolyStar');}},120);
 function introGo(){if(!INTRO.ready||INTRO.done)return;INTRO.done=true;sfx('buy');buzz(30);
  if(MUSIC.on){musicStart();rainStart();}
  const el=$('#intro');el.classList.add('out');setTimeout(()=>{el.hidden=true;},650);}
@@ -1918,7 +1922,7 @@ function drawClientBar(){if(!G||NET.role!=='client')return;const mine=G.players[
  drawBar();}
 function clientOver(d){G.over=true;const w=G.players[d.w];focusObj=w?w.obj:null;sfx('win');
  bar={p:w||G.players[0],btns:[{k:'_n',label:'Back to menu',primary:1,act:()=>newGame()}],status:'Game over.'};drawBar();
- modal(`<div class="panel win"><div class="trophy">🏆</div><div class="eyebrow">Game over</div><h2>${esc(w?w.name:'Nobody')} owns Lahore</h2><p>Final net worth ${short(d.nw||0)}</p><p style="margin-top:10px;font-size:13px">${d.rank.map(i=>esc(G.players[i].name)).join(' · ')}</p></div>`,[{k:'menu',label:'Back to menu',primary:1},{k:'x',label:'Look at the board'}]).then(k=>{if(k==='menu')newGame();}).catch(()=>{});}
+ modal(`<div class="panel win"><div class="trophy">🏆</div><div class="eyebrow">Game over</div><h2>${esc(w?w.name:'Nobody')} is the Raees of Lahore! 👑</h2><p>Final net worth ${short(d.nw||0)}</p><p style="margin-top:10px;font-size:13px">${d.rank.map(i=>esc(G.players[i].name)).join(' · ')}</p></div>`,[{k:'menu',label:'Back to menu',primary:1},{k:'x',label:'Look at the board'}]).then(k=>{if(k==='menu')newGame();}).catch(()=>{});}
 function clientClosed(){if(NET.role!=='client')return;const inGame=G&&!G.over;NET.role='local';NET.hostConn=null;
  if(inGame){toast('Lost connection to the host');modal(`<div class="panel win"><div class="eyebrow">Connection lost</div><h2>The host left the game</h2><p>The game can't continue without the host's device.</p></div>`,[{k:'menu',label:'Back to menu',primary:1}]).then(()=>newGame()).catch(()=>{});}
  else if(!G){netMsg('The host closed the room.');showNetStart();}}
@@ -1932,7 +1936,7 @@ function netTeardown(){const r=NET.role;
 function showNetStart(){$('#netStart').hidden=false;$('#roomBox').hidden=true;}
 function showRoom(){$('#netStart').hidden=true;$('#roomBox').hidden=false;
  let base=location.href.split('#')[0].split('?')[0];const link=base+'?room='+NET.code;
- $('#roomCode').textContent=NET.code;$('#roomLink').value=link;$('#waBtn').href='https://wa.me/?text='+encodeURIComponent(`Join my Lahore Monopoly game! Room ${NET.code}: ${link}`);renderRoom();}
+ $('#roomCode').textContent=NET.code;$('#roomLink').value=link;$('#waBtn').href='https://wa.me/?text='+encodeURIComponent(`Join my PolyStar game and become a Raees of Lahore! Room ${NET.code}: ${link}`);renderRoom();}
 function renderRoom(){const host=NET.role==='host',mi=host?0:NET.me;
  $('#hostActs').hidden=!host;
  $('#roomList').innerHTML=NET.lobby.map((e,i)=>{const tags=[e.kind==='host'?'HOST':e.kind==='cpu'?'CPU':'ONLINE'];if(i===mi)tags.unshift('YOU');
