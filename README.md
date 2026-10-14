@@ -70,6 +70,8 @@ Some Qismat and Mohalla Chest cards use the players' real names, like "It's Ayes
 
 A green ring counts down around the current player's avatar and the Roll button. It turns yellow, then red, and ticks for the last 5 seconds. If time runs out, the game plays that move automatically (rolls, skips buying, or ends the turn). Building or mortgaging resets the timer. Choose 10s, 20s, 30s or Off on the menu; online games use the host's setting.
 
+**Time-out penalty:** each time a player lets the timer run all the way out, they get a warning (a red ⏰ badge on their avatar). After 2 warnings, the 3rd time-out puts them **out of the game**. With 2 players, the other player wins. With more players, the timed-out player's houses are sold and their properties are shared out, most expensive first: the poorest player gets the priciest property, the next poorest gets the next one, and so on, so the richest player gets the cheapest ones. Their cash is split evenly. CPU players never get penalties, and there are no penalties when the timer is Off.
+
 ## Your property cards
 
 Your properties stack up as cards in the bottom-right corner. Tap the stack to spread them out. Each card has two buttons: the blue bank button mortgages it for quick cash (or pays the mortgage back), and the green house button builds a house or hotel once you own the whole colour set. When you owe money, the house button sells houses instead.

@@ -540,6 +540,13 @@ a.gbtn{text-decoration:none;display:inline-block}
 .srange b{color:#ffe08a;font-weight:normal}
 .srange input{width:100%;accent-color:#f2b632;height:28px}
 .setbtn svg{width:24px;height:24px}
+
+.strk{position:absolute;top:-6px;left:-8px;font:normal 10px/1 var(--f-game);background:#c8202f;color:#fff;border:2px solid #fff;border-radius:999px;padding:3px 5px 2px;white-space:nowrap;animation:strk 1.2s ease-in-out infinite alternate}
+@keyframes strk{from{transform:scale(1)}to{transform:scale(1.12)}}
+.gcard .ksub{font-size:14px;margin-top:8px;color:#5a5a52}
+.klist{display:grid;gap:6px;margin:12px 16px 0;text-align:left}
+.klist .kr{background:rgba(0,0,0,.06);border-radius:10px;padding:7px 10px;font:700 13.5px/1.35 var(--f-body)}
+.klist .kr b{font:normal 16px var(--f-game);display:block}
 </style>
 </head>
 <body>
@@ -1448,8 +1455,8 @@ function renderPlayers(){
  renderPot();
  $('#players').innerHTML=G.players.map(p=>{const own=G.sq.filter(s=>s.owner===p.i);
   const chips=own.map(s=>`<span class="chip ${s.mort?'m':''}" style="background:${s.g?GROUPS[s.g].c:(s.t==='rail'?'#e9e4d4':'#7fb6d8')}"></span>`).join('');
-  const badge=p.bankrupt?'<i class="badge">OUT</i>':(p.inJail?'<i class="badge">JAIL</i>':'');
-  return `<button class="pl ${p.i===G.cur?'on':''} ${p.bankrupt?'out':''} ${VOICE.talk[p.i]?'talk':''}" style="--pc:${p.color}" data-i="${p.i}" title="${esc(p.name)}: ${money(p.cash)}"><span class="pav">${imgT(p.pawn)}${badge}${p.cpu?'<i class="badge cpu">CPU</i>':''}${p.mic?`<i class="badge mic" title="Mic on">${MIC_SVG}</i>`:''}</span><span class="pn">${esc(p.name)}</span><span class="coin">${COIN}<span>${short(p.cash).replace('Rs ','')}</span></span><span class="chips">${chips}</span></button>`;}).join('');
+  const badge=p.bankrupt?`<i class="badge">${p.out==='time'?'TIMED OUT':'OUT'}</i>`:(p.inJail?'<i class="badge">JAIL</i>':'');const strk=!p.bankrupt&&p.strikes?`<i class="strk" title="${p.strikes} time-out warning${p.strikes>1?'s':''}">⏰${p.strikes}</i>`:'';
+  return `<button class="pl ${p.i===G.cur?'on':''} ${p.bankrupt?'out':''} ${VOICE.talk[p.i]?'talk':''}" style="--pc:${p.color}" data-i="${p.i}" title="${esc(p.name)}: ${money(p.cash)}"><span class="pav">${imgT(p.pawn)}${badge}${strk}${p.cpu?'<i class="badge cpu">CPU</i>':''}${p.mic?`<i class="badge mic" title="Mic on">${MIC_SVG}</i>`:''}</span><span class="pn">${esc(p.name)}</span><span class="coin">${COIN}<span>${short(p.cash).replace('Rs ','')}</span></span><span class="chips">${chips}</span></button>`;}).join('');
  renderDeck();
  G.players.forEach(p=>{if(p._last!=null&&p.cash!==p._last){floatMoney(p,p.cash-p._last);if(soundOn)sfxLocal(p.cash>p._last?'coin':'pay');}p._last=p.cash;});
  schedSync();
@@ -1610,6 +1617,25 @@ async function bankrupt(p,o){p.bankrupt=true;if(isMine(p))recordGame(false);
 if(NET.role==='host')bc({t:'gone',pi:p.i});
  const obj=p.obj;await tween(600,k=>{const s=1-k;obj.scale.set(s,s,s);});scene.remove(obj);updateBoard();renderPlayers();}
 
+/* timeout penalty: 3rd full timeout = out. Belongings go to the others, poorest gets the priciest properties */
+async function kickOut(p){p.kicked=false;p.out='time';stopTimer();
+ const others=G.players.filter(q=>!q.bankrupt&&q!==p);
+ G.sq.forEach(s=>{if(s.owner===p.i&&s.houses){p.cash+=s.houses*s.hc/2;s.houses=0;}});
+ const props=G.sq.filter(s=>s.owner===p.i).sort((a,b)=>b.price-a.price);
+ const poor=[...others].sort((a,b)=>netWorth(a)-netWorth(b));const got={};poor.forEach(q=>got[q.i]=[]);
+ props.forEach((s,i)=>{const q=poor[i%poor.length];if(!q){s.owner=null;s.mort=false;return;}s.owner=q.i;got[q.i].push(s);});
+ const cash=Math.max(0,p.cash);const share=poor.length?Math.floor(cash/poor.length/1000)*1000:0;let left=cash-share*poor.length;
+ poor.forEach((q,k)=>{q.cash+=share+(k===0?left:0);});
+ p.goojf.forEach(c=>G.decks[c.type].push(c.idx));p.cash=0;p.goojf=[];p.bankrupt=true;if(isMine(p))recordGame(false);
+ log(`🚫 ${nm(p)} ${isYou(p)?'are':'is'} out for wasting time 3 times`,p);
+ poor.forEach((q,k)=>{const ps=got[q.i];const amt=share+(k===0?left:0);if(ps.length||amt)log(`${nm(q)} gets ${ps.length?ps.map(s=>esc(s.n)).join(', '):''}${ps.length&&amt?' and ':''}${amt?short(amt):''}`,q);});
+ const rows=poor.map((q,k)=>{const ps=got[q.i],amt=share+(k===0?left:0);return `<div class="kr"><b style="color:${q.color}">${esc(q.name)}</b><span>${ps.length?ps.map(s=>esc(s.n)).join(', '):'No property'}${amt?' + '+short(amt):''}</span></div>`;}).join('');
+ const html=`<div class="gcard"><div class="gh" style="background:#c8202f">⏰ Time out!</div><p>${esc(p.name)} wasted time 3 times and ${isYou(p)?'are':'is'} out of the game.</p>${poor.length>1?`<p class="ksub">Their belongings are shared out. The poorest player gets the most expensive property.</p><div class="klist">${rows}</div>`:''}</div>`;
+ splash(`${p.name} ${isYou(p)?'are':'is'} out!`,'#c8202f');sfx('jail');
+ if(NET.role==='host')bc({t:'gone',pi:p.i});
+ if(poor.length>1){if(NET.role==='host')bc({t:'card',html});showCardView(html);}
+ const obj=p.obj;await tween(600,k=>{const sc=1-k;obj.scale.set(sc,sc,sc);});scene.remove(obj);updateBoard();renderPlayers();await sleep(poor.length>1?2600:900);}
+
 function cpuManage(p){
  G.sq.filter(s=>s.owner===p.i&&s.mort).forEach(s=>{if(p.cash-unm(s)>=45*L){p.cash-=unm(s);s.mort=false;log(`${nm(p)} paid off the mortgage on ${esc(s.n)}`,p);}});
  let built=0;for(let n=0;n<40;n++){const c=G.sq.filter(s=>s.owner===p.i&&canBuild(p,s)&&p.cash-s.hc>=30*L).sort((a,b)=>b.price-a.price)[0];if(!c)break;p.cash-=c.hc;c.houses++;built++;}
@@ -1638,13 +1664,14 @@ async function playTurn(p){
   if(p.bankrupt||p.inJail||!dbl)break;toast('Doubles! Roll again');}
  if(!p.bankrupt)await endTurn(p);}
 async function gameLoop(){try{while(true){const p=cur();if(!p.bankrupt)await playTurn(p);
+  for(const q of G.players)if(q.kicked&&!q.bankrupt)await kickOut(q);
   const alive=G.players.filter(q=>!q.bankrupt);if(alive.length<=1){G.over=true;showWinner(alive[0]);return;}
   do{G.cur=(G.cur+1)%G.players.length;}while(G.players[G.cur].bankrupt);}}
  catch(e){if(e!==ABORT){console.error(e);toast('Something went wrong. Start a new game.');}}}
 function showWinner(w){stopTimer();if(G&&G.players.some(isMine))recordGame(!!(w&&isMine(w)));focusObj=w?w.obj:null;renderPlayers();renderBar(w||G.players[0],[{k:'_n',label:'New game',primary:1,act:()=>newGame()}],'Game over.');
  const rank=[...G.players].sort((a,b)=>netWorth(b)-netWorth(a));
  if(NET.role==='host')bc({t:'over',w:w?w.i:-1,rank:rank.map(q=>q.i),nw:w?netWorth(w):0});
- sfx('win');modal(G.train?`<div class="panel win"><div class="trophy">🎓</div><div class="eyebrow">Training complete</div><h2>You're ready to play!</h2><p>🌐 Online play is now unlocked.</p><p style="margin-top:8px">Tap <b>Play a real game</b> to start with your menu settings, or go to the <b>Menu</b> to change players or play online.</p></div>`:`<div class="panel win"><div class="trophy">🏆</div><div class="eyebrow">Game over</div><h2>${w?(isYou(w)?'You are':esc(w.name)+' is'):'Nobody is'} the Raees of Lahore! 👑</h2><p>Final net worth ${short(w?netWorth(w):0)}</p><p style="margin-top:10px;font-size:13px">${rank.map(q=>esc(q.name)+(q.bankrupt?' (bankrupt)':'')).join(' · ')}</p></div>`,(G.train?[{k:'real',label:'Play a real game',primary:1},{k:'menu',label:'Menu'}]:NET.role==='host'?[{k:'menu',label:'Back to menu',primary:1},{k:'x',label:'Look at the board'}]:[{k:'again',label:'Play again',primary:1},{k:'menu',label:'Menu'},{k:'x',label:'Look at the board'}])).then(k=>{
+ sfx('win');modal(G.train?`<div class="panel win"><div class="trophy">🎓</div><div class="eyebrow">Training complete</div><h2>You're ready to play!</h2><p>🌐 Online play is now unlocked.</p><p style="margin-top:8px">Tap <b>Play a real game</b> to start with your menu settings, or go to the <b>Menu</b> to change players or play online.</p></div>`:`<div class="panel win"><div class="trophy">🏆</div><div class="eyebrow">Game over</div><h2>${w?(isYou(w)?'You are':esc(w.name)+' is'):'Nobody is'} the Raees of Lahore! 👑</h2><p>Final net worth ${short(w?netWorth(w):0)}</p><p style="margin-top:10px;font-size:13px">${rank.map(q=>esc(q.name)+(q.bankrupt?(q.out==='time'?' (timed out)':' (bankrupt)'):'')).join(' · ')}</p></div>`,(G.train?[{k:'real',label:'Play a real game',primary:1},{k:'menu',label:'Menu'}]:NET.role==='host'?[{k:'menu',label:'Back to menu',primary:1},{k:'x',label:'Look at the board'}]:[{k:'again',label:'Play again',primary:1},{k:'menu',label:'Menu'},{k:'x',label:'Look at the board'}])).then(k=>{
   if(k==='menu')newGame();
   else if(k==='again'||k==='real'){newGame();setTimeout(()=>startGame('normal'),60);}}).catch(()=>{});}
 
@@ -1715,12 +1742,17 @@ let TURN_S=20;
 (function(){try{const v=localStorage.getItem('lm-timer');if(v!=null&&['0','10','20','30'].includes(v))TURN_S=+v;}catch(e){}})();
 const TIMER={id:0,cb:null,p:null,view:null,lastSec:-1};
 function timerOn(){return TURN_S>0;}
-function startTimer(p,cb){stopTimer(true);if(!timerOn()||!G||G.train)return;if(TUT.open){TUT.paused={p,cb};return;}const ms=TURN_S*1000;TIMER.p=p;TIMER.cb=cb;TIMER.id=setTimeout(fireTimer,ms);
+function startTimer(p,cb){stopTimer(true);if(!timerOn()||!G||G.train)return;if(TUT.open){TUT.paused={p,cb};return;}const ms=p.kicked?350:TURN_S*1000;TIMER.p=p;TIMER.cb=cb;TIMER.id=setTimeout(fireTimer,ms);
  TIMER.view={pi:p.i,end:performance.now()+ms,ms};TIMER.lastSec=-1;if(NET.role==='host')bc({t:'timer',pi:p.i,ms});}
 function stopTimer(quiet){if(TIMER.id)clearTimeout(TIMER.id);TIMER.id=0;TIMER.cb=null;TIMER.p=null;TIMER.view=null;
  if(!quiet&&NET.role==='host')bc({t:'timer',pi:-1});}
 function bumpTimer(){if(TIMER.id&&TIMER.cb&&TIMER.p){const cb=TIMER.cb,p=TIMER.p;startTimer(p,cb);}}
-function fireTimer(){const cb=TIMER.cb,p=TIMER.p;stopTimer();if(!cb||!G)return;sfxLocal('tock');if(p)toast(`${p.name} ran out of time`);try{cb();}catch(e){console.error(e);}}
+function fireTimer(){const cb=TIMER.cb,p=TIMER.p;stopTimer();if(!cb||!G)return;sfxLocal('tock');
+ if(p&&!p.kicked&&!p.cpu&&!p.bankrupt){p.strikes=(p.strikes||0)+1;
+  if(p.strikes>=3){p.kicked=true;toast(`🚫 ${p.name} wasted time 3 times!`);log(`🚫 ${nm(p)} let the timer run out 3 times and will be out after this move`,p);}
+  else{toast(p.strikes===1?`⏰ ${p.name} wasted time! Warning 1 of 2`:`⏰ ${p.name}: LAST warning! Next time you're out`);log(`⏰ ${nm(p)} ran out of time (warning ${p.strikes} of 2)`,p);buzz(120);}
+  renderPlayers();}
+ try{cb();}catch(e){console.error(e);}}
 function autoPick(btns){const ok=b=>b&&!b.act&&!(typeof b.dis==='function'?b.dis():b.dis);
  if(G&&G.debt&&btns.some(b=>b.k==='pay')){cpuLiquidate(G.debt.p,G.debt.amt);const pay=btns.find(b=>b.k==='pay');return ok(pay)?'pay':'bk';}
  for(const k of ['roll','end','skip','ok']){const b=btns.find(x=>x.k===k);if(ok(b))return k;}
@@ -2073,7 +2105,7 @@ const HOME_STEPS=[
  {sel:'#lMusic',t:'⚙️ Settings',x:'Pick from 4 music styles, set the music and rain volume separately, or turn sounds off.'},
  {sel:'#lHelp',t:'❓ How to play',x:'Forgot something? Tap here any time to see this tour again.'},
  {sel:'#themePick',t:'🌆 Background',x:'Pick where you play: Basant sky, Food Street, Chand Raat, a stadium and more.'},
- {sel:'#tmrPick',t:'⏱️ Turn timer',x:'How long each player gets per move. Too slow, and the game plays for you!'},
+ {sel:'#tmrPick',t:'⏱️ Turn timer',x:'How long each player gets per move. Too slow, and the game plays for you. Run out of time 3 times and you are OUT!'},
  {sel:'.modes',t:'📱 Game modes',x:'Play with friends on this phone, or online with friends anywhere. Online unlocks after you finish your first game.'},
  {sel:'#count',t:'👥 Players',x:'Choose 2 to 6 players. Each one can be a friend (Human) or the computer (CPU).'},
  {sel:'#prows .slot',t:'♟️ Players & pawns',x:'Tap a pawn to choose from 100 fun pawns, and switch players between Human and CPU.'},
@@ -2183,7 +2215,7 @@ function bc(m){if(NET.role!=='host')return;NET.conns.forEach(c=>{try{if(c.open)c
 function send(m){try{if(NET.hostConn&&NET.hostConn.open)NET.hostConn.send(m);}catch(e){}}
 let syncT=0;
 function schedSync(){if(NET.role!=='host'||!G||syncT)return;syncT=setTimeout(()=>{syncT=0;if(!G||NET.role!=='host')return;
- bc({t:'state',cur:G.cur,pl:G.players.map(p=>[p.cash,p.inJail?1:0,p.bankrupt?1:0,p.goojf.length,p.cpu?1:0,p.pos]),sq:G.sq.filter(BUYABLE).map(s=>[s.i,s.owner==null?-1:s.owner,s.houses,s.mort?1:0]),debt:G.debt?G.debt.p.i:-1,debtAmt:G.debt?G.debt.amt:0,over:G.over?1:0,pot:G.pot||0});},40);}
+ bc({t:'state',cur:G.cur,pl:G.players.map(p=>[p.cash,p.inJail?1:0,p.bankrupt?1:0,p.goojf.length,p.cpu?1:0,p.pos,p.strikes||0,p.out==='time'?1:0]),sq:G.sq.filter(BUYABLE).map(s=>[s.i,s.owner==null?-1:s.owner,s.houses,s.mort?1:0]),debt:G.debt?G.debt.p.i:-1,debtAmt:G.debt?G.debt.amt:0,over:G.over?1:0,pot:G.pot||0});},40);}
 const serBtns=btns=>btns.filter(b=>!b.act).map(b=>({k:b.k,label:b.label,primary:b.primary?1:0,danger:b.danger?1:0,dis:(typeof b.dis==='function'?b.dis():b.dis)?1:0}));
 function remoteDecide(p,kind,payload,fallback){const id=++NET.askId;
  const fb=fallback||((payload.btns.find(b=>!b.act&&!(typeof b.dis==='function'?b.dis():b.dis))||{}).k)||'bk';
@@ -2280,7 +2312,7 @@ function clientData(d){if(!d||typeof d!=='object')return;
  case 'potwin':{const el=$('#pot');el.classList.remove('win');void el.offsetWidth;el.classList.add('win');}break;
  case 'over':if(G)clientOver(d);break;}}
 function applyState(d){G.cur=d.cur;
- d.pl.forEach((x,i)=>{const p=G.players[i];if(!p)return;p.cash=x[0];p.inJail=!!x[1];p.bankrupt=!!x[2];p.goojf=new Array(x[3]).fill(0);p.cpu=!!x[4];
+ d.pl.forEach((x,i)=>{const p=G.players[i];if(!p)return;p.cash=x[0];p.inJail=!!x[1];p.bankrupt=!!x[2];p.goojf=new Array(x[3]).fill(0);p.cpu=!!x[4];p.strikes=x[6]||0;if(x[7])p.out='time';
   if(!hopBusy&&!p.bankrupt&&p.pos!==x[5]){p.pos=x[5];p.obj.position.copy(posFor(p,p.pos));p.obj.rotation.y=yawFor(p,p.pos);}});
  d.sq.forEach(([i,o,hs,m])=>{const s=G.sq[i];s.owner=o<0?null:o;s.houses=hs;s.mort=!!m;});
  G.debt=d.debt>=0?{p:G.players[d.debt],amt:d.debtAmt}:null;{const np=d.pot||0;if(np>(G.pot||0)){G.pot=np;potBump();}else G.pot=np;}
