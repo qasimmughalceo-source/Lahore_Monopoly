@@ -344,6 +344,20 @@ button:focus-visible,input:focus-visible{outline:3px solid #fff;outline-offset:2
 #cardView{position:fixed;inset:0;z-index:19;display:grid;place-items:center;padding:16px;background:rgba(3,10,9,.45);animation:fadeBg .2s ease}
 #cardView .cvin{width:100%;max-width:360px;display:grid;gap:14px;justify-items:center;animation:pop .38s cubic-bezier(.2,1.5,.4,1)}
 #cardView .gcard{width:100%}
+/* walkthrough */
+#tut{position:fixed;inset:0;z-index:70}
+#tut.nohole{background:rgba(3,10,9,.72)}
+.tut-hole{position:fixed;border-radius:18px;box-shadow:0 0 0 9999px rgba(3,10,9,.72),0 0 0 3px var(--gold1),0 0 24px 6px rgba(242,182,50,.55);transition:all .35s cubic-bezier(.2,1,.3,1);pointer-events:none}
+#tut.nohole .tut-hole{display:none}
+.tut-box{position:fixed;width:min(330px,calc(100vw - 24px));background:linear-gradient(180deg,#fbf7ee,#efe6cf);color:#1b1b1b;border-radius:20px;border:3px solid #fff;padding:16px 16px 12px;box-shadow:0 6px 0 #c9bd9e,0 18px 40px rgba(0,0,0,.5);transition:top .35s ease,left .35s ease;animation:pop .35s cubic-bezier(.2,1.5,.4,1)}
+.tut-box h3{margin:0 0 4px;font:normal 22px var(--f-game);color:#1f6b5f}
+.tut-box p{margin:0;font:700 15.5px/1.45 var(--f-body)}
+.tut-foot{display:flex;align-items:center;gap:8px;margin-top:10px}
+.tut-dots{display:flex;gap:5px;justify-content:center;margin-top:12px}
+.tut-dots i{width:7px;height:7px;border-radius:50%;background:#cfc5ab}
+.tut-dots i.on{background:var(--gold2);width:18px;border-radius:4px}
+.tut-skip{background:none;border:0;color:#6b6656;font:800 14px var(--f-body);cursor:pointer;padding:8px 6px;text-decoration:underline}
+.tut-box .gbtn{font-size:15px;padding:9px 16px 8px}
 /* committee pot */
 #pot{position:absolute;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 124px);display:flex;align-items:center;gap:8px;background:linear-gradient(180deg,#3a2a08,#241a05);border:3px solid var(--gold);border-radius:999px;padding:3px 14px 3px 4px;color:#fff;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.4),0 0 16px rgba(242,182,50,.25)}
 #pot .pc{width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#ffe78f,#f2a91f);display:grid;place-items:center;font-size:17px;box-shadow:inset 0 -2px 0 rgba(178,107,0,.6)}
@@ -458,6 +472,7 @@ a.gbtn{text-decoration:none;display:inline-block}
     <button class="ib" id="tLog" aria-label="Game log" aria-pressed="false" title="Game log"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 4h11l3 3v13H5z"/><path d="M9 10h7M9 14h7M9 18h4"/></svg></button>
     <button class="ib musicbtn" id="tMusic" aria-label="Music" aria-pressed="true" title="Music on"></button>
     <button class="ib" id="tSound" aria-label="Sound" aria-pressed="true" title="Sound"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z"/><path class="wave" d="M16 9a4 4 0 010 6M18.5 6.5a7.5 7.5 0 010 11"/></svg></button>
+    <button class="ib" id="tHelp" aria-label="How to play" title="How to play"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 9a3 3 0 1 1 4.2 2.75c-.75.33-1.2 1.05-1.2 1.85V14"/><circle cx="12" cy="18" r=".6" fill="currentColor"/></svg></button>
     <button class="ib" id="tNew" aria-label="New game" title="New game"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 2.5-5.8"/><path d="M4 4v5h5"/></svg></button>
   </div>
   <button id="pot" type="button" aria-label="Committee pot" hidden><span class="pc">🪙</span><span class="pl2"><small>Committee pot</small><b id="potAmt">Rs 0</b></span></button>
@@ -488,6 +503,7 @@ a.gbtn{text-decoration:none;display:inline-block}
 <div class="tring" id="tring1" hidden><svg viewBox="0 0 100 100"><circle class="bg" cx="50" cy="50" r="46" stroke-width="8"/><circle class="fg" cx="50" cy="50" r="46" stroke-width="8"/></svg></div>
 <div class="tring" id="tring2" hidden><svg viewBox="0 0 100 100"><circle class="bg" cx="50" cy="50" r="47" stroke-width="5"/><circle class="fg" cx="50" cy="50" r="47" stroke-width="5"/></svg><b hidden></b></div>
 <div id="toast" role="status" aria-live="polite"></div>
+<div id="tut" hidden><div class="tut-hole" id="tutHole"></div><div class="tut-box" id="tutBox" role="dialog" aria-live="polite" aria-label="How to play"></div></div>
 <div id="cardView" hidden><div class="cvin" id="cvin"></div></div>
 <div class="modal" id="modal" hidden><div class="mcard" id="mcard"></div></div>
 
@@ -1342,6 +1358,7 @@ function drawBar(){const p=bar.p;if(!p)return;
 $('#acts').addEventListener('click',e=>{const el=e.target.closest('button');if(!el)return;const b=bar.btns[+el.dataset.b];if(!b)return;sfx('tap');buzz(15);if(b.act){b.act();return;}if(NET.role==='client'){if(NET.myAsk){send({t:'answer',id:NET.myAsk.id,k:b.k});NET.myAsk=null;drawClientBar();renderManage();}return;}if(G&&G.resolve)G.resolve(b.k);});
 
 function choose(p,btns,cpuPick,status,cpuDelay=650){
+ if(TUT.open&&TUT.wait)return guard(TUT.wait).then(()=>choose(p,btns,cpuPick,status,cpuDelay));
  if(p.cpu){renderBar(p,[],status);return sleep(cpuDelay).then(()=>cpuPick());}
  if(p.remote){renderBar(p,[],status);bar.status=`Waiting for ${p.name}…`;drawBar();return remoteDecide(p,'ask',{btns,status});}
  return guard(new Promise(res=>{G.waiting=true;G.actor=p;G.resolve=k=>{stopTimer();G.waiting=false;G.resolve=null;renderBar(p,[],'…');renderManage();res(k);};renderBar(p,btns,status);renderManage();startTimer(p,()=>{if(G&&G.resolve)G.resolve(autoPick(btns));});}));
@@ -1571,8 +1588,8 @@ function buildGame(cfg){
  $('#setup').hidden=true;$('#picker').hidden=true;$('#hud').hidden=false;$('#manage').hidden=true;setView(false);commsReset();}
 function startGame(){
  const cfg=setup.players.slice(0,setup.n).map(c=>({...c}));const used=new Set();cfg.forEach(c=>{if(used.has(c.pawn))c.pawn=PAWNS.findIndex((_,i)=>!used.has(i)&&!cfg.some(d=>d.pawn===i));used.add(c.pawn);});
- const tk=pickTheme(setup.theme);applyTheme(tk);buildGame(cfg);log(`Game on! Everyone starts with Rs 0. Pass Shuru Chowk to earn ${short(GO_PAY)}. Nobody pays anything until their first salary.`);toast(THEMES[tk].name);gameLoop();}
-function newGame(){stopTimer(true);hideCardView();netTeardown();setTimeout(rainLevel,0);GEN++;tweens.length=0;$('#modal').hidden=true;$('#manage').hidden=true;if(G)G.players.forEach(p=>{if(p.obj){scene.remove(p.obj);disposeObj(p.obj);}});
+ const tk=pickTheme(setup.theme);applyTheme(tk);buildGame(cfg);maybeTutorial();log(`Game on! Everyone starts with Rs 0. Pass Shuru Chowk to earn ${short(GO_PAY)}. Nobody pays anything until their first salary.`);toast(THEMES[tk].name);gameLoop();}
+function newGame(){if(TUT.open)endTutorial();stopTimer(true);hideCardView();netTeardown();setTimeout(rainLevel,0);GEN++;tweens.length=0;$('#modal').hidden=true;$('#manage').hidden=true;if(G)G.players.forEach(p=>{if(p.obj){scene.remove(p.obj);disposeObj(p.obj);}});
  G=null;focusObj=null;ring.visible=false;SQ.forEach(s=>{if(s.price){s.owner=null;s.houses=0;s.mort=false;}});markers.forEach(m=>{if(m)m.visible=false;});houseGroups.forEach(h=>{if(h)while(h.children.length)h.remove(h.children[0]);});
  $('#hud').hidden=true;$('#setup').hidden=false;renderSetup();}
 $('#startBtn').addEventListener('click',startGame);
@@ -1583,7 +1600,7 @@ let TURN_S=20;
 (function(){try{const v=localStorage.getItem('lm-timer');if(v!=null&&['0','10','20','30'].includes(v))TURN_S=+v;}catch(e){}})();
 const TIMER={id:0,cb:null,p:null,view:null,lastSec:-1};
 function timerOn(){return TURN_S>0;}
-function startTimer(p,cb){stopTimer(true);if(!timerOn()||!G)return;const ms=TURN_S*1000;TIMER.p=p;TIMER.cb=cb;TIMER.id=setTimeout(fireTimer,ms);
+function startTimer(p,cb){stopTimer(true);if(!timerOn()||!G)return;if(TUT.open){TUT.paused={p,cb};return;}const ms=TURN_S*1000;TIMER.p=p;TIMER.cb=cb;TIMER.id=setTimeout(fireTimer,ms);
  TIMER.view={pi:p.i,end:performance.now()+ms,ms};TIMER.lastSec=-1;if(NET.role==='host')bc({t:'timer',pi:p.i,ms});}
 function stopTimer(quiet){if(TIMER.id)clearTimeout(TIMER.id);TIMER.id=0;TIMER.cb=null;TIMER.p=null;TIMER.view=null;
  if(!quiet&&NET.role==='host')bc({t:'timer',pi:-1});}
@@ -1787,6 +1804,46 @@ function showCardView(html){const v=$('#cardView');
 function hideCardView(){$('#cardView').hidden=true;}
 $('#cardView').addEventListener('click',e=>{if(e.target.closest('[data-cvx]')||e.target.id==='cardView'){sfx('tap');hideCardView();}});
 
+
+/* ================= first-time walkthrough ================= */
+const TUT={open:false,i:0,wait:null,resolve:null,paused:null};
+const TUT_STEPS=[
+ {t:'👋 Welcome to PolyStar!',x:'Buy plots across Lahore, collect rent from your friends, and become the Raees of Lahore. This quick tour takes 30 seconds.'},
+ {sel:'#players',t:'👥 The players',x:'Everyone in the game is here. The glowing one is whose turn it is, and the gold number is their cash.'},
+ {sel:'#acts .roll,#bar',t:'🎲 Roll the dice',x:'On your turn, tap ROLL. Your pawn moves that many squares and the camera follows it.'},
+ {t:'🏠 Buy plots',x:'Land on an empty plot and you can buy it. Anyone who lands on your plot pays you rent. Own a whole colour set to build houses and hotels for much bigger rent!'},
+ {t:'💸 Salary at Shuru Chowk',x:'Everyone starts with Rs 0. Each time you pass Shuru Chowk you earn Rs 5 Lac. Until your first salary you pay no tax, fines or rent.'},
+ {sel:'#pot',t:'🪙 Committee pot',x:'Taxes and fines go into this pot. Land on Free Parking and the whole pot is yours, however big it is!'},
+ {t:'🎴 Qismat & Mohalla Chest',x:'These cards can make you rich or poor: prize bonds, challans, even a friend\'s birthday where everyone pays salami.'},
+ {sel:'#deck',t:'🃏 Your property cards',x:'Your plots stack up here. Tap the stack to build houses (green button) or mortgage a plot for quick cash (blue button).'},
+ {sel:'.pl.on .pav,#acts .roll',t:'⏱️ Turn timer',x:'A green ring counts down on each turn. If it runs out, the game moves for you, so stay sharp!'},
+ {sel:'#comms',t:'💬 Chat, talk & music',x:'Send messages and emojis, talk on the mic in online games, and switch the jazz & rain music on the right side.'},
+ {t:'👑 How to win',x:'Players who run out of money are out. The last one standing is the Raees of Lahore. Good luck, seth ji!'}];
+function tutSeen(){try{return localStorage.getItem('lm-tut')==='1';}catch(e){return false;}}
+function startTutorial(){if(TUT.open||!G)return;TUT.open=true;TUT.i=0;TUT.wait=new Promise(r=>TUT.resolve=r);
+ if(TIMER.id&&TIMER.cb){TUT.paused={p:TIMER.p,cb:TIMER.cb};stopTimer(true);}
+ $('#manage').hidden=true;$('#chat').hidden=true;$('#tut').hidden=false;renderTut();}
+function endTutorial(){if(!TUT.open)return;TUT.open=false;$('#tut').hidden=true;try{localStorage.setItem('lm-tut','1');}catch(e){}
+ const pz=TUT.paused;TUT.paused=null;if(TUT.resolve)TUT.resolve();TUT.wait=null;if(pz&&G&&!G.over)startTimer(pz.p,pz.cb);}
+function tutTarget(sel){if(!sel)return null;for(const s of sel.split(',')){const el=document.querySelector(s.trim());if(el&&!el.hidden&&el.offsetParent!==null){const r=el.getBoundingClientRect();if(r.width&&r.height)return r;}}return null;}
+function renderTut(){const st=TUT_STEPS[TUT.i],box=$('#tutBox'),hole=$('#tutHole'),ov=$('#tut'),last=TUT.i===TUT_STEPS.length-1;
+ box.innerHTML=`<h3>${st.t}</h3><p>${st.x}</p><div class="tut-dots">${TUT_STEPS.map((_,k)=>`<i class="${k===TUT.i?'on':''}"></i>`).join('')}</div><div class="tut-foot">${last?'':'<button class="tut-skip" type="button" data-tut="skip">Skip</button>'}<span style="flex:1"></span>${TUT.i?'<button class="gbtn small" type="button" data-tut="back">Back</button>':''}<button class="gbtn small ${last?'green':'gold'}" type="button" data-tut="next">${last?"Let's play!":'Next'}</button></div>`;
+ const r=tutTarget(st.sel),vw=window.innerWidth,vh=window.innerHeight;
+ const bw=Math.min(330,vw-24);
+ if(!r){ov.classList.add('nohole');box.style.left=((vw-bw)/2)+'px';box.style.top=Math.max(16,(vh-box.offsetHeight)/2)+'px';}
+ else{ov.classList.remove('nohole');const pad=8;Object.assign(hole.style,{left:(r.left-pad)+'px',top:(r.top-pad)+'px',width:(r.width+pad*2)+'px',height:(r.height+pad*2)+'px'});
+  const bh=box.offsetHeight||180;let top=r.bottom+18;if(top+bh>vh-12)top=r.top-bh-18;if(top<12)top=Math.max(12,(vh-bh)/2);
+  let left=r.left+r.width/2-bw/2;left=Math.max(12,Math.min(vw-bw-12,left));box.style.left=left+'px';box.style.top=top+'px';}
+ const nb=box.querySelector('[data-tut="next"]');if(nb)nb.focus({preventScroll:true});}
+$('#tut').addEventListener('click',e=>{const b=e.target.closest('[data-tut]');if(!b)return;sfx('tap');const a=b.dataset.tut;
+ if(a==='skip'){endTutorial();toast('Tap ? any time to see the tour again');return;}
+ if(a==='back'){TUT.i=Math.max(0,TUT.i-1);renderTut();return;}
+ if(TUT.i>=TUT_STEPS.length-1){endTutorial();return;}TUT.i++;renderTut();});
+document.addEventListener('keydown',e=>{if(!TUT.open)return;if(e.key==='Escape'){endTutorial();}else if(e.key==='ArrowRight'||e.key==='Enter'){e.preventDefault();$('#tut [data-tut="next"]').click();}else if(e.key==='ArrowLeft'&&TUT.i){TUT.i--;renderTut();}},true);
+window.addEventListener('resize',()=>{if(TUT.open)renderTut();});
+$('#tHelp').addEventListener('click',()=>{sfx('tap');startTutorial();});
+function maybeTutorial(){if(!tutSeen())setTimeout(()=>{if(G&&!G.over)startTutorial();},1300);}
+
 /* tools */
 $('#deck').addEventListener('click',()=>{if(!G)return;sfx('card');const M=$('#manage');if(!M.hidden){M.hidden=true;renderDeck();return;}const o=deckOwner();G.mview=o?o.i:G.cur;openManage();});
 let topView=false;
@@ -1871,7 +1928,7 @@ function hostStart(){if(NET.role!=='host'||NET.lobby.length<2)return;
  const tk=pickTheme(setup.theme);applyTheme(tk);
  buildGame(cfg);toast(THEMES[tk].name);
  NET.lobby.forEach((e,i)=>{if(e.conn)try{e.conn.send({t:'start',players:cfg.map(c=>({name:c.name,pawn:c.pawn,cpu:c.cpu})),me:i,roster:NET.roster,theme:tk});}catch(x){}});
- log(`Online game on! Room ${NET.code}. Everyone starts with Rs 0. Pass Shuru Chowk to earn ${short(GO_PAY)}. Nobody pays anything until their first salary.`);setTimeout(gameLoop,500);}
+ maybeTutorial();log(`Online game on! Room ${NET.code}. Everyone starts with Rs 0. Pass Shuru Chowk to earn ${short(GO_PAY)}. Nobody pays anything until their first salary.`);setTimeout(gameLoop,500);}
 
 /* client */
 function joinRoom(raw){const code=String(raw||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
@@ -1888,7 +1945,7 @@ function clientData(d){if(!d||typeof d!=='object')return;
  switch(d.t){
  case 'full':netMsg(d.why);netTeardown();showNetStart();break;
  case 'lobby':NET.lobby=d.list;NET.me=d.me;NET.code=d.code;if(d.list[d.me]){me.pawn=d.list[d.me].pawn;renderMe();}showRoom();break;
- case 'start':NET.roster=d.roster||[];NET.me=d.me;applyTheme(d.theme);if(THEMES[d.theme])setTimeout(()=>toast(THEMES[d.theme].name),300);buildGame(d.players.map(x=>({name:x.name,pawn:x.pawn,cpu:x.cpu})));NET.me=d.me;NET.myAsk=null;NET.bar={pi:0,status:''};drawClientBar();break;
+ case 'start':NET.roster=d.roster||[];NET.me=d.me;applyTheme(d.theme);maybeTutorial();if(THEMES[d.theme])setTimeout(()=>toast(THEMES[d.theme].name),300);buildGame(d.players.map(x=>({name:x.name,pawn:x.pawn,cpu:x.cpu})));NET.me=d.me;NET.myAsk=null;NET.bar={pi:0,status:''};drawClientBar();break;
  case 'state':if(G)applyState(d);break;
  case 'hop':if(G)clientHop(d);break;
  case 'dice':if(G)rollDice(d.v).catch(()=>{});break;

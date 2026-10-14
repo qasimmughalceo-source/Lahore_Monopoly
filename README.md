@@ -4,6 +4,10 @@
 
 A 3D property-trading game set in Lahore, priced in Pakistani Rupees. Shahdara is the cheapest square (Rs 6 Lac) and DHA Phase 6 the most expensive (Rs 40 Lac). There are 100 pawns, CPU opponents and sound effects. You can play on one device or online with friends.
 
+## New players
+
+The first time you start a game, a short walkthrough explains the screen step by step. Tap **Skip** to jump straight in, or the **?** button on the right side to see it again any time.
+
 ## Put it online with GitHub Pages (free, about 5 minutes)
 
 1. Sign in at https://github.com (create a free account if you don't have one).
