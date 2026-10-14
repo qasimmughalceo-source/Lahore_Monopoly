@@ -9,7 +9,7 @@ A 3D property-trading game set in Lahore, priced in Pakistani Rupees. Shahdara i
 - **Home tour:** after the splash screen, a quick tour points at the profile, music, help, background, timer, game modes and the Play button. Tap **?** on the menu to see it again.
 - **Profile:** your name, pawn, games played and wins sit in the top-left corner of the menu. Tap it to edit.
 - **Training match:** the first time you tap Play, you can play a guided 2-minute match against Ustad Bot. You tap Roll, but the dice are scripted so every rule comes up in order, with tips explaining each one. It always ends with you winning.
-- **Online unlock:** online play stays locked until you finish one game (the training match counts).
+- **Online unlock:** creating your own online rooms unlocks after you finish one game (the training match counts). Anyone with a room link or a friend's invite can join straight away.
 - **In-game tour:** tap **?** on the right side during a game to see how the game screen works.
 
 ## Put it online with GitHub Pages (free, about 5 minutes)
@@ -49,6 +49,16 @@ Good to know:
 - The host's device runs the game. **The host should keep the game open and the screen on.** If the host locks their phone or switches apps, the game pauses for everyone until they come back.
 - If a friend disconnects, a CPU player takes over their pawn so the game can continue.
 - Players connect directly to each other using PeerJS (free, no account needed). A few strict office or school networks block this kind of connection. If joining fails, try mobile data.
+
+## Friends
+
+Tap the **people** button at the top of the menu.
+- **Your friend code:** 6 letters and numbers, shown at the top. Send it with **Copy** or **Share on WhatsApp**. A friend who opens your shared link adds you automatically.
+- **Add a friend:** type their code and tap **Add friend**. You appear in their list too. After an online game, people you played with show under **Played with recently** with a **+ Add** button. In a room, you can tap **+ Friend** next to a player.
+- **Who's online:** a green dot means the friend has PolyStar open right now. Their line says what they're doing (in the menu, in a room, playing a game). Otherwise it shows when they were last seen. The green number on the people button counts friends online.
+- **Invite:** tap **Invite** next to an online friend. If you're not in a room yet, one is created for you. Your friend gets a pop-up with **Join**. If a friend is hosting a room, you'll see **Join** next to their name instead.
+
+Friends show as online only while PolyStar is open on their phone. If they close it or lock the screen, they appear offline after about 30 seconds.
 
 ## Money rules and turn timer
 

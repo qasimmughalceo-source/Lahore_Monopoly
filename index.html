@@ -482,10 +482,48 @@ a.gbtn{text-decoration:none;display:inline-block}
 }
 @media (max-width:430px){.coin svg{display:none}.coin{padding:1px 6px;font-size:10.5px}.pav{width:42px;height:42px}.pav img{width:34px;height:34px}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+#toast{z-index:57}
+#lFriends{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);right:122px;z-index:31;width:46px;height:46px}
+#lFriends .dotc{background:#22b14c}
+#lProfile{max-width:calc(100vw - 196px)}
+.friends{position:fixed;inset:0;z-index:52;background:rgba(3,10,9,.72);display:grid;place-items:center;padding:12px}
+.fpanel{width:min(460px,100%);max-height:calc(100% - 8px);overflow:auto;padding:16px 14px 14px;display:grid;gap:12px;animation:pop .32s cubic-bezier(.2,1.4,.4,1)}
+.fpanel h3{margin:0;font:normal 24px var(--f-game);color:#ffe08a;display:flex;justify-content:space-between;align-items:center;gap:10px;text-shadow:0 2px 0 rgba(0,0,0,.35)}
+.fme{background:rgba(0,0,0,.25);border-radius:16px;padding:10px 12px;display:grid;gap:8px;justify-items:center;text-align:center}
+.fme small{font:800 12px var(--f-body);color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.fme .fcode{font:normal 34px var(--f-game);letter-spacing:.18em;color:#fff;line-height:1}
+.fme .facts2{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.fpanel .joinrow input{width:170px;font-size:24px}
+.fsec{font:normal 15px var(--f-game);color:#ffe08a;letter-spacing:.04em;margin:2px 2px -4px;display:flex;justify-content:space-between}
+.fsec em{font-style:normal;color:var(--muted);font-size:13px}
+.flist{display:grid;gap:8px}
+.frow{display:flex;align-items:center;gap:10px;background:rgba(0,0,0,.22);border-radius:14px;padding:6px 8px 6px 6px}
+.frow .fav{position:relative;flex:none}
+.frow img{width:42px;height:42px;border-radius:50%;background:#0c2726;display:block}
+.frow .fdot{position:absolute;right:-1px;bottom:-1px;width:14px;height:14px;border-radius:50%;background:#7b8a88;border:2px solid #10302e}
+.frow .fdot.on{background:#3ee06a;box-shadow:0 0 8px #3ee06a}
+.frow .ft{flex:1;min-width:0;display:grid;line-height:1.15}
+.frow .ft b{font:normal 17px var(--f-game);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.frow .ft small{font:800 12px var(--f-body);color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.frow .ft small.on{color:#7dffa0}
+.frow .gbtn.small{padding:8px 11px 7px;font-size:14px;flex:none}
+.frow .x{width:28px;height:28px;font-size:16px;flex:none;opacity:.7}
+.fempty{text-align:center;color:var(--muted);font:700 14px/1.4 var(--f-body);padding:8px}
+.fmsg{min-height:0;margin:-4px 0 0;text-align:center;font:800 13px var(--f-body);color:#ffd27a}
+.fmsg:empty{display:none}
+#invPop{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 70px);transform:translateX(-50%);z-index:60;width:min(420px,calc(100% - 24px));display:flex;align-items:center;gap:10px;padding:10px 10px 10px 10px;animation:invin .45s cubic-bezier(.2,1.4,.4,1)}
+#invPop img{width:48px;height:48px;border-radius:50%;background:#0c2726;flex:none;border:2px solid var(--gold)}
+#invPop .it{flex:1;min-width:0;font:700 14px/1.3 var(--f-body);color:var(--ink)}
+#invPop .it b{font:normal 17px var(--f-game);color:#ffe08a}
+#invPop .it small{display:block;color:var(--muted);font-weight:800}
+#invPop .ib2{display:grid;gap:6px}
+@keyframes invin{from{transform:translate(-50%,-40px);opacity:0}to{transform:translate(-50%,0);opacity:1}}
+.rrow .addf{padding:6px 9px 5px;font-size:13px}
+#roomFr{justify-self:center}
 </style>
 </head>
 <body>
-
 <canvas id="gl" aria-label="3D PolyStar board"></canvas>
 
 <div class="hud" id="hud" hidden>
@@ -568,6 +606,7 @@ a.gbtn{text-decoration:none;display:inline-block}
   <div class="sw">
     <button id="lProfile" type="button" aria-label="Your profile"></button>
     <button class="ib" id="lHelp" type="button" aria-label="How to play" title="How to play"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 9a3 3 0 1 1 4.2 2.75c-.75.33-1.2 1.05-1.2 1.85V14"/><circle cx="12" cy="18" r=".6" fill="currentColor"/></svg></button>
+    <button class="ib" id="lFriends" type="button" aria-label="Friends" title="Friends"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 19c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><circle cx="17" cy="9" r="2.6"/><path d="M16.5 13.6c2.7.2 4.5 2.1 4.5 4.9"/></svg><span class="dotc" id="frBadge" hidden></span></button>
     <button class="ib musicbtn" id="lMusic" aria-label="Music" aria-pressed="true" title="Music on"></button>
     <div class="logo">
       <div class="logo-top">Zinda Dilan-e-Lahore</div>
@@ -611,6 +650,7 @@ a.gbtn{text-decoration:none;display:inline-block}
         <div class="eyebrow"><span class="online-dot"></span>Room code</div>
         <div class="code" id="roomCode">-----</div>
         <div class="share"><input id="roomLink" readonly aria-label="Invite link"><button class="gbtn small" id="copyBtn">Copy link</button><a class="gbtn small green" id="waBtn" target="_blank" rel="noopener">WhatsApp</a></div>
+        <button class="gbtn small green" id="roomFr" type="button">👥 Invite friends</button>
         <div id="roomList" class="roomlist"></div>
         <div class="roomacts" id="hostActs"><button class="gbtn small" id="addCpu">+ CPU player</button><button class="gbtn gold" id="netStartBtn">Start game</button></div>
         <p class="note" id="roomNote"></p>
@@ -622,6 +662,20 @@ a.gbtn{text-decoration:none;display:inline-block}
   </div>
 </div>
 
+<div class="friends" id="friends" hidden>
+  <div class="panel fpanel" role="dialog" aria-label="Friends">
+    <h3><span>👥 Friends</span><button class="x" id="frClose" aria-label="Close">×</button></h3>
+    <div class="fme"><small>Your friend code</small><div class="fcode" id="frCode">------</div>
+      <div class="facts2"><button class="gbtn small" id="frCopy" type="button">Copy</button><a class="gbtn small green" id="frWa" target="_blank" rel="noopener">Share on WhatsApp</a></div></div>
+    <div class="joinrow"><input id="frAddIn" maxlength="6" placeholder="CODE" autocomplete="off" autocapitalize="characters" aria-label="Friend code"><button class="gbtn green" id="frAddBtn" type="button">Add friend</button></div>
+    <p class="fmsg" id="frMsg" role="status"></p>
+    <div class="fsec"><span>Your friends</span><em id="frCount"></em></div>
+    <div class="flist" id="frList"></div>
+    <div id="frRecentWrap" hidden><div class="fsec"><span>Played with recently</span></div><div class="flist" id="frRecent"></div></div>
+    <p class="note">Friends show as online while PolyStar is open on their phone.</p>
+  </div>
+</div>
+<div class="panel" id="invPop" hidden role="alert"></div>
 <div class="picker" id="picker" hidden>
   <div class="panel pk-panel">
     <div class="pk-head">
@@ -1897,7 +1951,7 @@ function showLocked(){const room=LOCK.room;
   [{k:'play',label:'Play a game now',primary:1},{k:'x',label:'Later'}],null,true).then(k=>{
    if(k==='play'){$('#mLocal').click();const sb=$('#startBtn');sb.scrollIntoView({block:'center',behavior:'smooth'});sb.classList.add('bump');setTimeout(()=>sb.classList.remove('bump'),900);}}).catch(()=>{});}
 function openProfile(){sfx('tap');const nm0=(me.name||'').trim();
- modal(`<div class="panel prof"><h3>Your profile</h3><button class="ava" id="profAva" type="button" aria-label="Change your pawn" style="--pc:var(--gold1)"></button><input id="profName" maxlength="18" placeholder="Your name" value="${esc(nm0)}" aria-label="Your name"><div class="pstats"><span>🎮 ${STATS.games} games</span><span>🏆 ${STATS.wins} wins</span><span>${onlineUnlocked()?'🌐 Online unlocked':'🔒 Online after 1 game'}</span></div></div>`,
+ modal(`<div class="panel prof"><h3>Your profile</h3><button class="ava" id="profAva" type="button" aria-label="Change your pawn" style="--pc:var(--gold1)"></button><input id="profName" maxlength="18" placeholder="Your name" value="${esc(nm0)}" aria-label="Your name"><div class="pstats"><span>🎮 ${STATS.games} games</span><span>🏆 ${STATS.wins} wins</span><span>${onlineUnlocked()?'🌐 Online unlocked':'🔒 Online after 1 game'}</span><span>👥 Code ${FR.code}</span></div></div>`,
   [{k:'save',label:'Save',primary:1},{k:'x',label:'Cancel'}],null,true).then(k=>{
    if(k==='save'){const v=($('#profName')?$('#profName').value:'').replace(/[<>]/g,'').trim().slice(0,18);me.name=v;saveMe();
     setup.players[0].name=v||'You';renderSetup();renderMe();renderProfile();toast('Profile saved');}}).catch(()=>{});
@@ -1906,6 +1960,7 @@ $('#lProfile').addEventListener('click',openProfile);
 const HOME_STEPS=[
  {t:'👋 Welcome to PolyStar!',x:'Let\'s take a quick look around before your first game.'},
  {sel:'#lProfile',t:'🙂 Your profile',x:'This is you! Tap here to set your name and pick your pawn. Your games and wins show here too.'},
+ {sel:'#lFriends',t:'👥 Friends',x:'Add friends with your friend code, see who is online right now and invite them to play.'},
  {sel:'#lMusic',t:'🎵 Music',x:'Soft jazz & rain. Tap to turn the music on or off.'},
  {sel:'#lHelp',t:'❓ How to play',x:'Forgot something? Tap here any time to see this tour again.'},
  {sel:'#themePick',t:'🌆 Background',x:'Pick where you play: Basant sky, Food Street, Chand Raat, a stadium and more.'},
@@ -1915,8 +1970,8 @@ const HOME_STEPS=[
  {sel:'#prows .slot',t:'♟️ Players & pawns',x:'Tap a pawn to choose from 100 fun pawns, and switch players between Human and CPU.'},
  {sel:'#startBtn',t:'🎲 Ready?',x:'Tap PLAY to start a quick 2-minute training match. Finish it to unlock online play. Good luck, seth ji!'}];
 function afterIntro(){let seen=!!TUT_SEEN['lm-home-tut'];try{seen=seen||localStorage.getItem('lm-home-tut')==='1';}catch(e){}
- const then=()=>{if(LOCK.room)showLocked();};
- if(!seen&&!$('#setup').hidden)startTutorial(HOME_STEPS,'lm-home-tut',then);else then();}
+ const then=()=>{};
+ if(!seen&&!$('#setup').hidden&&!LOCK.room)startTutorial(HOME_STEPS,'lm-home-tut',then);else then();}
 $('#lHelp').addEventListener('click',()=>{sfx('tap');if(!$('#setup').hidden)startTutorial(HOME_STEPS,'lm-home-tut');});
 function syncProfile(){if((me.name||'').trim()){setup.players[0].name=me.name.trim();}if(PAWNS[me.pawn]&&!setup.players.slice(1).some(q=>q.pawn===me.pawn))setup.players[0].pawn=me.pawn;renderSetup();renderProfile();updateLock();}
 
@@ -2048,17 +2103,17 @@ function freePawn(want,self){const taken=new Set(NET.lobby.filter(e=>e!==self).m
 function hostRoom(){if(!window.Peer){netMsg('Online play could not load. Open the game from its GitHub Pages link with internet on.');return;}
  netTeardown();const code=newCode();netMsg('Creating room…');let peer;
  try{peer=new Peer(PREFIX+code);}catch(e){netMsg(netErr(e));return;}NET.peer=peer;
- peer.on('open',()=>{NET.role='host';NET.code=code;NET.lobby=[{kind:'host',name:myName(),pawn:me.pawn}];netMsg('');showRoom();sfx('buy');});
+ peer.on('open',()=>{NET.role='host';NET.code=code;NET.lobby=[{kind:'host',name:myName(),pawn:me.pawn,fc:FR.code}];netMsg('');showRoom();sfx('buy');frFlushInv();});
  peer.on('connection',conn=>{conn.on('data',d=>hostData(conn,d));conn.on('close',()=>hostClose(conn));conn.on('error',()=>hostClose(conn));});
  peer.on('error',e=>{if(e.type==='unavailable-id'){hostRoom();return;}if(e.type==='peer-unavailable')return;netMsg(netErr(e));});
  peer.on('disconnected',()=>{try{peer.reconnect();}catch(e){}});}
-function lobbyPublic(){return NET.lobby.map(e=>({name:e.name,pawn:e.pawn,kind:e.kind}));}
+function lobbyPublic(){return NET.lobby.map(e=>({name:e.name,pawn:e.pawn,kind:e.kind,fc:e.fc||''}));}
 function lobbyChanged(){renderRoom();NET.lobby.forEach((e,i)=>{if(e.conn)try{e.conn.send({t:'lobby',list:lobbyPublic(),me:i,code:NET.code});}catch(x){}});}
 const cleanName=s=>String(s||'').replace(/[<>]/g,'').trim().slice(0,18)||'Player';
 function hostData(conn,d){if(!d||typeof d!=='object')return;
  if(d.t==='hello'){if(G){try{conn.send({t:'full',why:'That game has already started.'});}catch(e){}return;}
   if(NET.lobby.length>=6){try{conn.send({t:'full',why:'That room is full (6 players).'});}catch(e){}return;}
-  if(!NET.conns.includes(conn))NET.conns.push(conn);const e={kind:'remote',name:cleanName(d.name),conn};e.pawn=freePawn(+d.pawn,e);NET.lobby.push(e);lobbyChanged();sfxLocal('coin');return;}
+  if(!NET.conns.includes(conn))NET.conns.push(conn);const e={kind:'remote',name:cleanName(d.name),conn,fc:cleanCode(d.fc)};e.pawn=freePawn(+d.pawn,e);NET.lobby.push(e);lobbyChanged();sfxLocal('coin');return;}
  if(d.t==='pawn'){const e=NET.lobby.find(x=>x.conn===conn);if(e&&!G){e.pawn=freePawn(+d.pawn,e);lobbyChanged();}return;}
  if(!G)return;const pl=G.players.find(p=>p.conn===conn);if(!pl)return;
  if(d.t==='chat'){const now=Date.now();if(now-(pl._chatAt||0)<700)return;pl._chatAt=now;const x=cleanChat(d.x);if(x)relayChat(pl.i,x);return;}
@@ -2075,7 +2130,7 @@ function hostStart(){if(NET.role!=='host'||NET.lobby.length<2)return;
  const cfg=NET.lobby.map(e=>({name:e.name,pawn:e.pawn,cpu:e.kind==='cpu',remote:e.kind==='remote',conn:e.conn||null}));
  NET.roster=NET.lobby.map(e=>e.kind==='host'?NET.peer.id:e.kind==='remote'?e.conn.peer:null);
  const tk=pickTheme(setup.theme);applyTheme(tk);
- buildGame(cfg);toast(THEMES[tk].name);
+ frRecent();buildGame(cfg);toast(THEMES[tk].name);
  NET.lobby.forEach((e,i)=>{if(e.conn)try{e.conn.send({t:'start',players:cfg.map(c=>({name:c.name,pawn:c.pawn,cpu:c.cpu})),me:i,roster:NET.roster,theme:tk});}catch(x){}});
  maybeTutorial();log(`Online game on! Room ${NET.code}. Everyone starts with Rs 0. Pass Shuru Chowk to earn ${short(GO_PAY)}. Nobody pays anything until their first salary.`);setTimeout(gameLoop,500);}
 
@@ -2086,7 +2141,7 @@ function joinRoom(raw){const code=String(raw||'').toUpperCase().replace(/[^A-Z0-
  netTeardown();netMsg('Connecting to room '+code+'…');let peer;try{peer=new Peer();}catch(e){netMsg(netErr(e));return;}NET.peer=peer;
  peer.on('open',()=>{const conn=peer.connect(PREFIX+code,{reliable:true});NET.hostConn=conn;
   const to=setTimeout(()=>{if(NET.role!=='client')netMsg('Still connecting… make sure the code is right and the host has the room open.');},9000);
-  conn.on('open',()=>{clearTimeout(to);NET.role='client';NET.code=code;conn.send({t:'hello',name:myName(),pawn:me.pawn});netMsg('');});
+  conn.on('open',()=>{clearTimeout(to);NET.role='client';NET.code=code;conn.send({t:'hello',name:myName(),pawn:me.pawn,fc:FR.code});netMsg('');});
   conn.on('data',clientData);conn.on('close',clientClosed);conn.on('error',clientClosed);});
  peer.on('error',e=>netMsg(netErr(e)));}
 let hopQ=Promise.resolve(),hopBusy=0;
@@ -2094,7 +2149,7 @@ function clientData(d){if(!d||typeof d!=='object')return;
  switch(d.t){
  case 'full':netMsg(d.why);netTeardown();showNetStart();break;
  case 'lobby':NET.lobby=d.list;NET.me=d.me;NET.code=d.code;if(d.list[d.me]){me.pawn=d.list[d.me].pawn;renderMe();}showRoom();break;
- case 'start':NET.roster=d.roster||[];NET.me=d.me;applyTheme(d.theme);maybeTutorial();if(THEMES[d.theme])setTimeout(()=>toast(THEMES[d.theme].name),300);buildGame(d.players.map(x=>({name:x.name,pawn:x.pawn,cpu:x.cpu})));NET.me=d.me;NET.myAsk=null;NET.bar={pi:0,status:''};drawClientBar();break;
+ case 'start':frRecent();NET.roster=d.roster||[];NET.me=d.me;applyTheme(d.theme);maybeTutorial();if(THEMES[d.theme])setTimeout(()=>toast(THEMES[d.theme].name),300);buildGame(d.players.map(x=>({name:x.name,pawn:x.pawn,cpu:x.cpu})));NET.me=d.me;NET.myAsk=null;NET.bar={pi:0,status:''};drawClientBar();break;
  case 'state':if(G)applyState(d);break;
  case 'hop':if(G)clientHop(d);break;
  case 'dice':if(G)rollDice(d.v).catch(()=>{});break;
@@ -2144,17 +2199,19 @@ function showRoom(){$('#netStart').hidden=true;$('#roomBox').hidden=false;
  let base=location.href.split('#')[0].split('?')[0];const link=base+'?room='+NET.code;
  $('#roomCode').textContent=NET.code;$('#roomLink').value=link;$('#waBtn').href='https://wa.me/?text='+encodeURIComponent(`Join my PolyStar game and become a Raees of Lahore! Room ${NET.code}: ${link}`);renderRoom();}
 function renderRoom(){const host=NET.role==='host',mi=host?0:NET.me;
- $('#hostActs').hidden=!host;
+ $('#hostActs').hidden=!host;$('#roomFr').hidden=!host;
  $('#roomList').innerHTML=NET.lobby.map((e,i)=>{const tags=[e.kind==='host'?'HOST':e.kind==='cpu'?'CPU':'ONLINE'];if(i===mi)tags.unshift('YOU');
-  return `<div class="rrow" style="--pc:${PCOL[i]}">${imgT(e.pawn)}<b>${esc(e.name)}</b><em>${tags.join(' · ')}</em>${host&&e.kind==='cpu'?`<button class="x" data-rm="${i}" aria-label="Remove ${esc(e.name)}">×</button>`:''}</div>`;}).join('');
+  const addf=e.fc&&e.fc!==FR.code&&!frFind(e.fc)?`<button class="gbtn small green addf" data-addf="${i}" type="button">+ Friend</button>`:'';
+  return `<div class="rrow" style="--pc:${PCOL[i]}">${imgT(e.pawn)}<b>${esc(e.name)}</b>${addf}<em>${tags.join(' · ')}</em>${host&&e.kind==='cpu'?`<button class="x" data-rm="${i}" aria-label="Remove ${esc(e.name)}">×</button>`:''}</div>`;}).join('');
  $('#netStartBtn').disabled=NET.lobby.length<2;$('#addCpu').disabled=NET.lobby.length>=6;
  $('#roomNote').textContent=host?(NET.lobby.length<2?'Share the link or code. Friends appear here when they join.':`${NET.lobby.length} players ready. Start when everyone is in.`):'You are in! Waiting for the host to start the game…';}
 const CPU_NAMES=['Chacha Bot','Baji Bot','Ustad Bot','Pappu Bot','Rani Bot'];
 $('#mLocal').addEventListener('click',()=>{sfx('tap');$('#mLocal').setAttribute('aria-pressed','true');$('#mOnline').setAttribute('aria-pressed','false');$('#localPane').hidden=false;$('#onlinePane').hidden=true;});
-$('#mOnline').addEventListener('click',()=>{sfx('tap');if(!onlineUnlocked()){showLocked();return;}$('#mOnline').setAttribute('aria-pressed','true');$('#mLocal').setAttribute('aria-pressed','false');$('#localPane').hidden=true;$('#onlinePane').hidden=false;renderMe();});
+function openOnline(force){if(!onlineUnlocked()&&!force){showLocked();return false;}$('#mOnline').setAttribute('aria-pressed','true');$('#mLocal').setAttribute('aria-pressed','false');$('#localPane').hidden=true;$('#onlinePane').hidden=false;renderMe();return true;}
+$('#mOnline').addEventListener('click',()=>{sfx('tap');openOnline(NET.role!=='local');});
 $('#meAva').addEventListener('click',()=>{sfx('tap');pk.mode='me';$('#pkTitle').textContent='Choose your pawn';$('#pkSearch').value=pk.q;$('#picker').hidden=false;renderPicker();});
 $('#netName').addEventListener('input',e=>{me.name=e.target.value.slice(0,18);saveMe();if(NET.role==='host'&&!G&&NET.lobby[0]){NET.lobby[0].name=myName();lobbyChanged();}});
-$('#hostBtn').addEventListener('click',()=>{sfx('tap');if(!(me.name||'').trim()){netMsg('Type your name first.');$('#netName').focus();return;}hostRoom();});
+$('#hostBtn').addEventListener('click',()=>{sfx('tap');if(!onlineUnlocked()){netMsg('Finish one game on this phone to create your own rooms. You can still join a friend\'s room with their code or invite.');return;}if(!(me.name||'').trim()){netMsg('Type your name first.');$('#netName').focus();return;}hostRoom();});
 $('#joinBtn').addEventListener('click',()=>{sfx('tap');if(!(me.name||'').trim()){netMsg('Type your name first.');$('#netName').focus();return;}joinRoom($('#joinCode').value);});
 $('#joinCode').addEventListener('keydown',e=>{if(e.key==='Enter')$('#joinBtn').click();});
 $('#copyBtn').addEventListener('click',()=>{const v=$('#roomLink').value;const ok=()=>{$('#copyBtn').textContent='Copied!';setTimeout(()=>$('#copyBtn').textContent='Copy link',1500);};
@@ -2163,8 +2220,148 @@ $('#addCpu').addEventListener('click',()=>{if(NET.role!=='host'||NET.lobby.lengt
 $('#roomList').addEventListener('click',e=>{const b=e.target.closest('[data-rm]');if(!b||NET.role!=='host')return;NET.lobby.splice(+b.dataset.rm,1);lobbyChanged();});
 $('#netStartBtn').addEventListener('click',()=>{sfx('tap');hostStart();});
 $('#leaveBtn').addEventListener('click',()=>{sfx('tap');netTeardown();netMsg('');showNetStart();});
-(function(){let room=null;try{room=new URLSearchParams(location.search).get('room');}catch(e){}
- if(room&&!onlineUnlocked()){LOCK.room=room.toUpperCase().slice(0,5);}else if(room){$('#mOnline').click();$('#joinCode').value=room.toUpperCase().slice(0,5);netMsg((me.name?'':'Type your name, ')+'pick a pawn and tap Join.');}})();
+
+/* ================= friends: friend codes, online status, invites (free PeerJS presence) ================= */
+const UPREFIX='polystar-u-';
+const cleanCode=s=>String(s||'').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,6);
+const FR={code:'',peer:null,ready:false,list:[],recent:[],conns:{},dialing:{},heard:{},stat:{},sent:{},lastSt:'',addOnStart:null,dup:false,invQ:[],invT:0};
+(function(){try{FR.code=cleanCode(localStorage.getItem('lm-fcode'));}catch(e){}
+ if(FR.code.length!==6){FR.code=Array.from({length:6},()=>CODECH[rnd(CODECH.length)]).join('');try{localStorage.setItem('lm-fcode',FR.code);}catch(e){}}
+ const ld=(k,n)=>{try{const l=JSON.parse(localStorage.getItem(k)||'[]');return Array.isArray(l)?l.filter(f=>f&&cleanCode(f.c).length===6).slice(0,n).map(f=>({c:cleanCode(f.c),n:cleanName(f.n),p:PAWNS[f.p]?+f.p:0,seen:+f.seen||0,pend:f.pend?1:undefined})):[];}catch(e){return [];}};
+ FR.list=ld('lm-friends',60);FR.recent=ld('lm-recent',12);})();
+function frSave(){try{localStorage.setItem('lm-friends',JSON.stringify(FR.list.map(f=>({c:f.c,n:f.n,p:f.p,seen:f.seen,pend:f.pend}))));localStorage.setItem('lm-recent',JSON.stringify(FR.recent));}catch(e){}}
+const frFind=c=>FR.list.find(f=>f.c===c);
+const frOnline=c=>Date.now()-(FR.heard[c]||0)<32000;
+const frLive=c=>FR.conns[c]?[...FR.conns[c]].filter(x=>x.open):[];
+const toastL=t=>{const r=NET.role;NET.role='_';try{toast(t);}finally{NET.role=r;}};
+const frMsg=t=>{const el=$('#frMsg');if(el)el.textContent=t||'';};
+function ago(ts){const s=(Date.now()-ts)/1000;if(s<90)return 'just now';if(s<3600)return Math.round(s/60)+'m ago';if(s<86400)return Math.round(s/3600)+'h ago';return Math.round(s/86400)+'d ago';}
+function myPres(){if(G&&!G.over)return{s:'game'};if(NET.role==='host')return{s:'room',room:NET.code,k:NET.lobby.length};if(NET.role==='client')return{s:'inroom'};return{s:'menu'};}
+function frHello(x){return Object.assign({t:'hi',c:FR.code,n:myName(),p:me.pawn},myPres(),x||{});}
+function frSendAll(m){Object.keys(FR.conns).forEach(c=>frLive(c).forEach(x=>{try{x.send(m);}catch(e){}}));}
+
+/* connect to the PeerJS server under our own friend code so friends can find us */
+function presStart(){if(!window.Peer||FR.peer||document.hidden)return;let p;try{p=new Peer(UPREFIX+FR.code);}catch(e){return;}FR.peer=p;
+ p.on('open',()=>{if(FR.peer!==p)return;FR.ready=true;FR.dup=false;if(FR.addOnStart){const c=FR.addOnStart;FR.addOnStart=null;frAdd(c);}frPoll();renderFriends();});
+ p.on('connection',c=>frWire(c,null));
+ p.on('error',e=>{if(FR.peer!==p)return;const t=e&&e.type;
+  if(t==='peer-unavailable'){const m=/polystar-u-([A-Z0-9]{6})/.exec(String(e.message||''));if(m){delete FR.dialing[m[1]];renderFriends();}return;}
+  if(t==='unavailable-id'){FR.dup=true;presKill();setTimeout(presStart,20000);renderFriends();return;}
+  if(t==='network'||t==='server-error'||t==='socket-error'||t==='socket-closed'){presKill();setTimeout(presStart,8000);}});
+ p.on('disconnected',()=>{setTimeout(()=>{if(FR.peer===p&&!p.destroyed)try{p.reconnect();}catch(e){}},2500);});}
+function presKill(){const p=FR.peer;FR.peer=null;FR.ready=false;FR.dialing={};
+ Object.keys(FR.conns).forEach(c=>FR.conns[c].forEach(x=>{try{x.close();}catch(e){}}));FR.conns={};FR.heard={};try{p&&p.destroy();}catch(e){}}
+function frWire(conn,code){conn._t=Date.now();if(code)FR.dialing[code]=Date.now();
+ conn.on('open',()=>{if(code)delete FR.dialing[code];if(document.hidden||!FR.peer){try{conn.close();}catch(e){}return;}
+  const f=code&&frFind(code);try{conn.send(frHello(f?{know:1,add:f.pend?1:0}:null));}catch(e){}
+  setTimeout(()=>{if(!conn._fc)try{conn.close();}catch(e){}},8000);});
+ conn.on('data',d=>frData(conn,d));
+ const drop=()=>{const c=conn._fc;if(c&&FR.conns[c]){FR.conns[c].delete(conn);if(!FR.conns[c].size){delete FR.conns[c];}}if(code&&FR.dialing[code])delete FR.dialing[code];renderFriends();};
+ conn.on('close',drop);conn.on('error',drop);}
+function frData(conn,d){if(!d||typeof d!=='object')return;const c=cleanCode(d.c);if(c.length!==6||c===FR.code)return;
+ if(conn._fc&&conn._fc!==c)return;
+ if(d.t==='hi'){let f=frFind(c);
+  if(!f){if(!d.add||FR.list.length>=60)return;
+   f={c,n:cleanName(d.n),p:PAWNS[+d.p]?+d.p:0,seen:Date.now()};FR.list.unshift(f);toastL(`👥 ${f.n} added you as a friend`);sfxLocal('coin');}
+  if(!conn._fc){conn._fc=c;(FR.conns[c]=FR.conns[c]||new Set()).add(conn);}
+  f.n=cleanName(d.n);if(PAWNS[+d.p])f.p=+d.p;f.seen=Date.now();if(d.know)delete f.pend;
+  FR.heard[c]=Date.now();FR.stat[c]={s:['menu','room','inroom','game'].includes(d.s)?d.s:'menu',room:/^[A-Z0-9]{5}$/.test(d.room||'')?d.room:null,k:Math.min(6,+d.k||0)};
+  if(!d.re)try{conn.send(frHello({know:1,re:1,add:f.pend?1:0}));}catch(e){}
+  frSave();renderFriends();if(NET.role!=='local'&&!G)renderRoom();return;}
+ if(!conn._fc||!frFind(c))return;
+ if(d.t==='bye'){FR.heard[c]=0;renderFriends();return;}
+ FR.heard[c]=Date.now();
+ if(d.t==='inv'&&/^[A-Z0-9]{5}$/.test(d.room||''))showInvite(frFind(c),d.room);}
+function frPoll(){if(!FR.peer||!FR.ready||document.hidden)return;const now=Date.now();
+ FR.list.forEach(f=>{if(frLive(f.c).length)return;const dl=FR.dialing[f.c];if(dl&&now-dl<15000)return;if((f._next||0)>now)return;
+  f._next=now+20000;try{frWire(FR.peer.connect(UPREFIX+f.c,{reliable:true}),f.c);}catch(e){}});}
+function frTick(){if(!FR.peer){if(!document.hidden&&window.Peer&&!FR.dup)presStart();return;}
+ if(!FR.ready||document.hidden)return;const now=Date.now();
+ // drop links to friends we have not heard from (closed app, lost signal)
+ Object.keys(FR.conns).forEach(c=>{if(now-(FR.heard[c]||0)>32000)FR.conns[c].forEach(x=>{if(now-x._t>20000)try{x.close();}catch(e){}});});
+ FR.list.forEach(f=>{if(frOnline(f.c))f.seen=now;});
+ frSendAll({t:'ping',c:FR.code});frPoll();frSave();renderFriends();}
+setInterval(frTick,10000);
+setInterval(()=>{if(!FR.ready||document.hidden)return;const st=JSON.stringify([myPres(),myName(),me.pawn]);if(st!==FR.lastSt){FR.lastSt=st;frSendAll(frHello({know:1,re:1}));}},1500);
+document.addEventListener('visibilitychange',()=>{
+ if(document.hidden){frSendAll({t:'bye',c:FR.code});}
+ else{if(!FR.peer)presStart();else{frSendAll(frHello({know:1,re:1}));FR.list.forEach(f=>f._next=0);frPoll();}renderFriends();}});
+window.addEventListener('pagehide',()=>{frSendAll({t:'bye',c:FR.code});});
+
+/* adding and removing friends */
+function frAdd(raw,n,p){const c=cleanCode(raw);
+ if(c.length!==6){frMsg('Friend codes have 6 letters or numbers.');return false;}
+ if(c===FR.code){frMsg('That is your own code! Send it to your friends instead.');return false;}
+ let f=frFind(c);if(f){frMsg(`${f.n} is already your friend.`);return false;}
+ if(FR.list.length>=60){frMsg('Your friends list is full (60).');return false;}
+ f={c,n:n?cleanName(n):'New friend',p:PAWNS[p]?+p:0,seen:0,pend:1,_next:0};FR.list.unshift(f);FR.recent=FR.recent.filter(r=>r.c!==c);frSave();
+ frMsg(n?`${f.n} added! They will see you in their friends list too.`:'Friend added! They show up here when they are online.');
+ toastL(`👥 ${n?f.n+' is now your friend':'Friend added'}`);sfx('coin');frPoll();renderFriends();if(NET.role!=='local'&&!G)renderRoom();return true;}
+function frRemove(c){const f=frFind(c);if(!f)return;FR.list=FR.list.filter(x=>x!==f);
+ if(FR.conns[c])FR.conns[c].forEach(x=>{try{x.close();}catch(e){}});delete FR.conns[c];delete FR.heard[c];frSave();frMsg(`${f.n} removed.`);renderFriends();}
+function frRecent(){const mine=FR.code;(NET.lobby||[]).forEach(e=>{const c=cleanCode(e.fc);if(c.length!==6||c===mine)return;
+  FR.recent=[{c,n:cleanName(e.name),p:PAWNS[e.pawn]?+e.pawn:0},...FR.recent.filter(r=>r.c!==c)].slice(0,12);});frSave();}
+
+/* invites */
+function frSendInv(c){const f=frFind(c);if(!f||NET.role!=='host')return;
+ frLive(c).forEach(x=>{try{x.send({t:'inv',c:FR.code,room:NET.code,n:myName()});}catch(e){}});
+ FR.sent[c]=Date.now();frMsg(`Invite sent to ${f.n}!`);sfx('tap');renderFriends();setTimeout(renderFriends,10100);}
+function frFlushInv(){const q=FR.invQ;FR.invQ=[];q.forEach(frSendInv);}
+function frInvite(c){if(NET.role==='host'&&!G){frSendInv(c);return;}
+ if(!onlineUnlocked()){frMsg('Finish one game on this phone to create rooms. Friends can still invite you!');return;}
+ if(!(me.name||'').trim()){frMsg('Set your name first: tap your profile in the top-left corner.');return;}
+ FR.invQ=[c];openOnline();hostRoom();frMsg('Creating a room…');}
+function frJoin(room){hideInvite();$('#friends').hidden=true;
+ if(G)newGame();else if(NET.role!=='local')netTeardown();
+ openOnline(true);$('#joinCode').value=room;
+ if((me.name||'').trim())joinRoom(room);else{netMsg('Type your name and tap Join.');$('#netName').focus();}}
+function showInvite(f,room){if(!f||((NET.role==='host'||NET.role==='client')&&NET.code===room))return;
+ const busy=G&&!G.over&&NET.role!=='local';const el=$('#invPop');
+ el.innerHTML=`${imgT(f.p)}<div class="it"><b>${esc(f.n)}</b> invited you to play PolyStar!<small>${busy?'Finish this game first, then join from Friends.':'Room '+room}</small></div><div class="ib2">${busy?'':`<button class="gbtn small green" data-ij="${room}" type="button">Join</button>`}<button class="gbtn small" data-ix type="button">${busy?'OK':'Later'}</button></div>`;
+ el.hidden=false;sfxLocal('coin');buzz(80);clearTimeout(FR.invT);FR.invT=setTimeout(hideInvite,25000);}
+function hideInvite(){clearTimeout(FR.invT);$('#invPop').hidden=true;}
+$('#invPop').addEventListener('click',e=>{const j=e.target.closest('[data-ij]');if(j){sfx('tap');frJoin(j.dataset.ij);return;}if(e.target.closest('[data-ix]')){sfx('tap');hideInvite();}});
+
+/* friends panel */
+function frRow(f){const on=frOnline(f.c),st=FR.stat[f.c]||{s:'menu'},busy=G&&!G.over;let sub,btn='';
+ if(!on)sub=f.pend&&!f.seen?'Waiting for them to open PolyStar':f.seen?'Last seen '+ago(f.seen):'Offline';
+ else sub=st.s==='game'?'🎲 Playing a game':st.s==='room'?`🏠 In a room (${st.k||1}/6)`:st.s==='inroom'?'🏠 In a friend\'s room':'Online';
+ if(on&&!busy){const sent=Date.now()-(FR.sent[f.c]||0)<10000;
+  if(NET.role==='host'&&st.s==='menu')btn=sent?'<button class="gbtn small" disabled type="button">Sent ✓</button>':`<button class="gbtn small green" data-finv="${f.c}" type="button">Invite</button>`;
+  else if(st.s==='room'&&st.room&&st.room!==NET.code)btn=`<button class="gbtn small gold" data-fjoin="${st.room}" type="button">Join</button>`;
+  else if(NET.role==='local'&&st.s==='menu')btn=`<button class="gbtn small green" data-finv="${f.c}" type="button">Invite</button>`;}
+ return `<div class="frow">${`<span class="fav">${imgT(f.p)}<span class="fdot${on?' on':''}"></span></span>`}<span class="ft"><b>${esc(f.n)}</b><small class="${on?'on':''}">${esc(sub)}</small></span>${btn}<button class="x" data-frm="${f.c}" aria-label="Remove ${esc(f.n)}" type="button">×</button></div>`;}
+function renderFriends(){const on=FR.list.filter(f=>frOnline(f.c)).length,b=$('#frBadge');if(b){b.hidden=!on;b.textContent=on;}
+ if($('#friends').hidden)return;
+ $('#frCode').textContent=FR.code;
+ const link=location.href.split('#')[0].split('?')[0]+'?friend='+FR.code;
+ $('#frWa').href='https://wa.me/?text='+encodeURIComponent(`Add me on PolyStar and let's play! My friend code is ${FR.code}: ${link}`);
+ const list=[...FR.list].sort((a,b)=>(frOnline(b.c)-frOnline(a.c))||((b.seen||0)-(a.seen||0)));
+ $('#frCount').textContent=FR.list.length?`${on} online`:'';
+ $('#frList').innerHTML=list.length?list.map(frRow).join(''):'<div class="fempty">No friends yet. Share your code, type a friend\'s code above, or add people you play online with.</div>';
+ if(FR.dup)$('#frList').insertAdjacentHTML('afterbegin','<div class="fempty">PolyStar is open in another tab, so friends see you there.</div>');
+ else if(!window.Peer)$('#frList').insertAdjacentHTML('afterbegin','<div class="fempty">Friends need internet. Open the game from its GitHub Pages link.</div>');
+ const rec=FR.recent.filter(r=>!frFind(r.c));$('#frRecentWrap').hidden=!rec.length;
+ $('#frRecent').innerHTML=rec.map(r=>`<div class="frow"><span class="fav">${imgT(r.p)}</span><span class="ft"><b>${esc(r.n)}</b><small>Played online with you</small></span><button class="gbtn small green" data-fadd="${r.c}" type="button">+ Add</button></div>`).join('');}
+function openFriends(){sfx('tap');frMsg('');$('#friends').hidden=false;if(!FR.peer)presStart();FR.list.forEach(f=>{if(!frLive(f.c).length)f._next=0;});frPoll();renderFriends();}
+$('#lFriends').addEventListener('click',openFriends);
+$('#roomFr').addEventListener('click',openFriends);
+$('#frClose').addEventListener('click',()=>{sfx('tap');$('#friends').hidden=true;});
+$('#friends').addEventListener('click',e=>{if(e.target.id==='friends'){$('#friends').hidden=true;return;}
+ const t=e.target.closest('button');if(!t)return;
+ if(t.dataset.finv){frInvite(t.dataset.finv);return;}
+ if(t.dataset.fjoin){sfx('tap');frJoin(t.dataset.fjoin);return;}
+ if(t.dataset.fadd){const r=FR.recent.find(x=>x.c===t.dataset.fadd);if(r)frAdd(r.c,r.n,r.p);return;}
+ if(t.dataset.frm){const f=frFind(t.dataset.frm);if(!f)return;if(t.dataset.sure){frRemove(f.c);return;}t.dataset.sure='1';t.textContent='✓';t.setAttribute('aria-label','Tap again to remove '+f.n);setTimeout(()=>{if(t.isConnected){delete t.dataset.sure;t.textContent='×';}},2500);}});
+$('#frAddBtn').addEventListener('click',()=>{if(frAdd($('#frAddIn').value))$('#frAddIn').value='';});
+$('#frAddIn').addEventListener('keydown',e=>{if(e.key==='Enter')$('#frAddBtn').click();});
+$('#frCopy').addEventListener('click',()=>{const ok=()=>{$('#frCopy').textContent='Copied!';setTimeout(()=>$('#frCopy').textContent='Copy',1500);};try{navigator.clipboard.writeText(FR.code).then(ok,()=>{});}catch(e){}});
+$('#roomList').addEventListener('click',e=>{const b=e.target.closest('[data-addf]');if(!b)return;const en=NET.lobby[+b.dataset.addf];if(en&&en.fc)frAdd(en.fc,en.name,en.pawn);});
+setTimeout(presStart,1200);
+
+(function(){let room=null,fc=null;try{const q=new URLSearchParams(location.search);room=q.get('room');fc=q.get('friend');}catch(e){}
+ if(fc&&cleanCode(fc).length===6)FR.addOnStart=cleanCode(fc);
+ if(room){LOCK.room=room.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,5);openOnline(true);$('#joinCode').value=LOCK.room;netMsg((me.name?'':'Type your name, ')+'pick a pawn and tap Join.');}})();
 
 
 /* ================= chat + voice ================= */
