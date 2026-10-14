@@ -298,6 +298,42 @@ button:focus-visible,input:focus-visible{outline:3px solid #fff;outline-offset:2
 .pl.talk .pav{box-shadow:0 0 0 3px #46e08c,0 0 16px 5px #46e08c!important}
 .badge.mic{top:-7px;left:-7px;right:auto;bottom:auto;transform:none;background:#46e08c;color:#06301a;padding:2px 3px 1px;line-height:0}
 .badge.mic svg{width:11px;height:11px}
+/* ===== starting splash screen ===== */
+#intro{position:fixed;inset:0;z-index:60;overflow:hidden;display:grid;place-items:center;cursor:pointer;
+ background:radial-gradient(800px 500px at 50% 18%,rgba(242,182,50,.22),transparent 60%),radial-gradient(700px 520px at 85% 85%,rgba(226,54,111,.3),transparent 62%),radial-gradient(700px 520px at 10% 75%,rgba(34,181,165,.3),transparent 62%),linear-gradient(180deg,#06231f,#0b1c1a 55%,#140d22);
+ transition:opacity .6s ease,transform .6s ease}
+#intro.out{opacity:0;transform:scale(1.08);pointer-events:none}
+#intro .stars{position:absolute;inset:0;background:radial-gradient(circle at 1px 1px,rgba(255,255,255,.08) 1.5px,transparent 0) 0 0/26px 26px;animation:drift 40s linear infinite}
+@keyframes drift{to{background-position:260px 130px}}
+.ic-wrap{position:relative;z-index:2;display:grid;justify-items:center;gap:18px;padding:0 16px calc(28vh) ;text-align:center;width:100%;max-width:560px}
+.ilogo{display:grid;justify-items:center;gap:6px}
+.ilogo .logo-top{animation:dropIn2 .7s .1s cubic-bezier(.2,1.5,.4,1) both}
+.ilogo h1{margin:0;font:normal clamp(58px,16vw,110px)/.9 var(--f-game);color:var(--gold1);text-transform:uppercase;text-shadow:0 5px 0 var(--goldE),0 10px 0 #4a2a00,0 20px 34px rgba(0,0,0,.55);animation:logoPop .9s .25s cubic-bezier(.2,1.6,.4,1) both}
+.ilogo h1 span{display:block;margin-top:.18em;color:#fff;font-size:.6em;text-shadow:0 5px 0 var(--red2),0 10px 0 #5a0a26,0 20px 34px rgba(0,0,0,.55);animation:logoPop .9s .45s cubic-bezier(.2,1.6,.4,1) both}
+@keyframes logoPop{0%{opacity:0;transform:scale(.3) rotate(-8deg)}100%{opacity:1;transform:none}}
+@keyframes dropIn2{0%{opacity:0;transform:translateY(-40px)}100%{opacity:1;transform:none}}
+.idice{display:flex;gap:26px;perspective:600px;height:70px;align-items:center;animation:dropIn2 .7s .6s both}
+.d3{width:52px;height:52px;position:relative;transform-style:preserve-3d;animation:tumble 3.2s linear infinite}
+.d3:nth-child(2){animation-duration:2.7s;animation-direction:reverse}
+@keyframes tumble{0%{transform:rotateX(0) rotateY(0)}100%{transform:rotateX(360deg) rotateY(720deg)}}
+.d3 i{position:absolute;inset:0;background:#fbf7ee;border-radius:10px;box-shadow:inset 0 0 0 2px #e6dcc0;display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);padding:7px;font-style:normal}
+.d3 i b{width:9px;height:9px;border-radius:50%;background:#1b1b1b;place-self:center}
+.d3 i.one b{background:#c8202f;width:12px;height:12px}
+.iload{width:min(320px,80vw);display:grid;gap:8px;animation:dropIn2 .6s .8s both}
+.ibar{height:16px;border-radius:999px;background:rgba(0,0,0,.45);border:2px solid rgba(255,255,255,.18);overflow:hidden;box-shadow:inset 0 2px 4px rgba(0,0,0,.4)}
+.ibar i{display:block;height:100%;width:0;border-radius:999px;background:repeating-linear-gradient(-45deg,var(--rose) 0 12px,var(--gold) 12px 24px,var(--teal) 24px 36px,#1f8a4c 36px 48px);background-size:68px 100%;animation:barslide 1s linear infinite;transition:width .3s ease}
+@keyframes barslide{to{background-position:68px 0}}
+.itip{font:800 14px var(--f-body);color:var(--muted);min-height:2.6em;text-wrap:balance;transition:opacity .3s}
+.itap{font:normal clamp(26px,7vw,38px) var(--f-game);color:#fff;text-transform:uppercase;letter-spacing:.04em;text-shadow:0 4px 0 rgba(0,0,0,.4);animation:tapPulse 1.2s ease-in-out infinite}
+@keyframes tapPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.08);opacity:.75}}
+.iskyline{position:absolute;left:0;right:0;bottom:0;height:30vh;min-height:150px;z-index:1;pointer-events:none}
+.iskyline svg{position:absolute;bottom:0;width:100%;height:100%}
+.ikite{position:absolute;z-index:1;width:42px;height:42px;animation:kfloat 5s ease-in-out infinite;pointer-events:none}
+.ikite i{position:absolute;inset:6px;transform:rotate(45deg);border-radius:4px;background:linear-gradient(135deg,var(--a) 50%,var(--b) 50%);box-shadow:0 4px 10px rgba(0,0,0,.35)}
+.ikite::after{content:"";position:absolute;left:50%;top:38px;width:2px;height:70px;background:linear-gradient(rgba(255,255,255,.5),transparent);transform-origin:top;transform:rotate(12deg)}
+@keyframes kfloat{0%,100%{transform:translate(0,0) rotate(-6deg)}50%{transform:translate(10px,-16px) rotate(8deg)}}
+.iver{position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 10px);left:0;right:0;text-align:center;z-index:2;font:800 12px var(--f-body);color:rgba(255,255,255,.55);letter-spacing:.08em;text-transform:uppercase}
+/* ===== end splash ===== */
 /* music toggle */
 .musicbtn .slash,.rainbtn .slash{display:none}.musicbtn[aria-pressed="false"] .slash,.rainbtn[aria-pressed="false"] .slash{display:inline}
 .musicbtn[aria-pressed="false"],.rainbtn[aria-pressed="false"]{background:linear-gradient(180deg,#6b6f76,#43474d);border-color:#9aa0a6}
@@ -424,6 +460,37 @@ a.gbtn{text-decoration:none;display:inline-block}
 <div id="toast" role="status" aria-live="polite"></div>
 <div class="modal" id="modal" hidden><div class="mcard" id="mcard"></div></div>
 
+<div id="intro" role="button" tabindex="0" aria-label="Lahore Monopoly is loading. Tap to start when ready.">
+  <div class="stars"></div>
+  <span class="ikite" style="left:8%;top:12%;--a:#e2366f;--b:#f2b632"><i></i></span>
+  <span class="ikite" style="right:10%;top:20%;--a:#22b5a5;--b:#fbf7ee;animation-delay:-2s"><i></i></span>
+  <span class="ikite" style="left:18%;top:46%;--a:#8f5cff;--b:#f08a1c;animation-delay:-1s;width:30px;height:30px"><i></i></span>
+  <span class="ikite" style="right:16%;top:52%;--a:#1f8a4c;--b:#e2366f;animation-delay:-3s;width:34px;height:34px"><i></i></span>
+  <div class="ic-wrap">
+    <div class="ilogo"><div class="logo-top">Zinda Dilan-e-Lahore</div><h1>Lahore<span>Monopoly</span></h1></div>
+    <div class="idice"><div class="d3" id="dA"></div><div class="d3" id="dB"></div></div>
+    <div class="iload" id="iload"><div class="ibar"><i id="ibarFill"></i></div><div class="itip" id="itip">Loading the streets of Lahore…</div></div>
+    <div class="itap" id="itap" hidden>Tap to start</div>
+  </div>
+  <div class="iskyline"><svg viewBox="0 0 400 120" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <g fill="#0a1a18" opacity=".55">
+      <rect x="0" y="86" width="400" height="34"/><rect x="10" y="70" width="26" height="22"/><rect x="44" y="78" width="18" height="14"/><rect x="300" y="72" width="30" height="20"/><rect x="340" y="80" width="22" height="12"/><rect x="368" y="66" width="24" height="26"/><circle cx="356" cy="80" r="8"/>
+    </g>
+    <g fill="#081311">
+      <rect x="0" y="100" width="400" height="20"/>
+      <!-- Badshahi-style mosque -->
+      <rect x="70" y="84" width="96" height="20"/><path d="M100 84a18 18 0 0 1 36 0z"/><path d="M80 86a10 10 0 0 1 20 0z"/><path d="M136 86a10 10 0 0 1 20 0z"/>
+      <rect x="64" y="48" width="6" height="56"/><circle cx="67" cy="47" r="4.5"/><rect x="166" y="48" width="6" height="56"/><circle cx="169" cy="47" r="4.5"/>
+      <rect x="118" y="58" width="2" height="8"/>
+      <!-- Minar-e-Pakistan -->
+      <path d="M228 104 L234 46 L242 46 L248 104 Z"/><rect x="219" y="98" width="38" height="6"/><rect x="231" y="56" width="14" height="3"/><circle cx="238" cy="42" r="5"/><rect x="237" y="28" width="2" height="12"/>
+      <!-- Fort wall -->
+      <rect x="270" y="88" width="70" height="16"/><path d="M270 88h6v-5h6v5h6v-5h6v5h6v-5h6v5h6v-5h6v5h6v-5h6v5h6v-5h4v5z"/><rect x="262" y="78" width="12" height="26"/><circle cx="268" cy="77" r="6"/><rect x="336" y="78" width="12" height="26"/><circle cx="342" cy="77" r="6"/>
+      <rect x="0" y="90" width="60" height="14"/><rect x="180" y="92" width="40" height="12"/><rect x="350" y="92" width="50" height="12"/>
+    </g>
+  </svg></div>
+  <div class="iver">A Lahori business game</div>
+</div>
 <div class="setup" id="setup">
   <div class="sw">
     <button class="ib musicbtn" id="lMusic" aria-label="Music" aria-pressed="true" title="Music on"></button>
@@ -1595,6 +1662,24 @@ document.querySelectorAll('.rainbtn').forEach(b=>{b.innerHTML=RAIN_SVG;b.addEven
 document.addEventListener('pointerdown',()=>{if(MUSIC.on&&!RAIN.playing&&!document.hidden){RAIN.on=true;rainStart();}},true);
 document.addEventListener('visibilitychange',()=>{if(document.hidden){RAIN.wasOn=RAIN.playing;rainStop();}else if(RAIN.on&&RAIN.wasOn)rainStart();});
 
+
+/* ================= splash screen logic ================= */
+const INTRO={t0:performance.now(),fonts:false,ready:false,done:false,tip:0};
+const TIPS=['Loading the streets of Lahore…','Tip: own a whole colour set to build houses.','Tip: DHA Phase 6 with a hotel charges Rs 2 Cr rent!','Tip: nobody pays tax until their first salary.','Tip: tap your card stack to build or mortgage.','Tip: play online and chat with friends while you play.','Polishing the pawns…','Brewing chai ☕'];
+(function buildDice(){const P={1:[5],2:[1,9],3:[1,5,9],4:[1,3,7,9],5:[1,3,5,7,9],6:[1,3,4,6,7,9]};const T=['translateZ(26px)','rotateY(180deg) translateZ(26px)','rotateY(90deg) translateZ(26px)','rotateY(-90deg) translateZ(26px)','rotateX(90deg) translateZ(26px)','rotateX(-90deg) translateZ(26px)'];
+ const faces=[1,6,3,4,2,5].map((v,k)=>`<i class="${v===1?'one':''}" style="transform:${T[k]}">${Array.from({length:9},(_,c)=>P[v].includes(c+1)?'<b></b>':'<span></span>').join('')}</i>`).join('');
+ ['dA','dB'].forEach(id=>{const d=document.getElementById(id);if(d)d.innerHTML=faces;});})();
+function introProgress(){const th=THUMBS.filter(Boolean).length/PAWNS.length,pv=Object.keys(THEME_PREV).length/THEME_KEYS.length;return Math.min(1,(INTRO.fonts?.15:0)+.45*th+.4*pv);}
+const introTimer=setInterval(()=>{if(INTRO.done){clearInterval(introTimer);return;}const el=performance.now()-INTRO.t0;let p=introProgress();
+ if(el>9000)p=1;document.getElementById('ibarFill').style.width=Math.round(Math.max(p,Math.min(.92,el/6000))*100)+'%';
+ const ti=Math.floor(el/2200)%TIPS.length;if(ti!==INTRO.tip){INTRO.tip=ti;$('#itip').textContent=TIPS[ti];}
+ if(!INTRO.ready&&p>=1&&el>1800){INTRO.ready=true;$('#iload').hidden=true;$('#itap').hidden=false;$('#intro').setAttribute('aria-label','Tap to start Lahore Monopoly');}},120);
+function introGo(){if(!INTRO.ready||INTRO.done)return;INTRO.done=true;sfx('buy');buzz(30);
+ if(MUSIC.on){musicStart();rainStart();}
+ const el=$('#intro');el.classList.add('out');setTimeout(()=>{el.hidden=true;},650);}
+$('#intro').addEventListener('click',introGo);
+$('#intro').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();introGo();}});
+
 /* tools */
 $('#deck').addEventListener('click',()=>{if(!G)return;sfx('card');const M=$('#manage');if(!M.hidden){M.hidden=true;renderDeck();return;}const o=deckOwner();G.mview=o?o.i:G.cur;openManage();});
 let topView=false;
@@ -1861,7 +1946,7 @@ async function genThemePreviews(){const cv=document.createElement('canvas');cv.w
  resize();setView(false);applyTheme('basant');const open=document.getElementById('tSel')&&$('#tSel').getAttribute('aria-expanded')==='true';renderThemePick(open);}
 resize();setView(false);applyTheme('basant');renderThemePick();requestAnimationFrame(frame);renderSetup();
 const fontsReady=document.fonts&&document.fonts.load?Promise.all([document.fonts.load('80px "Rozha One"'),document.fonts.load('800 24px Mukta'),document.fonts.load('600 24px Mukta')]):Promise.resolve();
-Promise.race([fontsReady,rawSleep(2500)]).catch(()=>{}).then(()=>{paintBoard();setTimeout(()=>{if(!G)genThemePreviews();},400);});
+Promise.race([fontsReady,rawSleep(2500)]).catch(()=>{}).then(()=>{INTRO.fonts=true;paintBoard();setTimeout(()=>{if(!G)genThemePreviews();},400);});
 paintBoard();
 setTimeout(genThumbs,60);
 })();
