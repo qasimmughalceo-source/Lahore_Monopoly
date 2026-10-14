@@ -74,11 +74,14 @@ A green ring counts down around the current player's avatar and the Roll button.
 
 Your properties stack up as cards in the bottom-right corner. Tap the stack to spread them out. Each card has two buttons: the blue bank button mortgages it for quick cash (or pays the mortgage back), and the green house button builds a house or hotel once you own the whole colour set. When you owe money, the house button sells houses instead.
 
-## Music
+## Music and settings
 
-Soft lo-fi jazz plays in the background: electric piano, walking bass, brush drums and vinyl crackle. It's generated live in the game, so it never repeats exactly. It starts after your first tap (browsers require that). Turn it on or off with the music-note button on the menu (top right) or in a game (right side). Your choice is remembered.
+Tap the **gear** button (top right on the menu, right side in a game) to open Settings:
+- **Choose your music:** 🎷 Lo-fi Jazz, 🪕 Sitar Sunset (raag with tanpura and tabla), 🎹 Soft Piano, or 🌃 Night Drive (retro synths). All four are generated live in the game, so they never repeat exactly.
+- **Music volume** and **Rain volume** have separate sliders.
+- **Music & rain** switch turns both off, and **Game sounds** turns off dice and coin sounds.
 
-Soft rain plays underneath the jazz as one mix; the same music button turns both on or off. The rain gets heavier on the Barish background.
+Your choices are saved on your phone. Music starts after your first tap (browsers require that). The rain gets a little heavier on the Barish background.
 
 ## Backgrounds
 
