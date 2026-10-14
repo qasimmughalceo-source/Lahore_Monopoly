@@ -6,7 +6,11 @@ A 3D property-trading game set in Lahore, priced in Pakistani Rupees. Shahdara i
 
 ## New players
 
-The first time you start a game, a short walkthrough explains the screen step by step. Tap **Skip** to jump straight in, or the **?** button on the right side to see it again any time.
+- **Home tour:** after the splash screen, a quick tour points at the profile, music, help, background, timer, game modes and the Play button. Tap **?** on the menu to see it again.
+- **Profile:** your name, pawn, games played and wins sit in the top-left corner of the menu. Tap it to edit.
+- **Training match:** the first time you tap Play, you can play a guided 2-minute match against Ustad Bot. You tap Roll, but the dice are scripted so every rule comes up in order, with tips explaining each one. It always ends with you winning.
+- **Online unlock:** online play stays locked until you finish one game (the training match counts).
+- **In-game tour:** tap **?** on the right side during a game to see how the game screen works.
 
 ## Put it online with GitHub Pages (free, about 5 minutes)
 

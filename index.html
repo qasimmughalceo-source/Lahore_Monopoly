@@ -358,6 +358,31 @@ button:focus-visible,input:focus-visible{outline:3px solid #fff;outline-offset:2
 .tut-dots i.on{background:var(--gold2);width:18px;border-radius:4px}
 .tut-skip{background:none;border:0;color:#6b6656;font:800 14px var(--f-body);cursor:pointer;padding:8px 6px;text-decoration:underline}
 .tut-box .gbtn{font-size:15px;padding:9px 16px 8px}
+/* training coach: spotlight you can tap through */
+#tut.coach{pointer-events:none}
+#tut.coach .tut-box{pointer-events:auto}
+#tut.coach.nohole{background:rgba(3,10,9,.55)}
+/* tour hand pointer */
+.tut-hand{position:fixed;font-size:40px;line-height:1;transform:translate(-20%,0);pointer-events:none;filter:drop-shadow(0 4px 6px rgba(0,0,0,.5));animation:tapHand 1s ease-in-out infinite;z-index:2}
+@keyframes tapHand{0%,100%{transform:translate(-20%,6px) scale(1)}50%{transform:translate(-20%,-4px) scale(.9)}}
+/* profile chip + lock */
+#lProfile{position:fixed;top:calc(env(safe-area-inset-top,0px) + 12px);left:12px;z-index:31;display:flex;align-items:center;gap:8px;max-width:calc(100vw - 150px);background:linear-gradient(180deg,#2a6d69,#164543);border:3px solid var(--gold);border-radius:999px;padding:3px 14px 3px 3px;color:#fff;cursor:pointer;box-shadow:0 4px 0 var(--edge),0 8px 14px rgba(0,0,0,.35)}
+#lProfile img{width:40px;height:40px;border-radius:50%;background:#0c2726;flex:none;border:2px solid #fff}
+#lProfile .pt{display:grid;line-height:1.1;min-width:0;text-align:left}
+#lProfile b{font:normal 16px var(--f-game);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#lProfile small{font:800 11px var(--f-body);color:#ffe08a;white-space:nowrap}
+#lHelp{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);right:68px;z-index:31;width:46px;height:46px}
+.prof{padding:20px 18px 18px;display:grid;gap:12px;justify-items:center;text-align:center}
+.prof h3{margin:0;font:normal 24px var(--f-game);color:#ffe08a}
+.prof input{width:100%;background:rgba(0,0,0,.3);border:2px solid rgba(255,255,255,.25);color:#fff;border-radius:12px;padding:10px 12px;font:normal 20px var(--f-game);text-align:center}
+.prof .pstats{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.prof .pstats span{background:rgba(0,0,0,.3);border-radius:999px;padding:5px 12px;font:800 13px var(--f-body);color:#ffe08a}
+.lockmsg{padding:22px 18px 18px;text-align:center;display:grid;gap:10px;justify-items:center}
+.lockmsg .big{font-size:52px;line-height:1}
+.lockmsg h3{margin:0;font:normal 24px var(--f-game);color:#ffe08a}
+.lockmsg p{margin:0;font:700 15px/1.45 var(--f-body);color:var(--ink)}
+#mOnline.locked{opacity:.75}
+.gbtn.bump{animation:pulse .45s ease 2}
 /* committee pot */
 #pot{position:absolute;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 124px);display:flex;align-items:center;gap:8px;background:linear-gradient(180deg,#3a2a08,#241a05);border:3px solid var(--gold);border-radius:999px;padding:3px 14px 3px 4px;color:#fff;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.4),0 0 16px rgba(242,182,50,.25)}
 #pot .pc{width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#ffe78f,#f2a91f);display:grid;place-items:center;font-size:17px;box-shadow:inset 0 -2px 0 rgba(178,107,0,.6)}
@@ -503,7 +528,7 @@ a.gbtn{text-decoration:none;display:inline-block}
 <div class="tring" id="tring1" hidden><svg viewBox="0 0 100 100"><circle class="bg" cx="50" cy="50" r="46" stroke-width="8"/><circle class="fg" cx="50" cy="50" r="46" stroke-width="8"/></svg></div>
 <div class="tring" id="tring2" hidden><svg viewBox="0 0 100 100"><circle class="bg" cx="50" cy="50" r="47" stroke-width="5"/><circle class="fg" cx="50" cy="50" r="47" stroke-width="5"/></svg><b hidden></b></div>
 <div id="toast" role="status" aria-live="polite"></div>
-<div id="tut" hidden><div class="tut-hole" id="tutHole"></div><div class="tut-box" id="tutBox" role="dialog" aria-live="polite" aria-label="How to play"></div></div>
+<div id="tut" hidden><div class="tut-hole" id="tutHole"></div><div class="tut-hand" id="tutHand" aria-hidden="true">👆</div><div class="tut-box" id="tutBox" role="dialog" aria-live="polite" aria-label="How to play"></div></div>
 <div id="cardView" hidden><div class="cvin" id="cvin"></div></div>
 <div class="modal" id="modal" hidden><div class="mcard" id="mcard"></div></div>
 
@@ -541,6 +566,8 @@ a.gbtn{text-decoration:none;display:inline-block}
 </div>
 <div class="setup" id="setup">
   <div class="sw">
+    <button id="lProfile" type="button" aria-label="Your profile"></button>
+    <button class="ib" id="lHelp" type="button" aria-label="How to play" title="How to play"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 9a3 3 0 1 1 4.2 2.75c-.75.33-1.2 1.05-1.2 1.85V14"/><circle cx="12" cy="18" r=".6" fill="currentColor"/></svg></button>
     <button class="ib musicbtn" id="lMusic" aria-label="Music" aria-pressed="true" title="Music on"></button>
     <div class="logo">
       <div class="logo-top">Zinda Dilan-e-Lahore</div>
@@ -1491,7 +1518,7 @@ async function raiseCash(p,amt,o,why){
  G.debt={p,amt};if(!p.remote){G.mview=p.i;openManage();}
  const k=await choose(p,[{k:'pay',label:`Pay ${short(amt)}`,primary:1,dis:()=>p.cash<amt},{k:'bk',label:'Declare bankruptcy',danger:1}],null,`You owe ${short(amt)} for ${esc(why)}. Sell houses or mortgage property to raise the cash.`);
  G.debt=null;renderManage();return k==='pay'&&p.cash>=amt;}
-async function bankrupt(p,o){p.bankrupt=true;
+async function bankrupt(p,o){p.bankrupt=true;if(isMine(p))recordGame(false);
  G.sq.forEach(s=>{if(s.owner!==p.i)return;if(s.houses){p.cash+=s.houses*s.hc/2;s.houses=0;}if(o)s.owner=o.i;else{s.owner=null;s.mort=false;}});
  if(o){o.cash+=Math.max(0,p.cash);o.goojf.push(...p.goojf);}else p.goojf.forEach(c=>G.decks[c.type].push(c.idx));p.cash=0;p.goojf=[];
  log(`${nm(p)} is bankrupt${o?' and hands everything to '+nm(o):''}`,p);toast(`${p.name} is bankrupt`);
@@ -1529,10 +1556,10 @@ async function gameLoop(){try{while(true){const p=cur();if(!p.bankrupt)await pla
   const alive=G.players.filter(q=>!q.bankrupt);if(alive.length<=1){G.over=true;showWinner(alive[0]);return;}
   do{G.cur=(G.cur+1)%G.players.length;}while(G.players[G.cur].bankrupt);}}
  catch(e){if(e!==ABORT){console.error(e);toast('Something went wrong. Start a new game.');}}}
-function showWinner(w){stopTimer();focusObj=w?w.obj:null;renderPlayers();renderBar(w||G.players[0],[{k:'_n',label:'New game',primary:1,act:()=>newGame()}],'Game over.');
+function showWinner(w){stopTimer();if(G&&G.players.some(isMine))recordGame(!!(w&&isMine(w)));focusObj=w?w.obj:null;renderPlayers();renderBar(w||G.players[0],[{k:'_n',label:'New game',primary:1,act:()=>newGame()}],'Game over.');
  const rank=[...G.players].sort((a,b)=>netWorth(b)-netWorth(a));
  if(NET.role==='host')bc({t:'over',w:w?w.i:-1,rank:rank.map(q=>q.i),nw:w?netWorth(w):0});
- sfx('win');modal(`<div class="panel win"><div class="trophy">🏆</div><div class="eyebrow">Game over</div><h2>${esc(w?w.name:'Nobody')} is the Raees of Lahore! 👑</h2><p>Final net worth ${short(w?netWorth(w):0)}</p><p style="margin-top:10px;font-size:13px">${rank.map(q=>esc(q.name)+(q.bankrupt?' (bankrupt)':'')).join(' · ')}</p></div>`,[{k:'new',label:'Play again',primary:1},{k:'x',label:'Look at the board'}]).then(k=>{if(k==='new')newGame();}).catch(()=>{});}
+ sfx('win');modal(`<div class="panel win"><div class="trophy">🏆</div><div class="eyebrow">Game over</div><h2>${w?(isYou(w)?'You are':esc(w.name)+' is'):'Nobody is'} the Raees of Lahore! 👑</h2><p>Final net worth ${short(w?netWorth(w):0)}</p><p style="margin-top:10px;font-size:13px">${rank.map(q=>esc(q.name)+(q.bankrupt?' (bankrupt)':'')).join(' · ')}</p></div>`,[{k:'new',label:'Play again',primary:1},{k:'x',label:'Look at the board'}]).then(k=>{if(k==='new')newGame();}).catch(()=>{});}
 
 /* ---------------- setup screen ---------------- */
 const NAMES=['You','Ayesha','Bilal','Zara','Hamza','Mahnoor'];
@@ -1586,7 +1613,8 @@ function buildGame(cfg){
  $('#logl').innerHTML='';$('#dice').innerHTML='';
  updateBoard();renderPlayers();focusObj=G.players[0].obj;
  $('#setup').hidden=true;$('#picker').hidden=true;$('#hud').hidden=false;$('#manage').hidden=true;setView(false);commsReset();}
-function startGame(){
+function startGame(force){
+ if(STATS.games===0&&force!=='normal'){modal(`<div class="panel lockmsg"><div class="big">🎓</div><h3>First time? Let's train!</h3><p>Play a quick <b>2-minute training match</b> against Ustad Bot. I'll show you how everything works as you play. Finish it to unlock online play.</p></div>`,[{k:'train',label:'Start training',primary:1},{k:'normal',label:'Skip, play normally'}],null,true).then(k=>{if(k==='train')startTraining();else if(k==='normal')startGame('normal');}).catch(()=>{});return;}
  const cfg=setup.players.slice(0,setup.n).map(c=>({...c}));const used=new Set();cfg.forEach(c=>{if(used.has(c.pawn))c.pawn=PAWNS.findIndex((_,i)=>!used.has(i)&&!cfg.some(d=>d.pawn===i));used.add(c.pawn);});
  const tk=pickTheme(setup.theme);applyTheme(tk);buildGame(cfg);maybeTutorial();log(`Game on! Everyone starts with Rs 0. Pass Shuru Chowk to earn ${short(GO_PAY)}. Nobody pays anything until their first salary.`);toast(THEMES[tk].name);gameLoop();}
 function newGame(){if(TUT.open)endTutorial();stopTimer(true);hideCardView();netTeardown();setTimeout(rainLevel,0);GEN++;tweens.length=0;$('#modal').hidden=true;$('#manage').hidden=true;if(G)G.players.forEach(p=>{if(p.obj){scene.remove(p.obj);disposeObj(p.obj);}});
@@ -1600,7 +1628,7 @@ let TURN_S=20;
 (function(){try{const v=localStorage.getItem('lm-timer');if(v!=null&&['0','10','20','30'].includes(v))TURN_S=+v;}catch(e){}})();
 const TIMER={id:0,cb:null,p:null,view:null,lastSec:-1};
 function timerOn(){return TURN_S>0;}
-function startTimer(p,cb){stopTimer(true);if(!timerOn()||!G)return;if(TUT.open){TUT.paused={p,cb};return;}const ms=TURN_S*1000;TIMER.p=p;TIMER.cb=cb;TIMER.id=setTimeout(fireTimer,ms);
+function startTimer(p,cb){stopTimer(true);if(!timerOn()||!G||G.train)return;if(TUT.open){TUT.paused={p,cb};return;}const ms=TURN_S*1000;TIMER.p=p;TIMER.cb=cb;TIMER.id=setTimeout(fireTimer,ms);
  TIMER.view={pi:p.i,end:performance.now()+ms,ms};TIMER.lastSec=-1;if(NET.role==='host')bc({t:'timer',pi:p.i,ms});}
 function stopTimer(quiet){if(TIMER.id)clearTimeout(TIMER.id);TIMER.id=0;TIMER.cb=null;TIMER.p=null;TIMER.view=null;
  if(!quiet&&NET.role==='host')bc({t:'timer',pi:-1});}
@@ -1741,7 +1769,7 @@ function introProgress(){const th=THUMBS.filter(Boolean).length/PAWNS.length,pv=
 const introTimer=setInterval(()=>{if(INTRO.done){clearInterval(introTimer);return;}const el=performance.now()-INTRO.t0;let p=introProgress();
  if(el>9000)p=1;document.getElementById('ibarFill').style.width=Math.round(Math.max(p,Math.min(.92,el/6000))*100)+'%';
  if(!INTRO.ready&&p>=1&&el>1800){INTRO.ready=true;$('#iload').hidden=true;$('#itap').hidden=false;$('#intro').setAttribute('aria-label','Tap to start PolyStar');}},120);
-function introGo(){if(!INTRO.ready||INTRO.done)return;INTRO.done=true;sfx('buy');buzz(30);
+function introGo(){if(!INTRO.ready||INTRO.done)return;INTRO.done=true;setTimeout(afterIntro,750);sfx('buy');buzz(30);
  if(MUSIC.on){musicStart();rainStart();}
  const el=$('#intro');el.classList.add('out');setTimeout(()=>{el.hidden=true;},650);}
 $('#intro').addEventListener('click',introGo);
@@ -1806,7 +1834,7 @@ $('#cardView').addEventListener('click',e=>{if(e.target.closest('[data-cvx]')||e
 
 
 /* ================= first-time walkthrough ================= */
-const TUT={open:false,i:0,wait:null,resolve:null,paused:null};
+const TUT={open:false,i:0,wait:null,resolve:null,paused:null,steps:null,key:'lm-tut',onEnd:null};
 const TUT_STEPS=[
  {t:'👋 Welcome to PolyStar!',x:'Buy plots across Lahore, collect rent from your friends, and become the Raees of Lahore. This quick tour takes 30 seconds.'},
  {sel:'#players',t:'👥 The players',x:'Everyone in the game is here. The glowing one is whose turn it is, and the gold number is their cash.'},
@@ -1820,15 +1848,15 @@ const TUT_STEPS=[
  {sel:'#comms',t:'💬 Chat, talk & music',x:'Send messages and emojis, talk on the mic in online games, and switch the jazz & rain music on the right side.'},
  {t:'👑 How to win',x:'Players who run out of money are out. The last one standing is the Raees of Lahore. Good luck, seth ji!'}];
 function tutSeen(){try{return localStorage.getItem('lm-tut')==='1';}catch(e){return false;}}
-function startTutorial(){if(TUT.open||!G)return;TUT.open=true;TUT.i=0;TUT.wait=new Promise(r=>TUT.resolve=r);
+function startTutorial(steps,key,onEnd){if(TUT.open)return;if(!steps){if(!G)return;steps=TUT_STEPS;key='lm-tut';}TUT.steps=steps;TUT.key=key;TUT.onEnd=onEnd||null;TUT.open=true;TUT.i=0;TUT.wait=new Promise(r=>TUT.resolve=r);
  if(TIMER.id&&TIMER.cb){TUT.paused={p:TIMER.p,cb:TIMER.cb};stopTimer(true);}
  $('#manage').hidden=true;$('#chat').hidden=true;$('#tut').hidden=false;renderTut();}
-function endTutorial(){if(!TUT.open)return;TUT.open=false;$('#tut').hidden=true;try{localStorage.setItem('lm-tut','1');}catch(e){}
+function endTutorial(){if(!TUT.open)return;TUT.open=false;$('#tut').hidden=true;try{localStorage.setItem(TUT.key,'1');}catch(e){}const oe=TUT.onEnd;TUT.onEnd=null;if(oe)setTimeout(oe,250);
  const pz=TUT.paused;TUT.paused=null;if(TUT.resolve)TUT.resolve();TUT.wait=null;if(pz&&G&&!G.over)startTimer(pz.p,pz.cb);}
-function tutTarget(sel){if(!sel)return null;for(const s of sel.split(',')){const el=document.querySelector(s.trim());if(el&&!el.hidden&&el.offsetParent!==null){const r=el.getBoundingClientRect();if(r.width&&r.height)return r;}}return null;}
-function renderTut(){const st=TUT_STEPS[TUT.i],box=$('#tutBox'),hole=$('#tutHole'),ov=$('#tut'),last=TUT.i===TUT_STEPS.length-1;
- box.innerHTML=`<h3>${st.t}</h3><p>${st.x}</p><div class="tut-dots">${TUT_STEPS.map((_,k)=>`<i class="${k===TUT.i?'on':''}"></i>`).join('')}</div><div class="tut-foot">${last?'':'<button class="tut-skip" type="button" data-tut="skip">Skip</button>'}<span style="flex:1"></span>${TUT.i?'<button class="gbtn small" type="button" data-tut="back">Back</button>':''}<button class="gbtn small ${last?'green':'gold'}" type="button" data-tut="next">${last?"Let's play!":'Next'}</button></div>`;
- const r=tutTarget(st.sel),vw=window.innerWidth,vh=window.innerHeight;
+function tutTarget(sel){if(!sel)return null;for(const s of sel.split(',')){const el=document.querySelector(s.trim());if(el&&!el.hidden&&el.offsetParent!==null){if(el.closest('.setup')&&getComputedStyle(el).position!=='fixed')el.scrollIntoView({block:'center',behavior:'auto'});const r=el.getBoundingClientRect();if(r.width&&r.height)return r;}}return null;}
+function renderTut(){const st=TUT.steps[TUT.i],box=$('#tutBox'),hole=$('#tutHole'),ov=$('#tut'),last=TUT.i===TUT.steps.length-1;
+ box.innerHTML=`<h3>${st.t}</h3><p>${st.x}</p><div class="tut-dots">${TUT.steps.map((_,k)=>`<i class="${k===TUT.i?'on':''}"></i>`).join('')}</div><div class="tut-foot">${last?'':'<button class="tut-skip" type="button" data-tut="skip">Skip</button>'}<span style="flex:1"></span>${TUT.i?'<button class="gbtn small" type="button" data-tut="back">Back</button>':''}<button class="gbtn small ${last?'green':'gold'}" type="button" data-tut="next">${last?"Let's play!":'Next'}</button></div>`;
+ const r=tutTarget(st.sel),vw=window.innerWidth,vh=window.innerHeight;const hand=$('#tutHand');hand.hidden=!r;if(r){hand.style.left=(r.left+r.width/2)+'px';hand.style.top=(r.bottom-4)+'px';}
  const bw=Math.min(330,vw-24);
  if(!r){ov.classList.add('nohole');box.style.left=((vw-bw)/2)+'px';box.style.top=Math.max(16,(vh-box.offsetHeight)/2)+'px';}
  else{ov.classList.remove('nohole');const pad=8;Object.assign(hole.style,{left:(r.left-pad)+'px',top:(r.top-pad)+'px',width:(r.width+pad*2)+'px',height:(r.height+pad*2)+'px'});
@@ -1838,11 +1866,129 @@ function renderTut(){const st=TUT_STEPS[TUT.i],box=$('#tutBox'),hole=$('#tutHole
 $('#tut').addEventListener('click',e=>{const b=e.target.closest('[data-tut]');if(!b)return;sfx('tap');const a=b.dataset.tut;
  if(a==='skip'){endTutorial();toast('Tap ? any time to see the tour again');return;}
  if(a==='back'){TUT.i=Math.max(0,TUT.i-1);renderTut();return;}
- if(TUT.i>=TUT_STEPS.length-1){endTutorial();return;}TUT.i++;renderTut();});
+ if(TUT.i>=TUT.steps.length-1){endTutorial();return;}TUT.i++;renderTut();});
 document.addEventListener('keydown',e=>{if(!TUT.open)return;if(e.key==='Escape'){endTutorial();}else if(e.key==='ArrowRight'||e.key==='Enter'){e.preventDefault();$('#tut [data-tut="next"]').click();}else if(e.key==='ArrowLeft'&&TUT.i){TUT.i--;renderTut();}},true);
 window.addEventListener('resize',()=>{if(TUT.open)renderTut();});
 $('#tHelp').addEventListener('click',()=>{sfx('tap');startTutorial();});
 function maybeTutorial(){if(!tutSeen())setTimeout(()=>{if(G&&!G.over)startTutorial();},1300);}
+
+
+/* ================= profile, stats, online lock, home tour ================= */
+const STATS={games:0,wins:0};
+try{const s=JSON.parse(localStorage.getItem('lm-stats')||'null');if(s){STATS.games=+s.games||0;STATS.wins=+s.wins||0;}}catch(e){}
+const LOCK={room:null};
+function saveStats(){try{localStorage.setItem('lm-stats',JSON.stringify(STATS));}catch(e){}}
+const onlineUnlocked=()=>STATS.games>=1;
+function isMine(p){if(!p)return false;if(NET.role==='client')return p.i===NET.me;if(NET.role==='host')return p.i===0;return !p.cpu&&!p.remote;}
+function recordGame(won){if(!G)return;const was=onlineUnlocked();
+ if(!G.counted){G.counted=true;STATS.games++;}
+ if(won&&!G.wonCounted){G.wonCounted=true;STATS.wins++;}
+ saveStats();renderProfile();updateLock();
+ if(!was&&onlineUnlocked())setTimeout(()=>toast('🎉 Online play unlocked! Play with friends from the menu.'),1500);}
+function renderProfile(){const b=document.getElementById('lProfile');if(!b)return;const nmTxt=(me.name||'').trim()||'Set your name';
+ b.innerHTML=`${imgT(me.pawn)}<span class="pt"><b>${esc(nmTxt)}</b><small>🎮 ${STATS.games} · 🏆 ${STATS.wins}</small></span>`;
+ const pa=document.getElementById('profAva');if(pa)pa.innerHTML=imgT(me.pawn)+`<span class="edit">${PEN}</span>`;}
+function updateLock(){const b=$('#mOnline');const ok=onlineUnlocked();b.classList.toggle('locked',!ok);b.textContent=(ok?'':'🔒 ')+'Online with friends';}
+function showLocked(){const room=LOCK.room;
+ modal(`<div class="panel lockmsg"><div class="big">🔒</div><h3>Online play is locked</h3><p>${room?`Your friend invited you to room <b>${esc(room)}</b>. `:''}Finish the quick <b>2-minute training match</b> (or any full game) on this device first. Then online play unlocks forever.</p></div>`,
+  [{k:'play',label:'Play a game now',primary:1},{k:'x',label:'Later'}],null,true).then(k=>{
+   if(k==='play'){$('#mLocal').click();const sb=$('#startBtn');sb.scrollIntoView({block:'center',behavior:'smooth'});sb.classList.add('bump');setTimeout(()=>sb.classList.remove('bump'),900);}}).catch(()=>{});}
+function openProfile(){sfx('tap');const nm0=(me.name||'').trim();
+ modal(`<div class="panel prof"><h3>Your profile</h3><button class="ava" id="profAva" type="button" aria-label="Change your pawn" style="--pc:var(--gold1)"></button><input id="profName" maxlength="18" placeholder="Your name" value="${esc(nm0)}" aria-label="Your name"><div class="pstats"><span>🎮 ${STATS.games} games</span><span>🏆 ${STATS.wins} wins</span><span>${onlineUnlocked()?'🌐 Online unlocked':'🔒 Online after 1 game'}</span></div></div>`,
+  [{k:'save',label:'Save',primary:1},{k:'x',label:'Cancel'}],null,true).then(k=>{
+   if(k==='save'){const v=($('#profName')?$('#profName').value:'').replace(/[<>]/g,'').trim().slice(0,18);me.name=v;saveMe();
+    setup.players[0].name=v||'You';renderSetup();renderMe();renderProfile();toast('Profile saved');}}).catch(()=>{});
+ renderProfile();setTimeout(()=>{const pa=$('#profAva');if(pa)pa.onclick=()=>{pk.mode='me';$('#pkTitle').textContent='Choose your pawn';$('#pkSearch').value=pk.q;$('#picker').hidden=false;renderPicker();};},0);}
+$('#lProfile').addEventListener('click',openProfile);
+const HOME_STEPS=[
+ {t:'👋 Welcome to PolyStar!',x:'Let\'s take a quick look around before your first game.'},
+ {sel:'#lProfile',t:'🙂 Your profile',x:'This is you! Tap here to set your name and pick your pawn. Your games and wins show here too.'},
+ {sel:'#lMusic',t:'🎵 Music',x:'Soft jazz & rain. Tap to turn the music on or off.'},
+ {sel:'#lHelp',t:'❓ How to play',x:'Forgot something? Tap here any time to see this tour again.'},
+ {sel:'#themePick',t:'🌆 Background',x:'Pick where you play: Basant sky, Food Street, Chand Raat, a stadium and more.'},
+ {sel:'#tmrPick',t:'⏱️ Turn timer',x:'How long each player gets per move. Too slow, and the game plays for you!'},
+ {sel:'.modes',t:'📱 Game modes',x:'Play with friends on this phone, or online with friends anywhere. Online unlocks after you finish your first game.'},
+ {sel:'#count',t:'👥 Players',x:'Choose 2 to 6 players. Each one can be a friend (Human) or the computer (CPU).'},
+ {sel:'#prows .slot',t:'♟️ Players & pawns',x:'Tap a pawn to choose from 100 fun pawns, and switch players between Human and CPU.'},
+ {sel:'#startBtn',t:'🎲 Ready?',x:'Tap PLAY to start a quick 2-minute training match. Finish it to unlock online play. Good luck, seth ji!'}];
+function afterIntro(){let seen=false;try{seen=localStorage.getItem('lm-home-tut')==='1';}catch(e){}
+ const then=()=>{if(LOCK.room)showLocked();};
+ if(!seen&&!$('#setup').hidden)startTutorial(HOME_STEPS,'lm-home-tut',then);else then();}
+$('#lHelp').addEventListener('click',()=>{sfx('tap');if(!$('#setup').hidden)startTutorial(HOME_STEPS,'lm-home-tut');});
+function syncProfile(){if((me.name||'').trim()){setup.players[0].name=me.name.trim();}if(PAWNS[me.pawn]&&!setup.players.slice(1).some(q=>q.pawn===me.pawn))setup.players[0].pawn=me.pawn;renderSetup();renderProfile();updateLock();}
+
+
+/* ================= guided training match (scripted dice) ================= */
+const COACH={res:null,cur:null};
+function placeSpot(r,box){const hole=$('#tutHole'),ov=$('#tut'),hand=$('#tutHand'),vw=window.innerWidth,vh=window.innerHeight,bw=Math.min(330,vw-24);
+ hand.hidden=!r;
+ if(!r){ov.classList.add('nohole');box.style.left=((vw-bw)/2)+'px';box.style.top=Math.max(16,(vh-(box.offsetHeight||160))/2)+'px';return;}
+ ov.classList.remove('nohole');const pad=8;Object.assign(hole.style,{left:(r.left-pad)+'px',top:(r.top-pad)+'px',width:(r.width+pad*2)+'px',height:(r.height+pad*2)+'px'});
+ hand.style.left=(r.left+r.width/2)+'px';hand.style.top=(r.bottom-4)+'px';
+ const bh=box.offsetHeight||170;let top=r.bottom+22;if(top+bh>vh-12)top=r.top-bh-22;if(top<12)top=Math.max(12,(vh-bh)/2);
+ let left=r.left+r.width/2-bw/2;left=Math.max(12,Math.min(vw-bw-12,left));box.style.left=left+'px';box.style.top=top+'px';}
+function coach(sel,t,x,ok){const ov=$('#tut'),box=$('#tutBox');ov.classList.add('coach');ov.hidden=false;COACH.cur={sel,t,x,ok};
+ box.innerHTML=`<h3>${t}</h3><p>${x}</p>`+(ok?'<div class="tut-foot"><span style="flex:1"></span><button class="gbtn small gold" type="button" data-coach="ok">Got it</button></div>':'');
+ placeSpot(tutTarget(sel),box);if(ok){const b=box.querySelector('[data-coach]');if(b)b.focus({preventScroll:true});}
+ return ok?guard(new Promise(r=>{COACH.res=r;})):Promise.resolve();}
+function coachHide(){const ov=$('#tut');if(ov.classList.contains('coach')){ov.hidden=true;ov.classList.remove('coach');}COACH.cur=null;}
+const coachOK=(sel,t,x)=>coach(sel,t,x,true).then(()=>coachHide());
+$('#tutBox').addEventListener('click',e=>{if(e.target.closest('[data-coach="ok"]')){sfx('tap');const r=COACH.res;COACH.res=null;if(r)r();}});
+window.addEventListener('resize',()=>{if(COACH.cur&&!$('#tut').hidden)placeSpot(tutTarget(COACH.cur.sel),$('#tutBox'));});
+function startTraining(){const tk=pickTheme(setup.theme);applyTheme(tk);
+ const myPawn=setup.players[0].pawn;let bot=pidx('Silver Robot');if(bot===myPawn)bot=pidx('Teal Robot');
+ buildGame([{name:(me.name||'').trim()||setup.players[0].name||'You',pawn:myPawn,cpu:false},{name:'Ustad Bot',pawn:bot,cpu:true}]);
+ G.train=true;G.pot=100*K;G.players[0].cash=300*K;renderPlayers();
+ log('🎓 Training match! You get Rs 30 Lac of training money, and the Committee pot starts with Rs 10 Lac.');
+ runTraining().catch(e=>{if(e!==ABORT)console.error(e);});}
+async function trainYou(Y,dice,t,x){focusObj=Y.obj;G.cur=0;renderPlayers();
+ const pr=choose(Y,[{k:'roll',label:'Roll',primary:1}],null,'Tap ROLL!');await sleep(200);coach('#acts .roll',t,x);await pr;coachHide();
+ await rollDice(dice);await moveBy(Y,dice[0]+dice[1]);}
+async function trainBot(C,dice){G.cur=1;focusObj=C.obj;renderPlayers();renderBar(C,[],'Ustad Bot is rolling…');splash(`${C.name}'s turn`,C.color);sfx('turn');
+ await sleep(900);await rollDice(dice);await moveBy(C,dice[0]+dice[1]);}
+async function trainBuy(Y,t,x){const s=G.sq[Y.pos];const pr=offerBuy(Y,s);await sleep(60);coach('#mcard .gbtn.green:not([disabled]),#mcard .gbtn:not([disabled])',t,x);await pr;coachHide();}
+async function runTraining(){const Y=G.players[0],C=G.players[1];
+ await sleep(900);
+ await coachOK(null,'🎓 Training match',`Welcome, ${esc(Y.name)}! Let's learn PolyStar in 2 minutes. Just follow the glowing buttons. You get Rs 30 Lac of training money.`);
+ // 1. buy a plot
+ await trainYou(Y,[1,2],'🎲 Your turn!','Tap ROLL to throw the dice and move your pawn.');
+ await trainBuy(Y,'🏠 Buy your first plot!','Nobody owns Kot Lakhpat yet. Buy it, and anyone who lands here has to pay YOU rent.');
+ await coachOK('#deck','🃏 Your property cards','Every plot you buy stacks up here. Tap the stack any time to build houses or mortgage for cash.');
+ // 2. first-salary rule
+ await trainBot(C,[1,2]);
+ await coachOK('.pl[data-i="1"] .pav','😮 Ustad Bot landed on your plot!','Normally he would pay you rent. But nobody pays anything until they collect their first salary at Shuru Chowk. That rule protects new players!');
+ // 3. Qismat card
+ {const i=CHANCE.findIndex(c=>c.t&&c.t.includes('record month'));if(i>=0)G.decks.chance=[i,...G.decks.chance.filter(x=>x!==i)];}
+ await trainYou(Y,[1,3],'🎲 Roll again','Your turn. Tap ROLL!');
+ await land(Y,4);
+ await coachOK(null,'🎴 Qismat & Mohalla Chest','Cards can give you money or take it away. Some even use your friends\' names, like a birthday where everyone pays salami!');
+ // 4. bot passes
+ await trainBot(C,[3,5]);await land(C,8);
+ // 5. colour sets
+ await trainYou(Y,[5,6],'🎲 Keep going','Tap ROLL!');
+ await trainBuy(Y,'🏘️ Buy Model Town','Own every plot of one colour (like all 3 orange plots) and you can build houses. Houses make rent much bigger!');
+ // 6. bot passes
+ await trainBot(C,[4,6]);await land(C,10);
+ // 7. committee pot + doubles
+ await coachOK('#pot','🪙 Committee pot','Every tax and fine goes into this pot. Whoever lands on Free Parking takes the whole thing. It has Rs 10 Lac in it right now…');
+ await trainYou(Y,[1,1],'🎲 Feeling lucky?','Free Parking is 2 squares away. Tap ROLL!');
+ await land(Y,2);
+ await coachOK('#pot','🎉 You won the pot!','You landed on Free Parking, so the whole Committee pot is yours. Remember this square!');
+ await coachOK('#acts','🎲 Doubles!','You rolled the same number on both dice, so you get another turn! (Three doubles in a row sends you to jail though.)');
+ await trainYou(Y,[2,3],'🎲 Bonus roll','Tap ROLL again!');
+ await trainBuy(Y,'🚌 Transport stops','Metro Bus is a transport stop. The more of the 4 stops you own, the more rent you collect.');
+ // 8. too expensive
+ await trainBot(C,[2,4]);await land(C,6);
+ await trainYou(Y,[6,6],'🎲 Big roll!','Tap ROLL!');
+ {const s=G.sq[Y.pos];const pr=offerBuy(Y,s);await sleep(60);coach('#mcard .gbtn:not(.green)','💸 Too expensive!','DHA Phase 5 costs Rs 35 Lac and you don\'t have enough. Skip it for now and buy it later when you\'re richer.');await pr;coachHide();}
+ // 9. salary
+ await coachOK('#acts','🎲 Doubles again!','Another double, another turn. Shuru Chowk is 3 squares away…');
+ await trainYou(Y,[1,2],'🎲 Go for salary!','Tap ROLL!');
+ await coachOK('.pl[data-i="0"] .coin','💸 Salary day!','You passed Shuru Chowk and earned Rs 5 Lac! From now on you pay taxes, fines and rent too, and so does everyone after their first salary.');
+ // 10. finish
+ await coachOK(null,'🏆 Training complete!','In real games you keep playing until only one player still has money. Ustad Bot gives up. You win!');
+ try{localStorage.setItem('lm-tut','1');}catch(e){}
+ log(`${nm(C)} gives up. Training complete!`,C);await bankrupt(C,null);G.over=true;showWinner(Y);}
 
 /* tools */
 $('#deck').addEventListener('click',()=>{if(!G)return;sfx('card');const M=$('#manage');if(!M.hidden){M.hidden=true;renderDeck();return;}const o=deckOwner();G.mview=o?o.i:G.cur;openManage();});
@@ -1887,7 +2033,7 @@ const me={name:'',pawn:pidx('Rickshaw')};
 try{const s=JSON.parse(localStorage.getItem('lm-me')||'null');if(s){me.name=String(s.name||'').slice(0,18);if(PAWNS[s.pawn])me.pawn=s.pawn;}}catch(e){}
 function saveMe(){try{localStorage.setItem('lm-me',JSON.stringify(me));}catch(e){}}
 function renderMe(){$('#meAva').innerHTML=imgT(me.pawn)+`<span class="edit">${PEN}</span>`;$('#mePawnName').textContent=PAWNS[me.pawn].n;if(document.activeElement!==$('#netName'))$('#netName').value=me.name;}
-function setMePawn(i){me.pawn=i;saveMe();renderMe();
+function setMePawn(i){me.pawn=i;saveMe();renderMe();if(!setup.players.slice(1,setup.n).some(q=>q.pawn===i)){setup.players[0].pawn=i;renderSetup();}renderProfile();
  if(NET.role==='host'&&!G){NET.lobby[0].pawn=freePawn(i,NET.lobby[0]);me.pawn=NET.lobby[0].pawn;lobbyChanged();}
  if(NET.role==='client')send({t:'pawn',pawn:i});}
 const netMsg=t=>{$('#netMsg').textContent=t||'';};
@@ -1959,7 +2105,7 @@ function clientData(d){if(!d||typeof d!=='object')return;
  case 'splash':splash(d.x,d.c);break;
  case 'log':{const el=document.createElement('div');el.className='le';el.innerHTML=d.h;const l=$('#logl');l.prepend(el);while(l.children.length>90)l.lastChild.remove();}break;
  case 'sfx':sfx(d.x);break;
- case 'gone':if(G){const p=G.players[d.pi];const o=p&&p.obj;if(o)tween(600,k=>{const s=1-k;o.scale.set(s,s,s);}).then(()=>scene.remove(o)).catch(()=>{});}break;
+ case 'gone':if(G){if(d.pi===NET.me)recordGame(false);const p=G.players[d.pi];const o=p&&p.obj;if(o)tween(600,k=>{const s=1-k;o.scale.set(s,s,s);}).then(()=>scene.remove(o)).catch(()=>{});}break;
  case 'chat':if(G)showChat(d.pi,d.x);break;
  case 'mic':if(G&&G.players[d.pi]){G.players[d.pi].mic=!!d.on;renderPlayers();}break;
  case 'timer':TIMER.view=d.pi>=0?{pi:d.pi,end:performance.now()+d.ms,ms:d.ms}:null;TIMER.lastSec=-1;break;
@@ -1977,9 +2123,9 @@ function drawClientBar(){if(!G||NET.role!=='client')return;const mine=G.players[
  if(NET.myAsk){bar={p:mine,btns:[...NET.myAsk.btns.map(b=>({...b}))],status:NET.myAsk.status};}
  else{const pi=NET.bar?NET.bar.pi:G.cur;const p=G.players[pi]||mine;bar={p,btns:[],status:p===mine?(NET.bar&&NET.bar.status)||'…':(p.cpu?`${p.name} is thinking…`:`Waiting for ${p.name}…`)};}
  drawBar();}
-function clientOver(d){G.over=true;const w=G.players[d.w];focusObj=w?w.obj:null;sfx('win');
+function clientOver(d){G.over=true;recordGame(d.w===NET.me);const w=G.players[d.w];focusObj=w?w.obj:null;sfx('win');
  bar={p:w||G.players[0],btns:[{k:'_n',label:'Back to menu',primary:1,act:()=>newGame()}],status:'Game over.'};drawBar();
- modal(`<div class="panel win"><div class="trophy">🏆</div><div class="eyebrow">Game over</div><h2>${esc(w?w.name:'Nobody')} is the Raees of Lahore! 👑</h2><p>Final net worth ${short(d.nw||0)}</p><p style="margin-top:10px;font-size:13px">${d.rank.map(i=>esc(G.players[i].name)).join(' · ')}</p></div>`,[{k:'menu',label:'Back to menu',primary:1},{k:'x',label:'Look at the board'}]).then(k=>{if(k==='menu')newGame();}).catch(()=>{});}
+ modal(`<div class="panel win"><div class="trophy">🏆</div><div class="eyebrow">Game over</div><h2>${w?(isYou(w)?'You are':esc(w.name)+' is'):'Nobody is'} the Raees of Lahore! 👑</h2><p>Final net worth ${short(d.nw||0)}</p><p style="margin-top:10px;font-size:13px">${d.rank.map(i=>esc(G.players[i].name)).join(' · ')}</p></div>`,[{k:'menu',label:'Back to menu',primary:1},{k:'x',label:'Look at the board'}]).then(k=>{if(k==='menu')newGame();}).catch(()=>{});}
 function clientClosed(){if(NET.role!=='client')return;const inGame=G&&!G.over;NET.role='local';NET.hostConn=null;
  if(inGame){toast('Lost connection to the host');modal(`<div class="panel win"><div class="eyebrow">Connection lost</div><h2>The host left the game</h2><p>The game can't continue without the host's device.</p></div>`,[{k:'menu',label:'Back to menu',primary:1}]).then(()=>newGame()).catch(()=>{});}
  else if(!G){netMsg('The host closed the room.');showNetStart();}}
@@ -2002,7 +2148,7 @@ function renderRoom(){const host=NET.role==='host',mi=host?0:NET.me;
  $('#roomNote').textContent=host?(NET.lobby.length<2?'Share the link or code. Friends appear here when they join.':`${NET.lobby.length} players ready. Start when everyone is in.`):'You are in! Waiting for the host to start the game…';}
 const CPU_NAMES=['Chacha Bot','Baji Bot','Ustad Bot','Pappu Bot','Rani Bot'];
 $('#mLocal').addEventListener('click',()=>{sfx('tap');$('#mLocal').setAttribute('aria-pressed','true');$('#mOnline').setAttribute('aria-pressed','false');$('#localPane').hidden=false;$('#onlinePane').hidden=true;});
-$('#mOnline').addEventListener('click',()=>{sfx('tap');$('#mOnline').setAttribute('aria-pressed','true');$('#mLocal').setAttribute('aria-pressed','false');$('#localPane').hidden=true;$('#onlinePane').hidden=false;renderMe();});
+$('#mOnline').addEventListener('click',()=>{sfx('tap');if(!onlineUnlocked()){showLocked();return;}$('#mOnline').setAttribute('aria-pressed','true');$('#mLocal').setAttribute('aria-pressed','false');$('#localPane').hidden=true;$('#onlinePane').hidden=false;renderMe();});
 $('#meAva').addEventListener('click',()=>{sfx('tap');pk.mode='me';$('#pkTitle').textContent='Choose your pawn';$('#pkSearch').value=pk.q;$('#picker').hidden=false;renderPicker();});
 $('#netName').addEventListener('input',e=>{me.name=e.target.value.slice(0,18);saveMe();if(NET.role==='host'&&!G&&NET.lobby[0]){NET.lobby[0].name=myName();lobbyChanged();}});
 $('#hostBtn').addEventListener('click',()=>{sfx('tap');if(!(me.name||'').trim()){netMsg('Type your name first.');$('#netName').focus();return;}hostRoom();});
@@ -2015,7 +2161,7 @@ $('#roomList').addEventListener('click',e=>{const b=e.target.closest('[data-rm]'
 $('#netStartBtn').addEventListener('click',()=>{sfx('tap');hostStart();});
 $('#leaveBtn').addEventListener('click',()=>{sfx('tap');netTeardown();netMsg('');showNetStart();});
 (function(){let room=null;try{room=new URLSearchParams(location.search).get('room');}catch(e){}
- if(room){$('#mOnline').click();$('#joinCode').value=room.toUpperCase().slice(0,5);netMsg((me.name?'':'Type your name, ')+'pick a pawn and tap Join.');}})();
+ if(room&&!onlineUnlocked()){LOCK.room=room.toUpperCase().slice(0,5);}else if(room){$('#mOnline').click();$('#joinCode').value=room.toUpperCase().slice(0,5);netMsg((me.name?'':'Type your name, ')+'pick a pawn and tap Join.');}})();
 
 
 /* ================= chat + voice ================= */
@@ -2109,7 +2255,7 @@ async function genThemePreviews(){const cv=document.createElement('canvas');cv.w
    cx.drawImage(renderer.domElement,0,0,320,200);THEME_PREV[k]=cv.toDataURL('image/jpeg',.82);}catch(e){console.warn(e);}
   await rawSleep(30);}
  resize();setView(false);applyTheme('basant');const open=document.getElementById('tSel')&&$('#tSel').getAttribute('aria-expanded')==='true';renderThemePick(open);}
-resize();setView(false);applyTheme('basant');renderThemePick();requestAnimationFrame(frame);renderSetup();
+resize();setView(false);applyTheme('basant');renderThemePick();syncProfile();requestAnimationFrame(frame);renderSetup();
 const fontsReady=document.fonts&&document.fonts.load?Promise.all([document.fonts.load('80px "Rozha One"'),document.fonts.load('800 24px Mukta'),document.fonts.load('600 24px Mukta')]):Promise.resolve();
 Promise.race([fontsReady,rawSleep(2500)]).catch(()=>{}).then(()=>{INTRO.fonts=true;paintBoard();setTimeout(()=>{if(!G)genThemePreviews();},400);});
 paintBoard();
