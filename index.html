@@ -512,7 +512,7 @@ a.gbtn{text-decoration:none;display:inline-block}
     </div>
     <div class="facts">
       <span class="fact">Start <b>Rs 0</b></span>
-      <span class="fact">Pass SHURU <b>+Rs 5 Lac</b></span>
+      <span class="fact">Pass Shuru Chowk <b>+Rs 5 Lac</b></span>
       <span class="fact">No tax <b>before first salary</b></span>
       <span class="fact">Bagarian <b>Rs 6 Lac</b></span>
       <span class="fact">DHA Phase 6 <b>Rs 40 Lac</b></span>
@@ -588,7 +588,7 @@ function short(n){const neg=n<0;n=Math.abs(n);let s;if(n>=1e7)s=(+(n/1e7).toFixe
 /* ---------------- board data ---------------- */
 const GROUPS={brown:{c:'#8a5a33',h:50,lt:0},lblue:{c:'#7cd3ea',h:50,lt:1},pink:{c:'#d93d8c',h:100,lt:0},orange:{c:'#f08a1c',h:100,lt:0},red:{c:'#d42a2f',h:150,lt:0},yellow:{c:'#f4cf22',h:150,lt:1},green:{c:'#1e9a4f',h:200,lt:0},dblue:{c:'#2348a8',h:200,lt:0}};
 const SQ=[
- {t:'go',n:'SHURU (GO)'},
+ {t:'go',n:'Shuru Chowk (GO)'},
  {t:'prop',n:'Bagarian',g:'brown',p:60,r:[2,10,30,90,160,250]},
  {t:'chest',n:'Mohalla Chest'},
  {t:'prop',n:'Kot Lakhpat',g:'brown',p:60,r:[4,20,60,180,320,450]},
@@ -659,30 +659,30 @@ function sqAt(px,py){
 const RAILS=[5,15,25,35], UTILS=[12,28];
 const nextOf=(pos,list)=>list.find(x=>x>pos)??list[0];
 const CHANCE=[
- {t:'Advance to SHURU (GO). Collect Rs 5 Lac.',a:async p=>{await moveTo(p,0);}},
+ {t:'Advance to Shuru Chowk (GO). Collect Rs 5 Lac.',a:async p=>{await moveTo(p,0);}},
  {t:'A friend tipped you about a plot. Advance to DHA Phase 6.',a:async p=>{await moveTo(p,39);await land(p,0);}},
- {t:'Dinner date! Advance to MM Alam Road. If you pass SHURU, collect Rs 5 Lac.',a:async p=>{await moveTo(p,31);await land(p,0);}},
- {t:'Eid shopping spree. Advance to Anarkali Bazaar. If you pass SHURU, collect Rs 5 Lac.',a:async p=>{await moveTo(p,11);await land(p,0);}},
+ {t:'Dinner date! Advance to MM Alam Road. If you pass Shuru Chowk, collect Rs 5 Lac.',a:async p=>{await moveTo(p,31);await land(p,0);}},
+ {t:'Eid shopping spree. Advance to Anarkali Bazaar. If you pass Shuru Chowk, collect Rs 5 Lac.',a:async p=>{await moveTo(p,11);await land(p,0);}},
  {t:'Catch a ride. Advance to the nearest transport stop. If it is owned, pay the owner double rent.',a:async p=>{await moveTo(p,nextOf(p.pos,RAILS));await land(p,0,{mult:2});}},
  {t:'Late for class. Advance to the nearest transport stop. If it is owned, pay the owner double rent.',a:async p=>{await moveTo(p,nextOf(p.pos,RAILS));await land(p,0,{mult:2});}},
  {t:'Load-shedding complaint. Advance to the nearest utility. If it is owned, roll the dice and pay 10 times the total.',a:async p=>{await moveTo(p,nextOf(p.pos,UTILS));const s=G.sq[p.pos];if(s.owner!=null&&s.owner!==p.i){const[d1,d2]=await rollDice();await land(p,d1+d2,{util10:true});}else await land(p,0);}},
  {t:'Your Liberty Market shop had a record month. Collect Rs 5 Lac.',a:async p=>gain(p,50*K)},
  {t:'Get out of jail free. Keep this card until you need it.',keep:1},
  {t:'Wrong turn at Kalma Chowk. Go back 3 spaces.',a:async p=>{await moveBy(p,-3);await land(p,0);}},
- {t:'Caught without a helmet on Canal Road. Go directly to jail. Do not pass SHURU.',a:async p=>sendToJail(p)},
+ {t:'Caught without a helmet on Canal Road. Go directly to jail. Do not pass Shuru Chowk.',a:async p=>sendToJail(p)},
  {t:'General repairs on all your property. Pay Rs 2.5 Lac per house and Rs 10 Lac per hotel.',a:async p=>repairs(p,25*K,100*K)},
  {t:'Speeding challan on the Ring Road. Pay Rs 1.5 Lac.',a:async p=>payTo(p,null,15*K,'a speeding challan')},
- {t:'Take a train trip. Advance to Lahore Junction. If you pass SHURU, collect Rs 5 Lac.',a:async p=>{await moveTo(p,5);await land(p,0);}},
+ {t:'Take a train trip. Advance to Lahore Junction. If you pass Shuru Chowk, collect Rs 5 Lac.',a:async p=>{await moveTo(p,5);await land(p,0);}},
  {t:'You were elected union council chairman. Pay each player Rs 5 Lac.',a:async p=>{for(const o of G.players)if(o!==p&&!o.bankrupt&&!p.bankrupt)await payTo(p,o,50*K,'chairman duties');}},
  {t:'Your building loan matures. Collect Rs 15 Lac.',a:async p=>gain(p,150*K)},
 ];
 const CHEST=[
- {t:'Advance to SHURU (GO). Collect Rs 5 Lac.',a:async p=>{await moveTo(p,0);}},
+ {t:'Advance to Shuru Chowk (GO). Collect Rs 5 Lac.',a:async p=>{await moveTo(p,0);}},
  {t:'Bank error in your favour. Collect Rs 20 Lac.',a:async p=>gain(p,200*K)},
  {t:'Doctor\'s fee at Services Hospital. Pay Rs 5 Lac.',a:async p=>payTo(p,null,50*K,'the doctor\'s fee')},
  {t:'You sold shares on the PSX. Collect Rs 5 Lac.',a:async p=>gain(p,50*K)},
  {t:'Get out of jail free. Keep this card until you need it.',keep:1},
- {t:'Flew a kite on Basant without a permit. Go directly to jail. Do not pass SHURU.',a:async p=>sendToJail(p)},
+ {t:'Flew a kite on Basant without a permit. Go directly to jail. Do not pass Shuru Chowk.',a:async p=>sendToJail(p)},
  {t:'Eid money from the whole khandaan. Collect Rs 10 Lac.',a:async p=>gain(p,100*K)},
  {t:'FBR income tax refund. Collect Rs 2 Lac.',a:async p=>gain(p,20*K)},
  {t:'It is your mehndi! Collect Rs 1 Lac from every player.',a:async p=>{for(const o of G.players)if(o!==p&&!o.bankrupt)await payTo(o,p,10*K,'the mehndi salami');}},
@@ -740,7 +740,7 @@ function drawEdge(x,s){
 }
 function drawCorner(x,i){
  const f=sqInfo(i);x.textAlign='center';x.textBaseline='middle';x.fillStyle='#1b1b1b';
- if(i===0){x.save();x.translate(f.x,f.y);x.rotate(-Math.PI/4);x.font='600 19px Mukta, sans-serif';wrap(x,'COLLECT RS 5 LAC SALARY AS YOU PASS',0,-86,200,22);x.font='800 30px Mukta, sans-serif';x.fillText('SHURU',0,-26);x.font='120px "Rozha One", Georgia, serif';x.fillStyle='#c8202f';x.fillText('GO',0,44);x.restore();
+ if(i===0){x.save();x.translate(f.x,f.y);x.rotate(-Math.PI/4);x.font='600 17px Mukta, sans-serif';wrap(x,'COLLECT RS 5 LAC SALARY AS YOU PASS',0,-104,230,19);x.font='800 25px Mukta, sans-serif';x.fillText('SHURU CHOWK',0,-30);x.font='120px "Rozha One", Georgia, serif';x.fillStyle='#c8202f';x.fillText('GO',0,44);x.restore();
   x.save();x.strokeStyle='#c8202f';x.fillStyle='#c8202f';x.lineWidth=14;x.beginPath();x.moveTo(S-24,S-30);x.lineTo(S-C+60,S-30);x.stroke();x.beginPath();x.moveTo(S-C+26,S-30);x.lineTo(S-C+66,S-52);x.lineTo(S-C+66,S-8);x.closePath();x.fill();x.restore();}
  if(i===10){x.save();x.fillStyle='#f08a1c';x.fillRect(C*.35,S-C,C*.65,C*.65);x.strokeStyle='#1b1b1b';x.lineWidth=3;x.strokeRect(C*.35,S-C,C*.65,C*.65);x.lineWidth=5;for(let k=1;k<6;k++){const xx=C*.35+k*C*.65/6;x.beginPath();x.moveTo(xx,S-C);x.lineTo(xx,S-C*.35);x.stroke();}
   x.translate(C*.675,S-C*.675);x.rotate(Math.PI/4);x.fillStyle='#fbf7ee';rr(x,-62,-24,124,48,8);x.fill();x.stroke();x.fillStyle='#1b1b1b';x.font='40px "Rozha One", Georgia, serif';x.fillText('JAIL',0,3);x.restore();
@@ -1327,7 +1327,7 @@ function deedHTML(s){
   ${[1,2,3,4].map(n=>`<tr><td>If ${n} stop${n>1?'s are':' is'} owned</td><td>${money(25*K*2**(n-1))}</td></tr>`).join('')}</table><p class="dfoot">Price ${money(s.price)} · Mortgage value ${money(s.price/2)}</p>${own}</div>`;
  if(s.t==='util')return `<div class="deed"><div class="dh lt" style="background:#cfe6f2"><small>UTILITY · ${esc(s.sub.toUpperCase())}</small><h3>${esc(s.n)}</h3></div><table>
   <tr><td>One utility owned</td><td>4 × dice × Rs 10,000</td></tr><tr><td>Both utilities owned</td><td>10 × dice × Rs 10,000</td></tr></table><p class="dfoot">Price ${money(s.price)} · Mortgage value ${money(s.price/2)}</p>${own}</div>`;
- const D={go:'Collect Rs 5 Lac every time you pass or land on SHURU.',jail:'Just visiting, unless you were sent here. Get out by paying Rs 5 Lac, using a card, or rolling doubles within 3 turns.',park:'A free rest stop. Nothing happens here.',gotojail:'Go directly to jail. Do not pass SHURU, do not collect Rs 5 Lac.',chance:'Draw a Qismat card and do what it says.',chest:'Draw a Mohalla Chest card and do what it says.',tax:`Pay ${short((s.a||0)*K)} to the government.`};
+ const D={go:'Collect Rs 5 Lac every time you pass or land on Shuru Chowk.',jail:'Just visiting, unless you were sent here. Get out by paying Rs 5 Lac, using a card, or rolling doubles within 3 turns.',park:'A free rest stop. Nothing happens here.',gotojail:'Go directly to jail. Do not pass Shuru Chowk, do not collect Rs 5 Lac.',chance:'Draw a Qismat card and do what it says.',chest:'Draw a Mohalla Chest card and do what it says.',tax:`Pay ${short((s.a||0)*K)} to the government.`};
  return `<div class="deed"><div class="dh lt" style="background:#cfe6d4"><small>BOARD SQUARE</small><h3>${esc(s.n)}</h3></div><p class="dfoot" style="font-size:15px;color:#1b1b1b">${D[s.t]}</p></div>`;}
 
 /* ---------------- property management ---------------- */
@@ -1396,7 +1396,7 @@ async function rollDice(forced){const v=forced||[1+rnd(6),1+rnd(6)];if(NET.role=
  await tween(950,k=>{const e=1-Math.pow(1-k,3);data.forEach(o=>{o.d.position.lerpVectors(o.from,o.to,e);o.d.position.y=o.to.y+4.2*(1-e)*(1-e)+Math.abs(Math.sin(k*Math.PI*3))*(1-k)*.9;o.d.quaternion.copy(o.qf).multiply(q.setFromAxisAngle(o.axis,(1-e)*o.spin));});});
  $('#dice').innerHTML=dieSVG(v[0])+dieSVG(v[1])+`<span>${v[0]+v[1]}</span>`;return v;}
 const LAND_PAUSE=200;
-async function moveBy(p,n,dur){dur=dur||(p.cpu?281:347);const dir=Math.sign(n);for(let s=0;s<Math.abs(n);s++){const ni=(p.pos+dir+40)%40;p.pos=ni;sfx('hop');await hop(p,ni,dur);if(dir>0&&ni===0){p.cash+=GO_PAY;if(!p.salaried){p.salaried=true;log(`${nm(p)} got their first salary. Taxes and fees apply from now on.`,p);}log(`${nm(p)} passed SHURU and collected ${short(GO_PAY)}`,p);toast(`${p.name} +${short(GO_PAY)}`);renderPlayers();}}
+async function moveBy(p,n,dur){dur=dur||(p.cpu?281:347);const dir=Math.sign(n);for(let s=0;s<Math.abs(n);s++){const ni=(p.pos+dir+40)%40;p.pos=ni;sfx('hop');await hop(p,ni,dur);if(dir>0&&ni===0){p.cash+=GO_PAY;if(!p.salaried){p.salaried=true;log(`${nm(p)} got their first salary. Taxes and fees apply from now on.`,p);}log(`${nm(p)} passed Shuru Chowk and collected ${short(GO_PAY)}`,p);toast(`${p.name} +${short(GO_PAY)}`);renderPlayers();}}
  if(n)await sleep(LAND_PAUSE);}
 async function moveTo(p,target){let n=(target-p.pos+40)%40;if(n===0)n=40;await moveBy(p,n,215);}
 async function sendToJail(p){p.inJail=true;p.jailTurns=0;p.pos=10;log(`${nm(p)} was sent to jail`,p);sfx('jail');if(p.cpu&&Math.random()<.5)botSay(p,['Yaar nahi! 😭','Ghalat hua 😡','Bail karwao 🙏']);buzz([40,60,40]);toast(`${p.name} goes to jail!`);await hop(p,10,1238,3);renderPlayers();await sleep(LAND_PAUSE);}
@@ -1530,7 +1530,7 @@ function buildGame(cfg){
  $('#setup').hidden=true;$('#picker').hidden=true;$('#hud').hidden=false;$('#manage').hidden=true;setView(false);commsReset();}
 function startGame(){
  const cfg=setup.players.slice(0,setup.n).map(c=>({...c}));const used=new Set();cfg.forEach(c=>{if(used.has(c.pawn))c.pawn=PAWNS.findIndex((_,i)=>!used.has(i)&&!cfg.some(d=>d.pawn===i));used.add(c.pawn);});
- const tk=pickTheme(setup.theme);applyTheme(tk);buildGame(cfg);log(`Game on! Everyone starts with Rs 0. Pass SHURU to earn ${short(GO_PAY)}. Nobody pays anything until their first salary.`);toast(THEMES[tk].name);gameLoop();}
+ const tk=pickTheme(setup.theme);applyTheme(tk);buildGame(cfg);log(`Game on! Everyone starts with Rs 0. Pass Shuru Chowk to earn ${short(GO_PAY)}. Nobody pays anything until their first salary.`);toast(THEMES[tk].name);gameLoop();}
 function newGame(){stopTimer(true);netTeardown();setTimeout(rainLevel,0);GEN++;tweens.length=0;$('#modal').hidden=true;$('#manage').hidden=true;if(G)G.players.forEach(p=>{if(p.obj){scene.remove(p.obj);disposeObj(p.obj);}});
  G=null;focusObj=null;ring.visible=false;SQ.forEach(s=>{if(s.price){s.owner=null;s.houses=0;s.mort=false;}});markers.forEach(m=>{if(m)m.visible=false;});houseGroups.forEach(h=>{if(h)while(h.children.length)h.remove(h.children[0]);});
  $('#hud').hidden=true;$('#setup').hidden=false;renderSetup();}
@@ -1693,7 +1693,7 @@ $('#intro').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.pr
 /* ================= rotating how-to-play line (every 5 s) ================= */
 const FUN_LINES=[
  'Roll the dice, move your pawn, buy what you land on. Simple, yaar! 🎲',
- 'Pass SHURU to collect your Rs 5 Lac salary. Payday! 💸',
+ 'Pass Shuru Chowk to collect your Rs 5 Lac salary. Payday! 💸',
  'Everyone starts with Rs 0. Broke, but full of dreams 😅',
  'No tax until your first salary. FBR is waiting patiently… 🧾',
  'Own a whole colour set, then build houses. Contractor mode ON 🏗️',
@@ -1803,7 +1803,7 @@ function hostStart(){if(NET.role!=='host'||NET.lobby.length<2)return;
  const tk=pickTheme(setup.theme);applyTheme(tk);
  buildGame(cfg);toast(THEMES[tk].name);
  NET.lobby.forEach((e,i)=>{if(e.conn)try{e.conn.send({t:'start',players:cfg.map(c=>({name:c.name,pawn:c.pawn,cpu:c.cpu})),me:i,roster:NET.roster,theme:tk});}catch(x){}});
- log(`Online game on! Room ${NET.code}. Everyone starts with Rs 0. Pass SHURU to earn ${short(GO_PAY)}. Nobody pays anything until their first salary.`);setTimeout(gameLoop,500);}
+ log(`Online game on! Room ${NET.code}. Everyone starts with Rs 0. Pass Shuru Chowk to earn ${short(GO_PAY)}. Nobody pays anything until their first salary.`);setTimeout(gameLoop,500);}
 
 /* client */
 function joinRoom(raw){const code=String(raw||'').toUpperCase().replace(/[^A-Z0-9]/g,'');

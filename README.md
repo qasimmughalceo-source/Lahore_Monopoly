@@ -42,7 +42,7 @@ Good to know:
 
 ## Money rules and turn timer
 
-Everyone starts with Rs 0 and earns Rs 5 Lac each time they pass SHURU. Until a player gets their first salary, they pay nothing: no taxes, fees, fines or rent.
+Everyone starts with Rs 0 and earns Rs 5 Lac each time they pass Shuru Chowk. Until a player gets their first salary, they pay nothing: no taxes, fees, fines or rent.
 
 A green ring counts down around the current player's avatar and the Roll button. It turns yellow, then red, and ticks for the last 5 seconds. If time runs out, the game plays that move automatically (rolls, skips buying, or ends the turn). Building or mortgaging resets the timer. Choose 10s, 20s, 30s or Off on the menu; online games use the host's setting.
 
