@@ -1559,7 +1559,9 @@ async function gameLoop(){try{while(true){const p=cur();if(!p.bankrupt)await pla
 function showWinner(w){stopTimer();if(G&&G.players.some(isMine))recordGame(!!(w&&isMine(w)));focusObj=w?w.obj:null;renderPlayers();renderBar(w||G.players[0],[{k:'_n',label:'New game',primary:1,act:()=>newGame()}],'Game over.');
  const rank=[...G.players].sort((a,b)=>netWorth(b)-netWorth(a));
  if(NET.role==='host')bc({t:'over',w:w?w.i:-1,rank:rank.map(q=>q.i),nw:w?netWorth(w):0});
- sfx('win');modal(`<div class="panel win"><div class="trophy">🏆</div><div class="eyebrow">Game over</div><h2>${w?(isYou(w)?'You are':esc(w.name)+' is'):'Nobody is'} the Raees of Lahore! 👑</h2><p>Final net worth ${short(w?netWorth(w):0)}</p><p style="margin-top:10px;font-size:13px">${rank.map(q=>esc(q.name)+(q.bankrupt?' (bankrupt)':'')).join(' · ')}</p></div>`,[{k:'new',label:'Play again',primary:1},{k:'x',label:'Look at the board'}]).then(k=>{if(k==='new')newGame();}).catch(()=>{});}
+ sfx('win');modal(G.train?`<div class="panel win"><div class="trophy">🎓</div><div class="eyebrow">Training complete</div><h2>You're ready to play!</h2><p>🌐 Online play is now unlocked.</p><p style="margin-top:8px">Tap <b>Play a real game</b> to start with your menu settings, or go to the <b>Menu</b> to change players or play online.</p></div>`:`<div class="panel win"><div class="trophy">🏆</div><div class="eyebrow">Game over</div><h2>${w?(isYou(w)?'You are':esc(w.name)+' is'):'Nobody is'} the Raees of Lahore! 👑</h2><p>Final net worth ${short(w?netWorth(w):0)}</p><p style="margin-top:10px;font-size:13px">${rank.map(q=>esc(q.name)+(q.bankrupt?' (bankrupt)':'')).join(' · ')}</p></div>`,(G.train?[{k:'real',label:'Play a real game',primary:1},{k:'menu',label:'Menu'}]:NET.role==='host'?[{k:'menu',label:'Back to menu',primary:1},{k:'x',label:'Look at the board'}]:[{k:'again',label:'Play again',primary:1},{k:'menu',label:'Menu'},{k:'x',label:'Look at the board'}])).then(k=>{
+  if(k==='menu')newGame();
+  else if(k==='again'||k==='real'){newGame();setTimeout(()=>startGame('normal'),60);}}).catch(()=>{});}
 
 /* ---------------- setup screen ---------------- */
 const NAMES=['You','Ayesha','Bilal','Zara','Hamza','Mahnoor'];
@@ -1617,7 +1619,7 @@ function startGame(force){
  if(STATS.games===0&&force!=='normal'){modal(`<div class="panel lockmsg"><div class="big">🎓</div><h3>First time? Let's train!</h3><p>Play a quick <b>2-minute training match</b> against Ustad Bot. I'll show you how everything works as you play. Finish it to unlock online play.</p></div>`,[{k:'train',label:'Start training',primary:1},{k:'normal',label:'Skip, play normally'}],null,true).then(k=>{if(k==='train')startTraining();else if(k==='normal')startGame('normal');}).catch(()=>{});return;}
  const cfg=setup.players.slice(0,setup.n).map(c=>({...c}));const used=new Set();cfg.forEach(c=>{if(used.has(c.pawn))c.pawn=PAWNS.findIndex((_,i)=>!used.has(i)&&!cfg.some(d=>d.pawn===i));used.add(c.pawn);});
  const tk=pickTheme(setup.theme);applyTheme(tk);buildGame(cfg);maybeTutorial();log(`Game on! Everyone starts with Rs 0. Pass Shuru Chowk to earn ${short(GO_PAY)}. Nobody pays anything until their first salary.`);toast(THEMES[tk].name);gameLoop();}
-function newGame(){if(TUT.open)endTutorial();stopTimer(true);hideCardView();netTeardown();setTimeout(rainLevel,0);GEN++;tweens.length=0;$('#modal').hidden=true;$('#manage').hidden=true;if(G)G.players.forEach(p=>{if(p.obj){scene.remove(p.obj);disposeObj(p.obj);}});
+function newGame(){if(TUT.open)endTutorial();coachHide();$('#tut').hidden=true;$('#tut').classList.remove('coach');stopTimer(true);hideCardView();netTeardown();setTimeout(rainLevel,0);GEN++;tweens.length=0;$('#modal').hidden=true;$('#manage').hidden=true;if(G)G.players.forEach(p=>{if(p.obj){scene.remove(p.obj);disposeObj(p.obj);}});
  G=null;focusObj=null;ring.visible=false;SQ.forEach(s=>{if(s.price){s.owner=null;s.houses=0;s.mort=false;}});markers.forEach(m=>{if(m)m.visible=false;});houseGroups.forEach(h=>{if(h)while(h.children.length)h.remove(h.children[0]);});
  $('#hud').hidden=true;$('#setup').hidden=false;renderSetup();}
 $('#startBtn').addEventListener('click',startGame);
@@ -1848,10 +1850,10 @@ const TUT_STEPS=[
  {sel:'#comms',t:'💬 Chat, talk & music',x:'Send messages and emojis, talk on the mic in online games, and switch the jazz & rain music on the right side.'},
  {t:'👑 How to win',x:'Players who run out of money are out. The last one standing is the Raees of Lahore. Good luck, seth ji!'}];
 function tutSeen(){try{return localStorage.getItem('lm-tut')==='1';}catch(e){return false;}}
-function startTutorial(steps,key,onEnd){if(TUT.open)return;if(!steps){if(!G)return;steps=TUT_STEPS;key='lm-tut';}TUT.steps=steps;TUT.key=key;TUT.onEnd=onEnd||null;TUT.open=true;TUT.i=0;TUT.wait=new Promise(r=>TUT.resolve=r);
+function startTutorial(steps,key,onEnd){if(TUT.open)return;if(!steps){if(!G)return;steps=TUT_STEPS;key='lm-tut';}TUT.steps=steps;TUT.key=key;TUT.onEnd=onEnd||null;TUT.open=true;TUT.i=0;$('#tut').classList.remove('coach');TUT.wait=new Promise(r=>TUT.resolve=r);
  if(TIMER.id&&TIMER.cb){TUT.paused={p:TIMER.p,cb:TIMER.cb};stopTimer(true);}
  $('#manage').hidden=true;$('#chat').hidden=true;$('#tut').hidden=false;renderTut();}
-function endTutorial(){if(!TUT.open)return;TUT.open=false;$('#tut').hidden=true;try{localStorage.setItem(TUT.key,'1');}catch(e){}const oe=TUT.onEnd;TUT.onEnd=null;if(oe)setTimeout(oe,250);
+function endTutorial(){if(!TUT.open)return;TUT.open=false;$('#tut').hidden=true;try{localStorage.setItem(TUT.key,'1');}catch(e){}const oe=TUT.onEnd;TUT.onEnd=null;if(oe)setTimeout(oe,250);if(COACH.cur){const c=COACH.cur;setTimeout(()=>{if(COACH.cur===c)coach(c.sel,c.t,c.x,false);},200);}
  const pz=TUT.paused;TUT.paused=null;if(TUT.resolve)TUT.resolve();TUT.wait=null;if(pz&&G&&!G.over)startTimer(pz.p,pz.cb);}
 function tutTarget(sel){if(!sel)return null;for(const s of sel.split(',')){const el=document.querySelector(s.trim());if(el&&!el.hidden&&el.offsetParent!==null){if(el.closest('.setup')&&getComputedStyle(el).position!=='fixed')el.scrollIntoView({block:'center',behavior:'auto'});const r=el.getBoundingClientRect();if(r.width&&r.height)return r;}}return null;}
 function renderTut(){const st=TUT.steps[TUT.i],box=$('#tutBox'),hole=$('#tutHole'),ov=$('#tut'),last=TUT.i===TUT.steps.length-1;
