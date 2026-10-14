@@ -334,6 +334,17 @@ button:focus-visible,input:focus-visible{outline:3px solid #fff;outline-offset:2
 @keyframes kfloat{0%,100%{transform:translate(0,0) rotate(-6deg)}50%{transform:translate(10px,-16px) rotate(8deg)}}
 .iver{position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 10px);left:0;right:0;text-align:center;z-index:2;font:800 12px var(--f-body);color:rgba(255,255,255,.55);letter-spacing:.08em;text-transform:uppercase}
 /* ===== end splash ===== */
+/* committee pot */
+#pot{position:absolute;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 124px);display:flex;align-items:center;gap:8px;background:linear-gradient(180deg,#3a2a08,#241a05);border:3px solid var(--gold);border-radius:999px;padding:3px 14px 3px 4px;color:#fff;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.4),0 0 16px rgba(242,182,50,.25)}
+#pot .pc{width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#ffe78f,#f2a91f);display:grid;place-items:center;font-size:17px;box-shadow:inset 0 -2px 0 rgba(178,107,0,.6)}
+#pot .pl2{display:grid;line-height:1.05;text-align:left}
+#pot small{font:900 10px var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:#f8d98a}
+#pot b{font:normal 17px var(--f-game);color:#ffe08a;font-variant-numeric:tabular-nums}
+#pot.bump{animation:potBump .6s cubic-bezier(.2,1.6,.4,1)}
+@keyframes potBump{30%{transform:translateX(-50%) scale(1.18)}100%{transform:translateX(-50%) scale(1)}}
+#pot.win{animation:potWin 1.2s ease}
+@keyframes potWin{0%,100%{box-shadow:0 4px 0 rgba(0,0,0,.4)}30%,70%{box-shadow:0 0 0 6px rgba(70,224,140,.6),0 0 30px 10px rgba(242,182,50,.7)}}
+@media (max-width:760px){#pot{top:calc(env(safe-area-inset-top,0px) + 104px);padding:2px 12px 2px 3px}#pot .pc{width:26px;height:26px;font-size:15px}#pot b{font-size:15px}}
 /* rotating how-to-play line */
 .funline{margin:0;min-height:2.7em;display:grid;place-items:center;max-width:34ch;justify-self:center;text-align:center}
 .funline span{font:800 15.5px/1.35 var(--f-body);color:#ffe8a8;text-wrap:balance;text-shadow:0 2px 0 rgba(0,0,0,.35)}
@@ -439,6 +450,7 @@ a.gbtn{text-decoration:none;display:inline-block}
     <button class="ib" id="tSound" aria-label="Sound" aria-pressed="true" title="Sound"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z"/><path class="wave" d="M16 9a4 4 0 010 6M18.5 6.5a7.5 7.5 0 010 11"/></svg></button>
     <button class="ib" id="tNew" aria-label="New game" title="New game"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 2.5-5.8"/><path d="M4 4v5h5"/></svg></button>
   </div>
+  <button id="pot" type="button" aria-label="Committee pot" hidden><span class="pc">🪙</span><span class="pl2"><small>Committee pot</small><b id="potAmt">Rs 0</b></span></button>
   <div id="comms" hidden>
     <button class="ib" id="cChat" aria-label="Open chat" title="Chat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12.5h5"/></svg><i class="dotc" id="chatDot" hidden></i></button>
     <button class="ib" id="cMic" aria-label="Microphone" aria-pressed="false" title="Talk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0013 0M12 17.5V21"/><path class="slash" d="M4 4l16 16"/></svg></button>
@@ -514,6 +526,7 @@ a.gbtn{text-decoration:none;display:inline-block}
       <span class="fact">Start <b>Rs 0</b></span>
       <span class="fact">Pass Shuru Chowk <b>+Rs 5 Lac</b></span>
       <span class="fact">No tax <b>before first salary</b></span>
+      <span class="fact">Free Parking <b>wins the Committee pot</b></span>
       <span class="fact">Shahdara <b>Rs 6 Lac</b></span>
       <span class="fact">DHA Phase 6 <b>Rs 40 Lac</b></span>
     </div>
@@ -675,10 +688,13 @@ const CHANCE=[
  {t:'Take a train trip. Advance to Lahore Junction. If you pass Shuru Chowk, collect Rs 5 Lac.',a:async p=>{await moveTo(p,5);await land(p,0);}},
  {t:'You were elected union council chairman. Pay each player Rs 5 Lac.',a:async p=>{for(const o of G.players)if(o!==p&&!o.bankrupt&&!p.bankrupt)await payTo(p,o,50*K,'chairman duties');}},
  {t:'Your building loan matures. Collect Rs 15 Lac.',a:async p=>gain(p,150*K)},
+ {t:'You were the best dancer at your cousin\'s mehndi. Collect Rs 5 Lac salami.',a:async p=>gain(p,50*K)},
 ];
 const CHEST=[
  {t:'Advance to Shuru Chowk (GO). Collect Rs 5 Lac.',a:async p=>{await moveTo(p,0);}},
  {t:'Bank error in your favour. Collect Rs 20 Lac.',a:async p=>gain(p,200*K)},
+ {t:'Your prize bond won! Collect Rs 10 Lac.',a:async p=>gain(p,100*K)},
+ {t:'Eid salami from your khala. Collect Rs 3 Lac.',a:async p=>gain(p,30*K)},
  {t:'Doctor\'s fee at Services Hospital. Pay Rs 5 Lac.',a:async p=>payTo(p,null,50*K,'the doctor\'s fee')},
  {t:'You sold shares on the PSX. Collect Rs 5 Lac.',a:async p=>gain(p,50*K)},
  {t:'Get out of jail free. Keep this card until you need it.',keep:1},
@@ -694,6 +710,16 @@ const CHEST=[
  {t:'Second prize in the Basant kite contest. Collect Rs 1 Lac.',a:async p=>gain(p,10*K)},
  {t:'Your Nana left you an inheritance. Collect Rs 10 Lac.',a:async p=>gain(p,100*K)},
 ];
+async function everyoneGives(X,amt,why){for(const o of G.players){if(o===X||o.bankrupt||X.bankrupt)continue;await payTo(o,X,amt,why);}}
+const isYou=q=>q.name.trim().toLowerCase()==='you';
+const possL=q=>isYou(q)?'your':q.name+"'s",possU=q=>isYou(q)?'Your':q.name+"'s",objN=q=>isYou(q)?'you':q.name,subjN=q=>isYou(q)?'You':q.name;
+CHEST.push(
+ {tf:(p,X)=>`It's ${possL(X)} birthday! 🎂 Everyone gives ${objN(X)} Rs 50,000.`,a:async(p,X)=>everyoneGives(X,5*K,`${possL(X)} birthday`)},
+ {tf:(p,X)=>`${possU(X)} wedding! 💍 Salami time: everyone gives ${objN(X)} Rs 1 Lac.`,a:async(p,X)=>everyoneGives(X,10*K,`${possL(X)} wedding salami`)},
+ {tf:(p,X)=>`${subjN(X)} got a new job! 🎉 Everyone gives ${objN(X)} Rs 50,000 for mithai.`,a:async(p,X)=>everyoneGives(X,5*K,`${possL(X)} mithai`)});
+CHANCE.push(
+ {noYou:1,tf:(p,X)=>`Oops! You broke ${X.name}'s phone screen 📱 Pay ${X.name} Rs 2 Lac.`,a:async(p,X)=>{await payTo(p,X,20*K,`${X.name}'s phone screen`);}},
+ {noYou:1,tf:(p,X)=>`${X.name} treats you to Food Street 🍢 ${X.name} pays you Rs 1 Lac.`,a:async(p,X)=>{await payTo(X,p,10*K,`treating ${p.name} at Food Street`);}});
 const DECKS={chance:CHANCE,chest:CHEST};
 
 /* ---------------- three.js scene ---------------- */
@@ -745,7 +771,7 @@ function drawCorner(x,i){
  if(i===10){x.save();x.fillStyle='#f08a1c';x.fillRect(C*.35,S-C,C*.65,C*.65);x.strokeStyle='#1b1b1b';x.lineWidth=3;x.strokeRect(C*.35,S-C,C*.65,C*.65);x.lineWidth=5;for(let k=1;k<6;k++){const xx=C*.35+k*C*.65/6;x.beginPath();x.moveTo(xx,S-C);x.lineTo(xx,S-C*.35);x.stroke();}
   x.translate(C*.675,S-C*.675);x.rotate(Math.PI/4);x.fillStyle='#fbf7ee';rr(x,-62,-24,124,48,8);x.fill();x.stroke();x.fillStyle='#1b1b1b';x.font='40px "Rozha One", Georgia, serif';x.fillText('JAIL',0,3);x.restore();
   x.font='800 24px Mukta, sans-serif';x.save();x.translate(C*.17,S-C*.62);x.rotate(Math.PI/2);x.fillText('JUST',0,0);x.restore();x.save();x.translate(C*.64,S-C*.17);x.fillText('VISITING',0,0);x.restore();}
- if(i===20){x.save();x.translate(f.x,f.y);x.rotate(3*Math.PI/4);x.font='70px "Rozha One", Georgia, serif';x.fillStyle='#c8202f';x.fillText('FREE',0,-52);x.fillStyle='#1f8a4c';rr(x,-46,-6,92,30,8);x.fill();x.fillRect(-26,-24,52,22);x.fillStyle='#1b1b1b';x.beginPath();x.arc(-26,26,10,0,7);x.fill();x.beginPath();x.arc(26,26,10,0,7);x.fill();x.font='800 30px Mukta, sans-serif';x.fillText('PARKING',0,72);x.restore();}
+ if(i===20){x.save();x.translate(f.x,f.y);x.rotate(3*Math.PI/4);x.font='70px "Rozha One", Georgia, serif';x.fillStyle='#c8202f';x.fillText('FREE',0,-52);x.fillStyle='#1f8a4c';rr(x,-46,-6,92,30,8);x.fill();x.fillRect(-26,-24,52,22);x.fillStyle='#1b1b1b';x.beginPath();x.arc(-26,26,10,0,7);x.fill();x.beginPath();x.arc(26,26,10,0,7);x.fill();x.font='800 30px Mukta, sans-serif';x.fillText('PARKING',0,72);x.font='800 15px Mukta, sans-serif';x.fillStyle='#b26b00';x.fillText('🪙 COMMITTEE POT',0,98);x.restore();}
  if(i===30){x.save();x.translate(f.x,f.y);x.rotate(-3*Math.PI/4);x.font='800 28px Mukta, sans-serif';x.fillText('GO TO',0,-62);x.font='80px "Rozha One", Georgia, serif';x.fillStyle='#2348a8';x.fillText('JAIL',0,4);x.fillStyle='#4a4a44';x.font='600 18px Mukta, sans-serif';x.fillText('CAMP JAIL, LAHORE',0,62);x.restore();}
 }
 function drawCenter(x){
@@ -1086,7 +1112,7 @@ function buildBasant(g){
   const a=new THREE.Mesh(Bx(2*s,2*s,.05),mt(c1,.6,0,null,{side:THREE.DoubleSide}));a.rotation.z=Math.PI/4;pv.add(a);
   const b=new THREE.Mesh(Bx(.9*s,.9*s,.07),mt(c2,.6,0));b.rotation.z=Math.PI/4;pv.add(b);
   const t=new THREE.Mesh(Co(.35*s,.7*s,3),mt(c2,.6,0));t.position.y=-1.7*s;t.rotation.z=Math.PI;pv.add(t);
-  const ang=rr01()*Math.PI*2,front=Math.sin(ang)>.3;const r=front?20+rr01()*6:16+rr01()*18,y=front?13+rr01()*5:5+rr01()*10;
+  const ang=rr01()*Math.PI*2,front=Math.sin(ang)>.3;const r=front?25+rr01()*6:22+rr01()*14,y=front?13+rr01()*5:8+rr01()*9;
   k.position.copy(ringPos(r,ang,y));faceCenter(k);
   const str=new THREE.Line(new THREE.BufferGeometry().setFromPoints([new V3(0,-1.4*s,0),new V3(0,-y-1,r*.35)]),new THREE.LineBasicMaterial({color:0xffffff,transparent:true,opacity:.5}));k.add(str);
   kg.add(k);kites.push({k,pv,y,ph:rr01()*6.28});}
@@ -1279,6 +1305,7 @@ const COIN='<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r=
 const DICE_ICON='<svg viewBox="0 0 40 40" aria-hidden="true"><rect x="3" y="9" width="22" height="22" rx="5" fill="#fff" stroke="#4a2a00" stroke-width="2.5" transform="rotate(-12 14 20)"/><circle cx="10" cy="16" r="2.3" fill="#c8202f"/><circle cx="17" cy="23" r="2.3" fill="#c8202f"/><rect x="17" y="12" width="20" height="20" rx="5" fill="#fff" stroke="#4a2a00" stroke-width="2.5" transform="rotate(10 27 22)"/><circle cx="23" cy="18" r="2" fill="#1b1b1b"/><circle cx="31" cy="26" r="2" fill="#1b1b1b"/><circle cx="27" cy="22" r="2" fill="#1b1b1b"/></svg>';
 const nm=p=>`<b>${esc(p.name)}</b>`;
 function renderPlayers(){
+ renderPot();
  $('#players').innerHTML=G.players.map(p=>{const own=G.sq.filter(s=>s.owner===p.i);
   const chips=own.map(s=>`<span class="chip ${s.mort?'m':''}" style="background:${s.g?GROUPS[s.g].c:(s.t==='rail'?'#e9e4d4':'#7fb6d8')}"></span>`).join('');
   const badge=p.bankrupt?'<i class="badge">OUT</i>':(p.inJail?'<i class="badge">JAIL</i>':'');
@@ -1327,7 +1354,7 @@ function deedHTML(s){
   ${[1,2,3,4].map(n=>`<tr><td>If ${n} stop${n>1?'s are':' is'} owned</td><td>${money(25*K*2**(n-1))}</td></tr>`).join('')}</table><p class="dfoot">Price ${money(s.price)} · Mortgage value ${money(s.price/2)}</p>${own}</div>`;
  if(s.t==='util')return `<div class="deed"><div class="dh lt" style="background:#cfe6f2"><small>UTILITY · ${esc(s.sub.toUpperCase())}</small><h3>${esc(s.n)}</h3></div><table>
   <tr><td>One utility owned</td><td>4 × dice × Rs 10,000</td></tr><tr><td>Both utilities owned</td><td>10 × dice × Rs 10,000</td></tr></table><p class="dfoot">Price ${money(s.price)} · Mortgage value ${money(s.price/2)}</p>${own}</div>`;
- const D={go:'Collect Rs 5 Lac every time you pass or land on Shuru Chowk.',jail:'Just visiting, unless you were sent here. Get out by paying Rs 5 Lac, using a card, or rolling doubles within 3 turns.',park:'A free rest stop. Nothing happens here.',gotojail:'Go directly to jail. Do not pass Shuru Chowk, do not collect Rs 5 Lac.',chance:'Draw a Qismat card and do what it says.',chest:'Draw a Mohalla Chest card and do what it says.',tax:`Pay ${short((s.a||0)*K)} to the government.`};
+ const D={go:'Collect Rs 5 Lac every time you pass or land on Shuru Chowk.',jail:'Just visiting, unless you were sent here. Get out by paying Rs 5 Lac, using a card, or rolling doubles within 3 turns.',park:'Every tax, fine and fee goes into the Committee pot. Land here to win the whole pot, however much has been saved up!',gotojail:'Go directly to jail. Do not pass Shuru Chowk, do not collect Rs 5 Lac.',chance:'Draw a Qismat card and do what it says.',chest:'Draw a Mohalla Chest card and do what it says.',tax:`Pay ${short((s.a||0)*K)} to the government.`};
  return `<div class="deed"><div class="dh lt" style="background:#cfe6d4"><small>BOARD SQUARE</small><h3>${esc(s.n)}</h3></div><p class="dfoot" style="font-size:15px;color:#1b1b1b">${D[s.t]}</p></div>`;}
 
 /* ---------------- property management ---------------- */
@@ -1414,18 +1441,20 @@ async function land(p,sum,o={}){const s=G.sq[p.pos];
  else if(s.t==='tax'){toast(`${s.n}: ${short(s.a*K)}`);await payTo(p,null,s.a*K,s.n);}
  else if(s.t==='chance'||s.t==='chest')await drawCard(p,s.t);
  else if(s.t==='gotojail')await sendToJail(p);
+ else if(s.t==='park')await winPot(p);
 }
 async function drawCard(p,type){const deck=G.decks[type];const idx=deck.shift();const card=DECKS[type][idx];if(!card.keep)deck.push(idx);
+ let others=G.players.filter(q=>q!==p&&!q.bankrupt);if(card.noYou&&others.some(q=>!isYou(q)))others=others.filter(q=>!isYou(q));const X=card.tf&&others.length?others[rnd(others.length)]:null;const text=card.tf?(X?card.tf(p,X):'Nothing happens this time. Lucky escape! 😅'):card.t;
  const head=type==='chance'?['Qismat','#d93d8c']:['Mohalla Chest','#1f9a8c'];
- const html=`<div class="gcard"><div class="gh" style="background:${head[1]}">${head[0]}</div><p>${esc(card.t)}</p><div class="who">Drawn by ${esc(p.name)}</div></div>`;
- log(`${nm(p)} drew ${head[0]}: ${esc(card.t)}`,p);sfx('card');
+ const html=`<div class="gcard"><div class="gh" style="background:${head[1]}">${head[0]}</div><p>${esc(text)}</p><div class="who">Drawn by ${esc(p.name)}</div></div>`;
+ log(`${nm(p)} drew ${head[0]}: ${esc(text)}`,p);sfx('card');
  if(NET.role==='host')bc({t:'card',html});
  if(p.cpu||p.remote)await modal(html,[{k:'ok',label:'OK'}],{k:'ok',ms:p.remote?2400:1900});else{const mp=modal(html,[{k:'ok',label:'OK',primary:1}]);startTimer(p,()=>{if(modalDone)modalDone('ok');});await mp;stopTimer();}
- if(card.keep){p.goojf.push({type,idx});renderPlayers();return;}await card.a(p);}
+ if(card.keep){p.goojf.push({type,idx});renderPlayers();return;}if(card.tf&&!X)return;await card.a(p,X);}
 async function payTo(p,o,amt,why){if(p.bankrupt)return false;
  if(!p.salaried){log(`${nm(p)} pays nothing for ${esc(why)}: no salary earned yet`,p);toast(`${p.name}: free until first salary`);return true;}
  if(p.cash<amt){const ok=await raiseCash(p,amt,o,why);if(!ok){await bankrupt(p,o);return false;}}
- p.cash-=amt;if(o)o.cash+=amt;if(o&&o.cpu&&amt>=50*K&&Math.random()<.4)botSay(o,['Shukriya! 🤑','Rent nikalo 😂','Aur aao 😎','Mazaa aa gaya 🔥']);log(`${nm(p)} paid ${short(amt)}${o?' to '+nm(o):''} for ${esc(why)}`,p);renderPlayers();renderManage();return true;}
+ p.cash-=amt;if(o)o.cash+=amt;else{G.pot=(G.pot||0)+amt;potBump();}if(o&&o.cpu&&amt>=50*K&&Math.random()<.4)botSay(o,['Shukriya! 🤑','Rent nikalo 😂','Aur aao 😎','Mazaa aa gaya 🔥']);log(`${nm(p)} paid ${short(amt)}${o?' to '+nm(o):''} for ${esc(why)}`,p);renderPlayers();renderManage();return true;}
 function cpuLiquidate(p,amt){let guardN=200;while(p.cash<amt&&guardN--){const sel=G.sq.filter(s=>s.owner===p.i&&canSell(s)).sort((a,b)=>b.houses-a.houses)[0];if(sel){sel.houses--;p.cash+=sel.hc/2;continue;}
   const mo=G.sq.filter(s=>s.owner===p.i&&canMort(s)).sort((a,b)=>a.price-b.price)[0];if(mo){mo.mort=true;p.cash+=mo.price/2;log(`${nm(p)} mortgaged ${esc(mo.n)}`,p);continue;}break;}updateBoard();renderPlayers();}
 async function raiseCash(p,amt,o,why){
@@ -1523,7 +1552,7 @@ function buildGame(cfg){
  GEN++;tweens.length=0;
  SQ.forEach(s=>{if(s.price){s.owner=null;s.houses=0;s.mort=false;}});
  G={sq:SQ,players:cfg.map((c,i)=>({i,name:(c.name||'').trim()||`Player ${i+1}`,cpu:!!c.cpu,remote:!!c.remote,conn:c.conn||null,pawn:c.pawn,color:PCOL[i],cash:START,salaried:false,pos:0,inJail:false,jailTurns:0,goojf:[],bankrupt:false})),
-  cur:0,dbl:0,decks:{chance:shuffle([...CHANCE.keys()]),chest:shuffle([...CHEST.keys()])},mview:0,over:false,waiting:false,debt:null};
+  cur:0,dbl:0,pot:0,decks:{chance:shuffle([...CHANCE.keys()]),chest:shuffle([...CHEST.keys()])},mview:0,over:false,waiting:false,debt:null};
  G.players.forEach(p=>{p.obj=buildPlayerObj(p);p.obj.position.copy(posFor(p,0));p.obj.rotation.y=yawFor(p,0);scene.add(p.obj);});
  $('#logl').innerHTML='';$('#dice').innerHTML='';
  updateBoard();renderPlayers();focusObj=G.players[0].obj;
@@ -1711,13 +1740,32 @@ const FUN_LINES=[
  'Play online and trash talk in chat. Rent nikalo! 😎',
  'Tap the mic and talk to your friends while you play 🎤',
  'Shahdara is cheap, DHA is costly. Choose wisely, seth ji 🧐',
- 'Build evenly across a set. One house each before the next 🏘️'];
+ 'Build evenly across a set. One house each before the next 🏘️',
+ 'Taxes and fines fill the Committee pot. Land on Free Parking and take it all! 🪙',
+ 'The Committee pot keeps growing. Pray for Free Parking 🙏',
+ 'Someone\'s birthday card came up? Salami time, everyone pays! 🎂'];
 const FUN={order:shuffle([...FUN_LINES.keys()]),i:0};
 function nextFunLine(){FUN.i=(FUN.i+1)%FUN.order.length;const txt=FUN_LINES[FUN.order[FUN.i]];
  document.querySelectorAll('.funline').forEach(p=>{if(p.offsetParent===null&&!p.closest('#intro')){p.firstElementChild.textContent=txt;return;}
   const s=p.firstElementChild;s.className='out';setTimeout(()=>{s.textContent=txt;s.className='in';},250);});}
 document.querySelectorAll('.funline span').forEach(s=>{s.textContent=FUN_LINES[FUN.order[0]];s.className='in';});
 setInterval(()=>{if(!document.hidden&&(!$('#intro').hidden||!$('#setup').hidden))nextFunLine();},5000);
+
+
+/* ================= committee pot ================= */
+function renderPot(){const el=document.getElementById('pot');if(!el)return;if(!G){el.hidden=true;return;}el.hidden=false;$('#potAmt').textContent=short(G.pot||0);
+ const s=document.getElementById('players').getBoundingClientRect();if(s.height)el.style.top=(s.bottom+8)+'px';}
+window.addEventListener('resize',()=>{if(G)renderPot();});
+function potBump(){renderPot();const el=$('#pot');el.classList.remove('bump');void el.offsetWidth;el.classList.add('bump');}
+async function winPot(p){const a=G.pot||0;
+ if(a<=0){log(`${nm(p)} landed on Free Parking, but the Committee pot is empty`,p);toast('Committee pot is empty 😅');return;}
+ G.pot=0;p.cash+=a;log(`${nm(p)} won the Committee pot: ${short(a)}! 🪙`,p);
+ splash(`${p.name} wins ${short(a)}!`,'#d99a12');sfx('win');buzz([60,40,60]);
+ const el=$('#pot');el.classList.remove('win');void el.offsetWidth;el.classList.add('win');
+ if(NET.role==='host')bc({t:'potwin'});
+ if(p.cpu)botSay(p,['Committee meri! 🤑','Allah ka shukar 🙏','Jackpot! 🎉']);
+ renderPlayers();renderManage();await sleep(900);}
+$('#pot').addEventListener('click',()=>{sfx('tap');toast(`Committee pot: ${short(G?G.pot||0:0)}. Land on Free Parking to win it all!`);});
 
 /* tools */
 $('#deck').addEventListener('click',()=>{if(!G)return;sfx('card');const M=$('#manage');if(!M.hidden){M.hidden=true;renderDeck();return;}const o=deckOwner();G.mview=o?o.i:G.cur;openManage();});
@@ -1745,7 +1793,7 @@ function bc(m){if(NET.role!=='host')return;NET.conns.forEach(c=>{try{if(c.open)c
 function send(m){try{if(NET.hostConn&&NET.hostConn.open)NET.hostConn.send(m);}catch(e){}}
 let syncT=0;
 function schedSync(){if(NET.role!=='host'||!G||syncT)return;syncT=setTimeout(()=>{syncT=0;if(!G||NET.role!=='host')return;
- bc({t:'state',cur:G.cur,pl:G.players.map(p=>[p.cash,p.inJail?1:0,p.bankrupt?1:0,p.goojf.length,p.cpu?1:0,p.pos]),sq:G.sq.filter(BUYABLE).map(s=>[s.i,s.owner==null?-1:s.owner,s.houses,s.mort?1:0]),debt:G.debt?G.debt.p.i:-1,debtAmt:G.debt?G.debt.amt:0,over:G.over?1:0});},40);}
+ bc({t:'state',cur:G.cur,pl:G.players.map(p=>[p.cash,p.inJail?1:0,p.bankrupt?1:0,p.goojf.length,p.cpu?1:0,p.pos]),sq:G.sq.filter(BUYABLE).map(s=>[s.i,s.owner==null?-1:s.owner,s.houses,s.mort?1:0]),debt:G.debt?G.debt.p.i:-1,debtAmt:G.debt?G.debt.amt:0,over:G.over?1:0,pot:G.pot||0});},40);}
 const serBtns=btns=>btns.filter(b=>!b.act).map(b=>({k:b.k,label:b.label,primary:b.primary?1:0,danger:b.danger?1:0,dis:(typeof b.dis==='function'?b.dis():b.dis)?1:0}));
 function remoteDecide(p,kind,payload,fallback){const id=++NET.askId;
  const fb=fallback||((payload.btns.find(b=>!b.act&&!(typeof b.dis==='function'?b.dis():b.dis))||{}).k)||'bk';
@@ -1839,12 +1887,13 @@ function clientData(d){if(!d||typeof d!=='object')return;
  case 'mic':if(G&&G.players[d.pi]){G.players[d.pi].mic=!!d.on;renderPlayers();}break;
  case 'timer':TIMER.view=d.pi>=0?{pi:d.pi,end:performance.now()+d.ms,ms:d.ms}:null;TIMER.lastSec=-1;break;
  case 'timeout':if(NET.myAsk&&NET.myAsk.id===d.id){NET.myAsk=null;drawClientBar();renderManage();}if(modalDone&&!$('#modal').hidden)modalDone('__timeout');toast('Time up!');break;
+ case 'potwin':{const el=$('#pot');el.classList.remove('win');void el.offsetWidth;el.classList.add('win');}break;
  case 'over':if(G)clientOver(d);break;}}
 function applyState(d){G.cur=d.cur;
  d.pl.forEach((x,i)=>{const p=G.players[i];if(!p)return;p.cash=x[0];p.inJail=!!x[1];p.bankrupt=!!x[2];p.goojf=new Array(x[3]).fill(0);p.cpu=!!x[4];
   if(!hopBusy&&!p.bankrupt&&p.pos!==x[5]){p.pos=x[5];p.obj.position.copy(posFor(p,p.pos));p.obj.rotation.y=yawFor(p,p.pos);}});
  d.sq.forEach(([i,o,hs,m])=>{const s=G.sq[i];s.owner=o<0?null:o;s.houses=hs;s.mort=!!m;});
- G.debt=d.debt>=0?{p:G.players[d.debt],amt:d.debtAmt}:null;
+ G.debt=d.debt>=0?{p:G.players[d.debt],amt:d.debtAmt}:null;{const np=d.pot||0;if(np>(G.pot||0)){G.pot=np;potBump();}else G.pot=np;}
  focusObj=G.players[G.cur]&&G.players[G.cur].obj;renderPlayers();updateBoard();renderManage();drawClientBar();}
 function clientHop(d){hopBusy++;const g=GEN;hopQ=hopQ.then(async()=>{if(g!==GEN)return;const p=G.players[d.pi];if(!p)return;p.pos=d.idx;p.inJail=!!d.jail;if(d.dur<500)sfx('hop');try{await hop(p,d.idx,d.dur,d.h);}catch(e){}}).finally(()=>{hopBusy--;});}
 function drawClientBar(){if(!G||NET.role!=='client')return;const mine=G.players[NET.me];
@@ -1909,7 +1958,7 @@ function commsReset(){$('#comms').hidden=false;$('#cSpk').hidden=!online();$('#c
 function updDot(){const d=$('#chatDot');d.hidden=!chatUnread;d.textContent=chatUnread>9?'9+':String(chatUnread);}
 function showBubble(pi,x){const el=document.querySelector(`.pl[data-i="${pi}"] .pav`);const p=G&&G.players[pi];if(!el||!p)return;
  const r=el.getBoundingClientRect();const b=document.createElement('div');b.className='bub'+(isEmojiOnly(x)?' big':'');b.textContent=x;b.style.setProperty('--pc',p.color);
- const left=Math.max(90,Math.min(window.innerWidth-90,r.left+r.width/2));b.style.left=left+'px';const strip=document.getElementById('players').getBoundingClientRect();b.style.top=(strip.bottom+12)+'px';
+ const left=Math.max(90,Math.min(window.innerWidth-90,r.left+r.width/2));b.style.left=left+'px';const strip=document.getElementById('players').getBoundingClientRect(),potEl=document.getElementById('pot');const below=potEl&&!potEl.hidden?Math.max(strip.bottom,potEl.getBoundingClientRect().bottom):strip.bottom;b.style.top=(below+14)+'px';
  const old=document.querySelector(`.bub[data-i="${pi}"]`);if(old)old.remove();b.dataset.i=pi;$('#bubbles').appendChild(b);setTimeout(()=>b.remove(),3900);}
 function showChat(pi,x){const p=G&&G.players[pi];if(!p)return;x=cleanChat(x);if(!x)return;
  showBubble(pi,x);sfxLocal('tap');
