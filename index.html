@@ -512,6 +512,7 @@ a.gbtn{text-decoration:none;display:inline-block}
 .fempty{text-align:center;color:var(--muted);font:700 14px/1.4 var(--f-body);padding:8px}
 .fmsg{min-height:0;margin:-4px 0 0;text-align:center;font:800 13px var(--f-body);color:#ffd27a}
 .fmsg:empty{display:none}
+.fself{display:grid;gap:8px;justify-items:center;font:800 13px/1.35 var(--f-body)}.fself .on{color:#7dffa0}.fself .off{color:#ffd27a}.fself .wait{color:var(--muted)}
 #invPop{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 70px);transform:translateX(-50%);z-index:60;width:min(420px,calc(100% - 24px));display:flex;align-items:center;gap:10px;padding:10px 10px 10px 10px;animation:invin .45s cubic-bezier(.2,1.4,.4,1)}
 #invPop img{width:48px;height:48px;border-radius:50%;background:#0c2726;flex:none;border:2px solid var(--gold)}
 #invPop .it{flex:1;min-width:0;font:700 14px/1.3 var(--f-body);color:var(--ink)}
@@ -665,7 +666,7 @@ a.gbtn{text-decoration:none;display:inline-block}
 <div class="friends" id="friends" hidden>
   <div class="panel fpanel" role="dialog" aria-label="Friends">
     <h3><span>👥 Friends</span><button class="x" id="frClose" aria-label="Close">×</button></h3>
-    <div class="fme"><small>Your friend code</small><div class="fcode" id="frCode">------</div>
+    <div class="fme"><small>Your friend code</small><div class="fcode" id="frCode">------</div><div class="fself" id="frSelf"></div>
       <div class="facts2"><button class="gbtn small" id="frCopy" type="button">Copy</button><a class="gbtn small green" id="frWa" target="_blank" rel="noopener">Share on WhatsApp</a></div></div>
     <div class="joinrow"><input id="frAddIn" maxlength="6" placeholder="CODE" autocomplete="off" autocapitalize="characters" aria-label="Friend code"><button class="gbtn green" id="frAddBtn" type="button">Add friend</button></div>
     <p class="fmsg" id="frMsg" role="status"></p>
@@ -2236,17 +2237,17 @@ const frLive=c=>FR.conns[c]?[...FR.conns[c]].filter(x=>x.open):[];
 const toastL=t=>{const r=NET.role;NET.role='_';try{toast(t);}finally{NET.role=r;}};
 const frMsg=t=>{const el=$('#frMsg');if(el)el.textContent=t||'';};
 function ago(ts){const s=(Date.now()-ts)/1000;if(s<90)return 'just now';if(s<3600)return Math.round(s/60)+'m ago';if(s<86400)return Math.round(s/3600)+'h ago';return Math.round(s/86400)+'d ago';}
-function myPres(){if(G&&!G.over)return{s:'game'};if(NET.role==='host')return{s:'room',room:NET.code,k:NET.lobby.length};if(NET.role==='client')return{s:'inroom'};return{s:'menu'};}
+function myPres(){if(G&&!G.over)return{s:'game',m:NET.role!=='local'?'online':G.train?'train':'local',k:G.players.length};if(NET.role==='host')return{s:'room',room:NET.code,k:NET.lobby.length};if(NET.role==='client')return{s:'inroom'};return{s:'menu'};}
 function frHello(x){return Object.assign({t:'hi',c:FR.code,n:myName(),p:me.pawn},myPres(),x||{});}
 function frSendAll(m){Object.keys(FR.conns).forEach(c=>frLive(c).forEach(x=>{try{x.send(m);}catch(e){}}));}
 
 /* connect to the PeerJS server under our own friend code so friends can find us */
 function presStart(){if(!window.Peer||FR.peer||document.hidden)return;let p;try{p=new Peer(UPREFIX+FR.code);}catch(e){return;}FR.peer=p;
- p.on('open',()=>{if(FR.peer!==p)return;FR.ready=true;FR.dup=false;if(FR.addOnStart){const c=FR.addOnStart;FR.addOnStart=null;frAdd(c);}frPoll();renderFriends();});
+ p.on('open',()=>{if(FR.peer!==p)return;FR.ready=true;FR.dup=false;FR.dupN=0;if(FR.addOnStart){const c=FR.addOnStart;FR.addOnStart=null;frAdd(c);}frPoll();renderFriends();});
  p.on('connection',c=>frWire(c,null));
  p.on('error',e=>{if(FR.peer!==p)return;const t=e&&e.type;
   if(t==='peer-unavailable'){const m=/polystar-u-([A-Z0-9]{6})/.exec(String(e.message||''));if(m){delete FR.dialing[m[1]];renderFriends();}return;}
-  if(t==='unavailable-id'){FR.dup=true;presKill();setTimeout(presStart,20000);renderFriends();return;}
+  if(t==='unavailable-id'){FR.dupN=(FR.dupN||0)+1;FR.dup=FR.dupN>=3;presKill();setTimeout(presStart,FR.dup?20000:5000);renderFriends();return;}
   if(t==='network'||t==='server-error'||t==='socket-error'||t==='socket-closed'){presKill();setTimeout(presStart,8000);}});
  p.on('disconnected',()=>{setTimeout(()=>{if(FR.peer===p&&!p.destroyed)try{p.reconnect();}catch(e){}},2500);});}
 function presKill(){const p=FR.peer;FR.peer=null;FR.ready=false;FR.dialing={};
@@ -2265,7 +2266,7 @@ function frData(conn,d){if(!d||typeof d!=='object')return;const c=cleanCode(d.c)
    f={c,n:cleanName(d.n),p:PAWNS[+d.p]?+d.p:0,seen:Date.now()};FR.list.unshift(f);toastL(`👥 ${f.n} added you as a friend`);sfxLocal('coin');}
   if(!conn._fc){conn._fc=c;(FR.conns[c]=FR.conns[c]||new Set()).add(conn);}
   f.n=cleanName(d.n);if(PAWNS[+d.p])f.p=+d.p;f.seen=Date.now();if(d.know)delete f.pend;
-  FR.heard[c]=Date.now();FR.stat[c]={s:['menu','room','inroom','game'].includes(d.s)?d.s:'menu',room:/^[A-Z0-9]{5}$/.test(d.room||'')?d.room:null,k:Math.min(6,+d.k||0)};
+  FR.heard[c]=Date.now();FR.stat[c]={m:['online','local','train'].includes(d.m)?d.m:'',s:['menu','room','inroom','game'].includes(d.s)?d.s:'menu',room:/^[A-Z0-9]{5}$/.test(d.room||'')?d.room:null,k:Math.min(6,+d.k||0)};
   if(!d.re)try{conn.send(frHello({know:1,re:1,add:f.pend?1:0}));}catch(e){}
   frSave();renderFriends();if(NET.role!=='local'&&!G)renderRoom();return;}
  if(!conn._fc||!frFind(c))return;
@@ -2325,7 +2326,7 @@ $('#invPop').addEventListener('click',e=>{const j=e.target.closest('[data-ij]');
 /* friends panel */
 function frRow(f){const on=frOnline(f.c),st=FR.stat[f.c]||{s:'menu'},busy=G&&!G.over;let sub,btn='';
  if(!on)sub=f.pend&&!f.seen?'Waiting for them to open PolyStar':f.seen?'Last seen '+ago(f.seen):'Offline';
- else sub=st.s==='game'?'🎲 Playing a game':st.s==='room'?`🏠 In a room (${st.k||1}/6)`:st.s==='inroom'?'🏠 In a friend\'s room':'Online';
+ else sub=st.s==='game'?(st.m==='online'?`🎲 In an online match (${st.k||2} players)`:st.m==='train'?'🎓 Playing the training match':`🎲 In a match vs CPU`):st.s==='room'?`🏠 In a room (${st.k||1}/6)`:st.s==='inroom'?'🏠 In a friend\'s room':'Online';
  if(on&&!busy){const sent=Date.now()-(FR.sent[f.c]||0)<10000;
   if(NET.role==='host'&&st.s==='menu')btn=sent?'<button class="gbtn small" disabled type="button">Sent ✓</button>':`<button class="gbtn small green" data-finv="${f.c}" type="button">Invite</button>`;
   else if(st.s==='room'&&st.room&&st.room!==NET.code)btn=`<button class="gbtn small gold" data-fjoin="${st.room}" type="button">Join</button>`;
@@ -2334,13 +2335,13 @@ function frRow(f){const on=frOnline(f.c),st=FR.stat[f.c]||{s:'menu'},busy=G&&!G.
 function renderFriends(){const on=FR.list.filter(f=>frOnline(f.c)).length,b=$('#frBadge');if(b){b.hidden=!on;b.textContent=on;}
  if($('#friends').hidden)return;
  $('#frCode').textContent=FR.code;
+ const GAME_URL='https://qasimmughalceo-source.github.io/Lahore_Monopoly/';
+ $('#frSelf').innerHTML=!window.Peer?`<span class="off">⚠️ You are offline here. Friends only work in your game link:</span><a class="gbtn small gold" href="${GAME_URL}" target="_blank" rel="noopener">Open PolyStar</a>`:FR.dup?'<span class="off">⚠️ PolyStar is open in another tab. Friends see you there.</span>':FR.ready?'<span class="on">🟢 You are online. Friends can see you.</span>':'<span class="wait">⏳ Connecting…</span>';
  const link=location.href.split('#')[0].split('?')[0]+'?friend='+FR.code;
  $('#frWa').href='https://wa.me/?text='+encodeURIComponent(`Add me on PolyStar and let's play! My friend code is ${FR.code}: ${link}`);
  const list=[...FR.list].sort((a,b)=>(frOnline(b.c)-frOnline(a.c))||((b.seen||0)-(a.seen||0)));
  $('#frCount').textContent=FR.list.length?`${on} online`:'';
  $('#frList').innerHTML=list.length?list.map(frRow).join(''):'<div class="fempty">No friends yet. Share your code, type a friend\'s code above, or add people you play online with.</div>';
- if(FR.dup)$('#frList').insertAdjacentHTML('afterbegin','<div class="fempty">PolyStar is open in another tab, so friends see you there.</div>');
- else if(!window.Peer)$('#frList').insertAdjacentHTML('afterbegin','<div class="fempty">Friends need internet. Open the game from its GitHub Pages link.</div>');
  const rec=FR.recent.filter(r=>!frFind(r.c));$('#frRecentWrap').hidden=!rec.length;
  $('#frRecent').innerHTML=rec.map(r=>`<div class="frow"><span class="fav">${imgT(r.p)}</span><span class="ft"><b>${esc(r.n)}</b><small>Played online with you</small></span><button class="gbtn small green" data-fadd="${r.c}" type="button">+ Add</button></div>`).join('');}
 function openFriends(){sfx('tap');frMsg('');$('#friends').hidden=false;if(!FR.peer)presStart();FR.list.forEach(f=>{if(!frLive(f.c).length)f._next=0;});frPoll();renderFriends();}
