@@ -1712,7 +1712,7 @@ renderTimerPick();
 
 
 /* ================= background music: original generative lo-fi jazz ================= */
-const MUSIC={on:true,playing:false,ac:null,master:null,bus:null,wet:null,noise:null,crackle:null,timer:0,beatT:0,step:0,ahead:.9,mel:5,melCount:0,vol:.7};
+const MUSIC={on:true,playing:false,ac:null,master:null,bus:null,wet:null,noise:null,crackle:null,timer:0,beatT:0,step:0,ahead:.9,mel:5,melCount:0,vol:.35};
 try{const v=localStorage.getItem('lm-music');if(v==='0')MUSIC.on=false;}catch(e){}
 const BPM=74,BEAT=60/BPM,SWING=.64;
 // 8-bar loop in F: Fmaj9 | Dm9 | Gm9 | C13 | Am7 | D9 | Gm9 | C9sus
@@ -1785,7 +1785,7 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden){MUSIC.wasO
 
 
 /* ================= rain ambience ================= */
-const RAIN={on:true,playing:false,src:null,gain:null,ac:null,base:.32};
+const RAIN={on:true,playing:false,src:null,gain:null,ac:null,base:.11};
 RAIN.on=MUSIC.on;
 function rainBuffer(ac){const sr=ac.sampleRate,n=sr*12,buf=ac.createBuffer(2,n,sr);
  for(let c=0;c<2;c++){const d=buf.getChannelData(c);let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0,br=0;
@@ -1798,11 +1798,11 @@ function rainBuffer(ac){const sr=ac.sampleRate,n=sr*12,buf=ac.createBuffer(2,n,s
   // smooth the loop seam
   const fade=Math.floor(sr*.25);for(let j=0;j<fade;j++){const a=j/fade;d[j]=d[j]*a+d[n-fade+j]*(1-a);}}
  return buf;}
-function rainTarget(){return RAIN.base*((typeof themeKey!=='undefined'&&themeKey==='rain'&&G)?1.7:1);}
+function rainTarget(){return RAIN.base*((typeof themeKey!=='undefined'&&themeKey==='rain'&&G)?1.5:1);}
 function rainStart(){if(!RAIN.on||RAIN.playing)return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();}catch(e){return;}
  if(AC.state==='suspended')AC.resume();
  if(!RAIN.src||RAIN.ac!==AC){RAIN.ac=AC;const s=AC.createBufferSource();s.buffer=rainBuffer(AC);s.loop=true;s.loopStart=.25;s.loopEnd=s.buffer.duration;
-  const hp=AC.createBiquadFilter();hp.type='highpass';hp.frequency.value=120;const lp=AC.createBiquadFilter();lp.type='lowpass';lp.frequency.value=6500;
+  const hp=AC.createBiquadFilter();hp.type='highpass';hp.frequency.value=120;const lp=AC.createBiquadFilter();lp.type='lowpass';lp.frequency.value=3200;
   const g=AC.createGain();g.gain.value=0;s.connect(hp);hp.connect(lp);lp.connect(g);g.connect(AC.destination);s.start();RAIN.src=s;RAIN.gain=g;}
  const now=AC.currentTime,g=RAIN.gain.gain;g.cancelScheduledValues(now);g.setValueAtTime(g.value,now);g.linearRampToValueAtTime(rainTarget(),now+3);RAIN.playing=true;}
 function rainStop(){if(!RAIN.playing)return;RAIN.playing=false;if(RAIN.gain&&RAIN.ac){const now=RAIN.ac.currentTime,g=RAIN.gain.gain;g.cancelScheduledValues(now);g.setValueAtTime(g.value,now);g.linearRampToValueAtTime(0,now+.8);}}
