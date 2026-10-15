@@ -643,7 +643,7 @@ a.gbtn{text-decoration:none;display:inline-block}
       <p class="funline" aria-live="polite"><span>Roll the dice and become a Raees of Lahore! 🎲</span></p>
     </div>
     <div class="facts">
-      <span class="fact">Start <b>Rs 0</b></span>
+      <span class="fact">Start <b>Rs 40 Lac</b></span>
       <span class="fact">Pass Shuru Chowk <b>+Rs 5 Lac</b></span>
       <span class="fact">No tax <b>before first salary</b></span>
       <span class="fact">Free Parking <b>wins the Committee pot</b></span>
@@ -741,7 +741,7 @@ const rnd=n=>Math.floor(Math.random()*n);
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
 
 /* ---------------- money ---------------- */
-const K=1e4, L=1e5, START=0, GO_PAY=50*K, FINE=50*K;
+const K=1e4, L=1e5, START=400*K, GO_PAY=50*K, FINE=50*K;
 const money=n=>'Rs '+Math.round(n).toLocaleString('en-IN');
 function short(n){const neg=n<0;n=Math.abs(n);let s;if(n>=1e7)s=(+(n/1e7).toFixed(2))+' Cr';else if(n>=1e5)s=(+(n/1e5).toFixed(2))+' Lac';else s=Math.round(n).toLocaleString('en-IN');return (neg?'−':'')+'Rs '+s;}
 
@@ -752,7 +752,7 @@ const SQ=[
  {t:'prop',n:'Shahdara',g:'brown',p:60,r:[2,10,30,90,160,250]},
  {t:'chest',n:'Mohalla Chest'},
  {t:'prop',n:'Kot Lakhpat',g:'brown',p:60,r:[4,20,60,180,320,450]},
- {t:'tax',n:'FBR Income Tax',a:200},
+ {t:'tax',n:'FBR Income Tax',a:200,pct:10,cap:30},
  {t:'rail',n:'Lahore Junction',sub:'Railway Station',i:'train',p:200},
  {t:'prop',n:'Samanabad',g:'lblue',p:100,r:[6,30,90,270,400,550]},
  {t:'chance',n:'Qismat'},
@@ -786,7 +786,7 @@ const SQ=[
  {t:'rail',n:'Allama Iqbal Airport',sub:'Flights',i:'plane',p:200},
  {t:'chance',n:'Qismat'},
  {t:'prop',n:'DHA Phase 5',g:'dblue',p:350,r:[35,175,500,1100,1300,1500]},
- {t:'tax',n:'Super Tax',a:100},
+ {t:'tax',n:'Super Tax',a:100,pct:5,cap:15},
  {t:'prop',n:'DHA Phase 6',g:'dblue',p:400,r:[50,200,600,1400,1700,2000]},
 ];
 SQ.forEach((s,i)=>{s.i=i;if(s.p){s.price=s.p*K;s.owner=null;s.houses=0;s.mort=false;}if(s.r)s.rent=s.r.map(x=>x*K);if(s.g)s.hc=GROUPS[s.g].h*K;});
@@ -909,7 +909,7 @@ function drawEdge(x,s){
  else if(s.t==='rail'||s.t==='util'){x.font='800 22px Mukta, sans-serif';wrap(x,s.n.toUpperCase(),0,top+30,W-16,24);icon(x,s.i,14);x.font='600 18px Mukta, sans-serif';x.fillStyle='#4a4a44';x.fillText(s.sub.toUpperCase(),0,C/2-58);x.fillStyle='#1b1b1b';x.font='600 23px Mukta, sans-serif';x.fillText(short(s.price),0,C/2-28);}
  else if(s.t==='chance'){x.font='800 26px Mukta, sans-serif';x.fillText('QISMAT',0,top+36);x.font='150px "Rozha One", Georgia, serif';x.fillStyle=QCOL[[7,22,36].indexOf(s.i)];x.fillText('?',0,26);x.fillStyle='#1b1b1b';x.font='600 19px Mukta, sans-serif';x.fillText('CHANCE',0,C/2-26);}
  else if(s.t==='chest'){x.font='800 25px Mukta, sans-serif';x.fillText('MOHALLA',0,top+34);x.fillText('CHEST',0,top+60);x.save();x.lineWidth=4;x.fillStyle='#22a597';rr(x,-44,-4,88,50,6);x.fill();x.stroke();x.fillStyle='#f2b632';rr(x,-44,-26,88,26,8);x.fill();x.stroke();x.fillStyle='#1b1b1b';x.fillRect(-7,-6,14,18);x.restore();x.font='600 17px Mukta, sans-serif';x.fillText('COMMUNITY CHEST',0,C/2-26);}
- else if(s.t==='tax'){x.font='800 23px Mukta, sans-serif';wrap(x,s.n.toUpperCase(),0,top+34,W-16,25);icon(x,'tax',14);x.font='600 21px Mukta, sans-serif';x.fillText('PAY '+short(s.a*K).toUpperCase(),0,C/2-30);}
+ else if(s.t==='tax'){x.font='800 23px Mukta, sans-serif';wrap(x,s.n.toUpperCase(),0,top+34,W-16,25);icon(x,'tax',14);x.font='600 21px Mukta, sans-serif';x.fillText('PAY '+s.pct+'%',0,C/2-30);}
 }
 function drawCorner(x,i){
  const f=sqInfo(i);x.textAlign='center';x.textBaseline='middle';x.fillStyle='#1b1b1b';
@@ -1502,7 +1502,7 @@ function deedHTML(s){
   ${[1,2,3,4].map(n=>`<tr><td>If ${n} stop${n>1?'s are':' is'} owned</td><td>${money(25*K*2**(n-1))}</td></tr>`).join('')}</table><p class="dfoot">Price ${money(s.price)} · Mortgage value ${money(s.price/2)}</p>${own}</div>`;
  if(s.t==='util')return `<div class="deed"><div class="dh lt" style="background:#cfe6f2"><small>UTILITY · ${esc(s.sub.toUpperCase())}</small><h3>${esc(s.n)}</h3></div><table>
   <tr><td>One utility owned</td><td>4 × dice × Rs 10,000</td></tr><tr><td>Both utilities owned</td><td>10 × dice × Rs 10,000</td></tr></table><p class="dfoot">Price ${money(s.price)} · Mortgage value ${money(s.price/2)}</p>${own}</div>`;
- const D={go:'Collect Rs 5 Lac every time you pass or land on Shuru Chowk.',jail:'Just visiting, unless you were sent here. Get out by paying Rs 5 Lac, using a card, or rolling doubles within 3 turns.',park:'Every tax, fine and fee goes into the Committee pot. Land here to win the whole pot, however much has been saved up!',gotojail:'Go directly to jail. Do not pass Shuru Chowk, do not collect Rs 5 Lac.',chance:'Draw a Qismat card and do what it says.',chest:'Draw a Mohalla Chest card and do what it says.',tax:`Pay ${short((s.a||0)*K)} to the government.`};
+ const D={go:'Collect Rs 5 Lac every time you pass or land on Shuru Chowk.',jail:'Just visiting, unless you were sent here. Get out by paying Rs 5 Lac, using a card, or rolling doubles within 3 turns.',park:'Every tax, fine and fee goes into the Committee pot. Land here to win the whole pot, however much has been saved up!',gotojail:'Go directly to jail. Do not pass Shuru Chowk, do not collect Rs 5 Lac.',chance:'Draw a Qismat card and do what it says.',chest:'Draw a Mohalla Chest card and do what it says.',tax:`Pay ${s.pct}% of your cash to FBR, never more than ${short((s.cap||0)*K)}. If you have no cash, you pay nothing, so a tax can never make you bankrupt.`};
  return `<div class="deed"><div class="dh lt" style="background:#cfe6d4"><small>BOARD SQUARE</small><h3>${esc(s.n)}</h3></div><p class="dfoot" style="font-size:15px;color:#1b1b1b">${D[s.t]}</p></div>`;}
 
 /* ---------------- property management ---------------- */
@@ -1586,7 +1586,7 @@ async function offerBuy(p,s){const can=p.cash>=s.price;
 async function land(p,sum,o={}){const s=G.sq[p.pos];
  if(BUYABLE(s)){if(s.owner==null)await offerBuy(p,s);
   else if(s.owner!==p.i){const ow=G.players[s.owner];if(s.mort)log(`${esc(s.n)} is mortgaged, so ${nm(p)} pays no rent`,p);else{const r=rentOf(s,sum,o);toast(`${p.name} pays ${short(r)} rent`);await payTo(p,ow,r,`rent on ${s.n}`);}}}
- else if(s.t==='tax'){toast(`${s.n}: ${short(s.a*K)}`);await payTo(p,null,s.a*K,s.n);}
+ else if(s.t==='tax'){await payTax(p,s);}
  else if(s.t==='chance'||s.t==='chest')await drawCard(p,s.t);
  else if(s.t==='gotojail')await sendToJail(p);
  else if(s.t==='park')await winPot(p);
@@ -1599,6 +1599,12 @@ async function drawCard(p,type){const deck=G.decks[type];const idx=deck.shift();
  if(NET.role==='host')bc({t:'card',html});
  if(p.cpu||p.remote){showCardView(html);await sleep(1700);}else{const mp=modal(html.replace('<div class="gcard">','<div class="gcard"><button class="gx" type="button" data-m="0" aria-label="Close card">×</button>'),[{k:'ok',label:'Close',primary:1}]);startTimer(p,()=>{if(modalDone)modalDone('ok');});await mp;stopTimer();}
  if(card.keep){p.goojf.push({type,idx});renderPlayers();return;}if(card.tf&&!X)return;await card.a(p,X);}
+/* taxes: a % of cash with a cap, and a tax can never bankrupt anyone */
+const taxAmt=(s,p)=>Math.min(s.cap*K,Math.round(Math.max(0,p.cash)*s.pct/100/1000)*1000);
+async function payTax(p,s){const amt=taxAmt(s,p);
+ if(!p.salaried||amt<=0){if(!p.salaried)return payTo(p,null,amt,s.n);toast(`${p.name}: nothing to tax 😅`);log(`${nm(p)} has no cash, so ${esc(s.n)} is Rs 0`,p);return true;}
+ toast(`${s.n}: ${s.pct}% = ${short(amt)}`);p.cash-=amt;G.pot=(G.pot||0)+amt;potBump();
+ log(`${nm(p)} paid ${short(amt)} ${esc(s.n)} (${s.pct}% of cash, max ${short(s.cap*K)})`,p);renderPlayers();renderManage();return true;}
 async function payTo(p,o,amt,why){if(p.bankrupt)return false;
  if(!p.salaried){log(`${nm(p)} pays nothing for ${esc(why)}: no salary earned yet`,p);toast(`${p.name}: free until first salary`);return true;}
  if(p.cash<amt){const ok=await raiseCash(p,amt,o,why);if(!ok){await bankrupt(p,o);return false;}}
@@ -1730,7 +1736,7 @@ function buildGame(cfg){
 function startGame(force){
  if(STATS.games===0&&force!=='normal'){modal(`<div class="panel lockmsg"><div class="big">🎓</div><h3>First time? Let's train!</h3><p>Play a quick <b>2-minute training match</b> against Ustad Bot. I'll show you how everything works as you play. Finish it to unlock online play.</p></div>`,[{k:'train',label:'Start training',primary:1},{k:'normal',label:'Skip, play normally'}],null,true).then(k=>{if(k==='train')startTraining();else if(k==='normal')startGame('normal');}).catch(()=>{});return;}
  const cfg=setup.players.slice(0,setup.n).map(c=>({...c}));const used=new Set();cfg.forEach(c=>{if(used.has(c.pawn))c.pawn=PAWNS.findIndex((_,i)=>!used.has(i)&&!cfg.some(d=>d.pawn===i));used.add(c.pawn);});
- const tk=pickTheme(setup.theme);applyTheme(tk);buildGame(cfg);maybeTutorial();log(`Game on! Everyone starts with Rs 0. Pass Shuru Chowk to earn ${short(GO_PAY)}. Nobody pays anything until their first salary.`);toast(THEMES[tk].name);gameLoop();}
+ const tk=pickTheme(setup.theme);applyTheme(tk);buildGame(cfg);maybeTutorial();log(`Game on! Everyone starts with ${short(START)}. Pass Shuru Chowk to earn ${short(GO_PAY)}. Nobody pays anything until their first salary.`);toast(THEMES[tk].name);gameLoop();}
 function newGame(){if(TUT.open)endTutorial();coachHide();$('#tut').hidden=true;$('#tut').classList.remove('coach');stopTimer(true);hideCardView();netTeardown();setTimeout(rainLevel,0);GEN++;tweens.length=0;$('#modal').hidden=true;$('#manage').hidden=true;if(G)G.players.forEach(p=>{if(p.obj){scene.remove(p.obj);disposeObj(p.obj);}});
  G=null;focusObj=null;ring.visible=false;SQ.forEach(s=>{if(s.price){s.owner=null;s.houses=0;s.mort=false;}});markers.forEach(m=>{if(m)m.visible=false;});houseGroups.forEach(h=>{if(h)while(h.children.length)h.remove(h.children[0]);});
  $('#hud').hidden=true;$('#setup').hidden=false;renderSetup();}
@@ -1977,7 +1983,7 @@ $('#intro').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.pr
 const FUN_LINES=[
  'Roll the dice, move your pawn, buy what you land on. Simple, yaar! 🎲',
  'Pass Shuru Chowk to collect your Rs 5 Lac salary. Payday! 💸',
- 'Everyone starts with Rs 0. Broke, but full of dreams 😅',
+ 'Everyone starts with Rs 40 Lac. Spend it wisely, seth ji 😎',
  'No tax until your first salary. FBR is waiting patiently… 🧾',
  'Own a whole colour set, then build houses. Contractor mode ON 🏗️',
  'Four houses? Upgrade to a hotel. Five-star Lahori style 🏨',
@@ -2038,7 +2044,7 @@ const TUT_STEPS=[
  {sel:'#players',t:'👥 The players',x:'Everyone in the game is here. The glowing one is whose turn it is, and the gold number is their cash.'},
  {sel:'#acts .roll,#bar',t:'🎲 Roll the dice',x:'On your turn, tap ROLL. Your pawn moves that many squares and the camera follows it.'},
  {t:'🏠 Buy plots',x:'Land on an empty plot and you can buy it. Anyone who lands on your plot pays you rent. Own a whole colour set to build houses and hotels for much bigger rent!'},
- {t:'💸 Salary at Shuru Chowk',x:'Everyone starts with Rs 0. Each time you pass Shuru Chowk you earn Rs 5 Lac. Until your first salary you pay no tax, fines or rent.'},
+ {t:'💸 Salary at Shuru Chowk',x:'Everyone starts with Rs 40 Lac to buy property. Each time you pass Shuru Chowk you earn Rs 5 Lac. Until your first salary you pay no tax, fines or rent.'},
  {sel:'#pot',t:'🪙 Committee pot',x:'Taxes and fines go into this pot. Land on Free Parking and the whole pot is yours, however big it is!'},
  {t:'🎴 Qismat & Mohalla Chest',x:'These cards can make you rich or poor: prize bonds, challans, even a friend\'s birthday where everyone pays salami.'},
  {sel:'#deck',t:'🃏 Your property cards',x:'Your plots stack up here. Tap the stack to build houses (green button) or mortgage a plot for quick cash (blue button).'},
@@ -2273,7 +2279,7 @@ function hostStart(){if(NET.role!=='host'||NET.lobby.length<2)return;
  const tk=pickTheme(setup.theme);applyTheme(tk);
  frRecent();buildGame(cfg);toast(THEMES[tk].name);
  NET.lobby.forEach((e,i)=>{if(e.conn)try{e.conn.send({t:'start',players:cfg.map(c=>({name:c.name,pawn:c.pawn,cpu:c.cpu})),me:i,roster:NET.roster,theme:tk});}catch(x){}});
- maybeTutorial();log(`Online game on! Room ${NET.code}. Everyone starts with Rs 0. Pass Shuru Chowk to earn ${short(GO_PAY)}. Nobody pays anything until their first salary.`);setTimeout(gameLoop,500);}
+ maybeTutorial();log(`Online game on! Room ${NET.code}. Everyone starts with ${short(START)}. Pass Shuru Chowk to earn ${short(GO_PAY)}. Nobody pays anything until their first salary.`);setTimeout(gameLoop,500);}
 
 /* client */
 function joinRoom(raw){const code=String(raw||'').toUpperCase().replace(/[^A-Z0-9]/g,'');

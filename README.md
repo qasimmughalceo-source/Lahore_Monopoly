@@ -62,7 +62,9 @@ Friends show as online only while PolyStar is open on their phone. If they close
 
 ## Money rules and turn timer
 
-Everyone starts with Rs 0 and earns Rs 5 Lac each time they pass Shuru Chowk. Until a player gets their first salary, they pay nothing: no taxes, fees, fines or rent.
+Everyone starts with **Rs 40 Lac** to buy property, and earns Rs 5 Lac each time they pass Shuru Chowk. Until a player gets their first salary, they pay nothing: no taxes, fees, fines or rent.
+
+**Taxes** are a share of your cash, so they grow as you get richer: **FBR Income Tax** is 10% of your cash (never more than Rs 3 Lac) and **Super Tax** is 5% (never more than Rs 1.5 Lac). A tax can never make you bankrupt: with no cash, you pay nothing.
 
 Every tax, fine and fee goes into the **Committee pot** (shown under the players). Whoever lands on **Free Parking** wins the whole pot, however much has built up.
 
