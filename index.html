@@ -312,6 +312,7 @@ button:focus-visible,input:focus-visible{outline:3px solid #fff;outline-offset:2
 .ilogo{display:grid;justify-items:center;gap:6px}
 .ilogo .logo-top{animation:dropIn2 .7s .1s cubic-bezier(.2,1.5,.4,1) both}
 .ilogo h1{margin:0;font:normal clamp(58px,16vw,110px)/.9 var(--f-game);color:var(--gold1);text-transform:uppercase;text-shadow:0 5px 0 var(--goldE),0 10px 0 #4a2a00,0 20px 34px rgba(0,0,0,.55);animation:logoPop .9s .25s cubic-bezier(.2,1.6,.4,1) both}
+.brandlogo{display:block;width:min(600px,88vw);height:auto;margin:8px auto 4px;filter:drop-shadow(0 10px 16px rgba(0,0,0,.45))}.logo .brandlogo{width:min(500px,84vw)}
 .ilogo h1 span{color:#fff;font-size:1em;text-shadow:0 5px 0 var(--red2),0 10px 0 #5a0a26,0 20px 34px rgba(0,0,0,.55);animation:logoPop .9s .45s cubic-bezier(.2,1.6,.4,1) both}
 @keyframes logoPop{0%{opacity:0;transform:scale(.3) rotate(-8deg)}100%{opacity:1;transform:none}}
 @keyframes dropIn2{0%{opacity:0;transform:translateY(-40px)}100%{opacity:1;transform:none}}
@@ -603,7 +604,7 @@ a.gbtn{text-decoration:none;display:inline-block}
   <span class="ikite" style="left:6%;top:64%;--a:#8f5cff;--b:#f08a1c;animation-delay:-1s;width:30px;height:30px"><i></i></span>
   <span class="ikite" style="right:8%;top:70%;--a:#1f8a4c;--b:#e2366f;animation-delay:-3s;width:34px;height:34px"><i></i></span>
   <div class="ic-wrap">
-    <div class="ilogo"><div class="logo-top">Zinda Dilan-e-Lahore</div><h1>Pak <span>Poly</span></h1><div class="tagline">Become a Raees of Lahore</div></div>
+    <div class="ilogo"><div class="logo-top">Zinda Dilan-e-Lahore</div><h1><img class="brandlogo" src="logo-pakpoly.png" alt="Pak Poly" width="1000" height="242"></h1><div class="tagline">Become a Raees of Lahore</div></div>
     <div class="idice"><div class="d3" id="dA"></div><div class="d3" id="dB"></div></div>
     <div class="iload" id="iload"><div class="ibar"><i id="ibarFill"></i></div></div>
     <div class="itap" id="itap" hidden>Tap to start</div>
@@ -636,7 +637,7 @@ a.gbtn{text-decoration:none;display:inline-block}
     <button class="ib setbtn" id="lMusic" type="button" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
     <div class="logo">
       <div class="logo-top">Zinda Dilan-e-Lahore</div>
-      <h1>Pak <span>Poly</span></h1>
+      <h1><img class="brandlogo" src="logo-pakpoly.png" alt="Pak Poly" width="1000" height="242"></h1>
       <div class="tagline">Become a Raees of Lahore</div>
       <div class="strip"></div>
       <div class="logo-sub">3D board game · Pakistani Rupees · 100 pawns</div>
@@ -933,7 +934,7 @@ function drawCenter(x){
  deck(S*.29,S*.29,'#d93d8c','Qismat','CHANCE');deck(S*.71,S*.71,'#22a597','Mohalla','CHEST');
  x.save();x.translate(S/2,S/2);x.rotate(Math.PI/4);x.textAlign='center';x.textBaseline='middle';
  x.fillStyle='#1b1b1b';rr(x,-412,-122,824,244,30);x.fill();x.fillStyle='#c8202f';rr(x,-400,-110,800,220,24);x.fill();x.lineWidth=8;x.strokeStyle='#fbf7ee';rr(x,-384,-94,768,188,18);x.stroke();
- x.fillStyle='#fbf7ee';{let fs=170;x.font=fs+'px "Rozha One", Georgia, serif';while(x.measureText('Pak Poly').width>700&&fs>90){fs-=6;x.font=fs+'px "Rozha One", Georgia, serif';}}x.fillText('Pak Poly',0,14);
+ x.fillStyle='#fbf7ee';{let fs=170;x.font='bold '+fs+'px "Rozha One", Georgia, serif';while(x.measureText('Pak Poly').width>700&&fs>90){fs-=6;x.font='bold '+fs+'px "Rozha One", Georgia, serif';}}x.fillText('Pak Poly',0,14);
  x.fillStyle='#1b1b1b';x.font='800 48px Mukta, sans-serif';x.fillText('★ RAEES OF LAHORE ★',0,172);
  x.fillStyle='#1f8a4c';x.font='600 30px Mukta, sans-serif';x.fillText('ZINDA DILAN-E-LAHORE',0,-160);x.restore();
 }
@@ -2389,12 +2390,12 @@ function frSendAll(m){Object.keys(FR.conns).forEach(c=>frLive(c).forEach(x=>{try
 
 /* connect to the PeerJS server under our own friend code so friends can find us */
 function presStart(){if(!window.Peer||FR.peer||document.hidden)return;let p;try{p=new Peer(UPREFIX+FR.code);}catch(e){return;}FR.peer=p;
- p.on('open',()=>{if(FR.peer!==p)return;FR.ready=true;FR.dup=false;FR.dupN=0;if(FR.addOnStart){const c=FR.addOnStart;FR.addOnStart=null;frAdd(c);}frPoll();renderFriends();});
+ p.on('open',()=>{if(FR.peer!==p)return;FR.ready=true;FR.dup=false;FR.dupN=0;FR.retry=0;if(FR.addOnStart){const c=FR.addOnStart;FR.addOnStart=null;frAdd(c);}frPoll();renderFriends();});
  p.on('connection',c=>frWire(c,null));
  p.on('error',e=>{if(FR.peer!==p)return;const t=e&&e.type;
   if(t==='peer-unavailable'){const m=/polystar-u-([A-Z0-9]{6})/.exec(String(e.message||''));if(m){delete FR.dialing[m[1]];renderFriends();}return;}
   if(t==='unavailable-id'){FR.dupN=(FR.dupN||0)+1;FR.dup=FR.dupN>=3;presKill();setTimeout(presStart,FR.dup?20000:5000);renderFriends();return;}
-  if(t==='network'||t==='server-error'||t==='socket-error'||t==='socket-closed'){presKill();setTimeout(presStart,8000);}});
+  if(t==='network'||t==='server-error'||t==='socket-error'||t==='socket-closed'){presKill();FR.retry=Math.min((FR.retry||0)+1,6);setTimeout(presStart,Math.min(60000,4000*2**(FR.retry-1)));}});
  p.on('disconnected',()=>{setTimeout(()=>{if(FR.peer===p&&!p.destroyed)try{p.reconnect();}catch(e){}},2500);});}
 function presKill(){const p=FR.peer;FR.peer=null;FR.ready=false;FR.dialing={};
  Object.keys(FR.conns).forEach(c=>FR.conns[c].forEach(x=>{try{x.close();}catch(e){}}));FR.conns={};FR.heard={};try{p&&p.destroy();}catch(e){}}
@@ -2611,7 +2612,7 @@ setTimeout(genThumbs,60);
 </script>
 <script>
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('pwabuilder-sw.js');
+    navigator.serviceWorker.register('pwabuilder-sw.js', { updateViaCache: 'none' });
   }
 </script>
 </body>
