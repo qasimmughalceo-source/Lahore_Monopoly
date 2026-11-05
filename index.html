@@ -2078,7 +2078,7 @@ $('#tut').addEventListener('click',e=>{const b=e.target.closest('[data-tut]');if
  if(a==='skip'){endTutorial();toast('Tap ? any time to see the tour again');return;}
  if(a==='back'){TUT.i=Math.max(0,TUT.i-1);renderTut();return;}
  if(TUT.i>=TUT.steps.length-1){endTutorial();return;}TUT.i++;renderTut();});
-document.addEventListener('keydown',e=>{if(!TUT.open)return;if(e.key==='Escape'){endTutorial();}else if(e.key==='ArrowRight'||e.key==='Enter'){e.preventDefault();$('#tut [data-tut="next"]').click();}else if(e.key==='ArrowLeft'&&TUT.i){TUT.i--;renderTut();}},true);
+document.addEventListener('keydown',e=>{if(!TUT.open||/INPUT|TEXTAREA/.test((document.activeElement||{}).tagName||''))return;if(e.key==='Escape'){endTutorial();}else if(e.key==='ArrowRight'||e.key==='Enter'){e.preventDefault();$('#tut [data-tut="next"]').click();}else if(e.key==='ArrowLeft'&&TUT.i){TUT.i--;renderTut();}},true);
 window.addEventListener('resize',()=>{if(TUT.open)renderTut();});
 $('#tHelp').addEventListener('click',()=>{sfx('tap');startTutorial();});
 function maybeTutorial(){if(!tutSeen())setTimeout(()=>{if(G&&!G.over)startTutorial();},1300);}
@@ -2263,7 +2263,30 @@ function hostRoom(){if(!window.Peer){netMsg('Online play could not load. Open th
  peer.on('disconnected',()=>{try{peer.reconnect();}catch(e){}});}
 function lobbyPublic(){return NET.lobby.map(e=>({name:e.name,pawn:e.pawn,kind:e.kind,fc:e.fc||''}));}
 function lobbyChanged(){renderRoom();NET.lobby.forEach((e,i)=>{if(e.conn)try{e.conn.send({t:'lobby',list:lobbyPublic(),me:i,code:NET.code});}catch(x){}});}
-const cleanName=s=>String(s||'').replace(/[<>]/g,'').trim().slice(0,18)||'Player';
+/* ================= swear-word filter =================
+   Replaces bad words in chat and player names with stars, e.g. "fuck" -> "****".
+   Covers English, Roman Urdu / Punjabi and Urdu script. Matching ignores case,
+   stretched letters ("fuuuck") and common symbol swaps ("sh1t", "@ss", "b!tch"). */
+const BADW=(()=>{
+ /* whole words only */
+ const exact='cunt cunts ass asses arse arses dick dicks cock cocks prick pricks pussy pussies piss pissed pissing twat twats wank wanker wankers slut sluts damn crap tits titty boobs boob fag fags retard retards retarded bastard bastards jackass dumbass bc mc bsdk bkl mkc bhosdi bhosda bhosdike bhosdiwala lund lun lora lorra loda lauda lawda lavda gand gaand gandu gaandu chut choot chutia chutiya chootiya chutiye kutta kutte kuttay kutti kuttiya kamina kamine kaminay kamini kanjar kanjri kanjra harami haramzada haramzadi haramzaday randi randwa dalla dalli bharwa bharwe bharway bund phuddi phudi phuddu tatte tatti gashti ghashti suar sooar soor khusra hijra chodu bhenchod behenchod bhanchod benchod bhainchod madarchod maderchod maachod machod'
+  +' کتا کتے کتی کمینہ کمینے کمینی حرامی حرامزادہ حرامزادی حرامزادے کنجر کنجری رنڈی گانڈ گانڈو لن لوڑا لوڑے چوتیا چوتیے بھڑوا بھڑوے گشتی پھدی ہیجڑا کھسرا چود بہنچود مادرچود';
+ /* caught anywhere inside a word */
+ const part='fuck fuk fck shit bitch whore motherf nigger nigga faggot asshole arsehole bullshit nchod rchod bhosd chutiy phudd haramzad haramkhor madarch maderch behench bhench';
+ const leet={'0':'o','1':'i','!':'i','|':'i','3':'e','4':'a','@':'a','5':'s','$':'s','7':'t','+':'t','8':'b','9':'g'};
+ const base=w=>w.toLowerCase().replace(/[0-9!|@$+]/g,c=>leet[c]||c).replace(/[^a-z؀-ۿ]/g,'');
+ const fold=w=>base(w).replace(/(.)\1+/g,'$1');      /* all repeats folded, for word parts */
+ const fold3=w=>base(w).replace(/(.)\1{2,}/g,'$1$1'); /* only 3+ repeats folded, for whole words, so "as" and "Bob" stay clean */
+ const EX=new Set(exact.split(/\s+/).map(fold3)),EXF=new Set(exact.split(/\s+/).map(fold)),PT=part.split(/\s+/).map(fold);
+ const bad1=w=>{const n2=fold3(w);if(n2.length<2)return false;if(EX.has(n2))return true;
+  const n=fold(w);if(/(.)\1\1/.test(base(w))&&EXF.has(n))return true; /* stretched, e.g. "kuttaaa" */if(/^ch(o|au)dh/.test(n))return false;return PT.some(p=>n.includes(p));};
+ const bad=w=>bad1(w)||bad1(w.replace(/^[!|+]+|[!|+]+$/g,''));
+ const stars=m=>m.replace(/\S/g,'*');
+ const PHRASE=[/\b(b+h?[ae]+h?[iy]?n+|ma+n?|madd?[ae]r|teri\s*ma+)[\s._-]*ch+o+d\w*/gi,/(بہن|بھین|ماں|مادر)\s*چود\S*/g];
+ return s=>{s=String(s||'');PHRASE.forEach(r=>{s=s.replace(r,stars);});
+  return s.replace(/[\p{L}\p{N}@$!|+]+/gu,w=>bad(w)?stars(w):w);};
+})();
+const cleanName=s=>BADW(String(s||'').replace(/[<>]/g,'').trim().slice(0,18))||'Player';
 function hostData(conn,d){if(!d||typeof d!=='object')return;
  if(d.t==='hello'){if(G){try{conn.send({t:'full',why:'That game has already started.'});}catch(e){}return;}
   if(NET.lobby.length>=6){try{conn.send({t:'full',why:'That room is full (6 players).'});}catch(e){}return;}
@@ -2524,7 +2547,7 @@ const EMO=['😂','😎','🤑','😡','😭','👍','🙏','🔥','❤️','�
 const MIC_SVG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0013 0M12 17.5V21"/></svg>';
 const VOICE={stream:null,calls:{},audios:{},talk:{},meters:{},ctx:null,timer:0,muted:false,wired:false};
 let chatUnread=0;
-const cleanChat=s=>String(s||'').replace(/[\u0000-\u001f<>]/g,'').trim().slice(0,80);
+const cleanChat=s=>BADW(String(s||'').replace(/[\u0000-\u001f<>]/g,'').trim().slice(0,80));
 const isEmojiOnly=s=>/^(\p{Extended_Pictographic}|️|‍|\s){1,6}$/u.test(s);
 const online=()=>NET.role==='host'||NET.role==='client';
 const myIndex=()=>NET.role==='client'?NET.me:0;
