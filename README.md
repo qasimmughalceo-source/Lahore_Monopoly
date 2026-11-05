@@ -1,4 +1,4 @@
-# PolyStar
+# PakPoly
 
 **Become a Raees of Lahore.**
 
