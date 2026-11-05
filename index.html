@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="PolyStar: Become a Raees of Lahore. A 3D property game in Pakistani Rupees. Play on one device or online with friends.">
+<meta name="description" content="Pak Poly: Become a Raees of Lahore. A 3D property game in Pakistani Rupees. Play on one device or online with friends.">
 <title>Pak Poly</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -550,7 +550,7 @@ a.gbtn{text-decoration:none;display:inline-block}
 </style>
 </head>
 <body>
-<canvas id="gl" aria-label="3D PolyStar board"></canvas>
+<canvas id="gl" aria-label="3D Pak Poly board"></canvas>
 
 <div class="hud" id="hud" hidden>
   <div id="players"></div>
@@ -596,14 +596,14 @@ a.gbtn{text-decoration:none;display:inline-block}
 <div id="cardView" hidden><div class="cvin" id="cvin"></div></div>
 <div class="modal" id="modal" hidden><div class="mcard" id="mcard"></div></div>
 
-<div id="intro" role="button" tabindex="0" aria-label="PolyStar is loading. Tap to start when ready.">
+<div id="intro" role="button" tabindex="0" aria-label="Pak Poly is loading. Tap to start when ready.">
   <div class="stars"></div>
   <span class="ikite" style="left:8%;top:12%;--a:#e2366f;--b:#f2b632"><i></i></span>
   <span class="ikite" style="right:8%;top:6%;--a:#22b5a5;--b:#fbf7ee;animation-delay:-2s"><i></i></span>
   <span class="ikite" style="left:6%;top:64%;--a:#8f5cff;--b:#f08a1c;animation-delay:-1s;width:30px;height:30px"><i></i></span>
   <span class="ikite" style="right:8%;top:70%;--a:#1f8a4c;--b:#e2366f;animation-delay:-3s;width:34px;height:34px"><i></i></span>
   <div class="ic-wrap">
-    <div class="ilogo"><div class="logo-top">Zinda Dilan-e-Lahore</div><h1>Poly<span>Star</span></h1><div class="tagline">Become a Raees of Lahore</div></div>
+    <div class="ilogo"><div class="logo-top">Zinda Dilan-e-Lahore</div><h1>Pak<span>Poly</span></h1><div class="tagline">Become a Raees of Lahore</div></div>
     <div class="idice"><div class="d3" id="dA"></div><div class="d3" id="dB"></div></div>
     <div class="iload" id="iload"><div class="ibar"><i id="ibarFill"></i></div></div>
     <div class="itap" id="itap" hidden>Tap to start</div>
@@ -636,7 +636,7 @@ a.gbtn{text-decoration:none;display:inline-block}
     <button class="ib setbtn" id="lMusic" type="button" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
     <div class="logo">
       <div class="logo-top">Zinda Dilan-e-Lahore</div>
-      <h1>Poly<span>Star</span></h1>
+      <h1>Pak<span>Poly</span></h1>
       <div class="tagline">Become a Raees of Lahore</div>
       <div class="strip"></div>
       <div class="logo-sub">3D board game · Pakistani Rupees · 100 pawns</div>
@@ -698,7 +698,7 @@ a.gbtn{text-decoration:none;display:inline-block}
     <div class="fsec"><span>Your friends</span><em id="frCount"></em></div>
     <div class="flist" id="frList"></div>
     <div id="frRecentWrap" hidden><div class="fsec"><span>Played with recently</span></div><div class="flist" id="frRecent"></div></div>
-    <p class="note">Friends show as online while PolyStar is open on their phone.</p>
+    <p class="note">Friends show as online while Pak Poly is open on their phone.</p>
   </div>
 </div>
 <div class="friends" id="settings" hidden>
@@ -933,7 +933,7 @@ function drawCenter(x){
  deck(S*.29,S*.29,'#d93d8c','Qismat','CHANCE');deck(S*.71,S*.71,'#22a597','Mohalla','CHEST');
  x.save();x.translate(S/2,S/2);x.rotate(Math.PI/4);x.textAlign='center';x.textBaseline='middle';
  x.fillStyle='#1b1b1b';rr(x,-412,-122,824,244,30);x.fill();x.fillStyle='#c8202f';rr(x,-400,-110,800,220,24);x.fill();x.lineWidth=8;x.strokeStyle='#fbf7ee';rr(x,-384,-94,768,188,18);x.stroke();
- x.fillStyle='#fbf7ee';{let fs=170;x.font=fs+'px "Rozha One", Georgia, serif';while(x.measureText('PakPoly').width>700&&fs>90){fs-=6;x.font=fs+'px "Rozha One", Georgia, serif';}}x.fillText('PolyStar',0,14);
+ x.fillStyle='#fbf7ee';{let fs=170;x.font=fs+'px "Rozha One", Georgia, serif';while(x.measureText('Pak Poly').width>700&&fs>90){fs-=6;x.font=fs+'px "Rozha One", Georgia, serif';}}x.fillText('Pak Poly',0,14);
  x.fillStyle='#1b1b1b';x.font='800 48px Mukta, sans-serif';x.fillText('★ RAEES OF LAHORE ★',0,172);
  x.fillStyle='#1f8a4c';x.font='600 30px Mukta, sans-serif';x.fillText('ZINDA DILAN-E-LAHORE',0,-160);x.restore();
 }
@@ -1971,7 +1971,7 @@ const TIPS=['Loading the streets of Lahore…','Tip: own a whole colour set to b
 function introProgress(){const th=THUMBS.filter(Boolean).length/PAWNS.length,pv=Object.keys(THEME_PREV).length/THEME_KEYS.length;return Math.min(1,(INTRO.fonts?.15:0)+.45*th+.4*pv);}
 const introTimer=setInterval(()=>{if(INTRO.done){clearInterval(introTimer);return;}const el=performance.now()-INTRO.t0;let p=introProgress();
  if(el>9000)p=1;document.getElementById('ibarFill').style.width=Math.round(Math.max(p,Math.min(.92,el/6000))*100)+'%';
- if(!INTRO.ready&&p>=1&&el>1800){INTRO.ready=true;$('#iload').hidden=true;$('#itap').hidden=false;$('#intro').setAttribute('aria-label','Tap to start PolyStar');}},120);
+ if(!INTRO.ready&&p>=1&&el>1800){INTRO.ready=true;$('#iload').hidden=true;$('#itap').hidden=false;$('#intro').setAttribute('aria-label','Tap to start Pak Poly');}},120);
 function introGo(){if(!INTRO.ready||INTRO.done)return;INTRO.done=true;setTimeout(afterIntro,750);sfx('buy');buzz(30);
  if(MUSIC.on){musicStart();rainStart();}
  const el=$('#intro');el.classList.add('out');setTimeout(()=>{el.hidden=true;},650);}
@@ -2040,7 +2040,7 @@ $('#cardView').addEventListener('click',e=>{if(e.target.closest('[data-cvx]')||e
 const TUT_SEEN={};
 const TUT={open:false,i:0,wait:null,resolve:null,paused:null,steps:null,key:'lm-tut',onEnd:null};
 const TUT_STEPS=[
- {t:'👋 Welcome to PolyStar!',x:'Buy plots across Lahore, collect rent from your friends, and become the Raees of Lahore. This quick tour takes 30 seconds.'},
+ {t:'👋 Welcome to Pak Poly!',x:'Buy plots across Lahore, collect rent from your friends, and become the Raees of Lahore. This quick tour takes 30 seconds.'},
  {sel:'#players',t:'👥 The players',x:'Everyone in the game is here. The glowing one is whose turn it is, and the gold number is their cash.'},
  {sel:'#acts .roll,#bar',t:'🎲 Roll the dice',x:'On your turn, tap ROLL. Your pawn moves that many squares and the camera follows it.'},
  {t:'🏠 Buy plots',x:'Land on an empty plot and you can buy it. Anyone who lands on your plot pays you rent. Own a whole colour set to build houses and hotels for much bigger rent!'},
@@ -2105,7 +2105,7 @@ function openProfile(){sfx('tap');const nm0=(me.name||'').trim();
  renderProfile();setTimeout(()=>{const pa=$('#profAva');if(pa)pa.onclick=()=>{pk.mode='me';$('#pkTitle').textContent='Choose your pawn';$('#pkSearch').value=pk.q;$('#picker').hidden=false;renderPicker();};},0);}
 $('#lProfile').addEventListener('click',openProfile);
 const HOME_STEPS=[
- {t:'👋 Welcome to PolyStar!',x:'Let\'s take a quick look around before your first game.'},
+ {t:'👋 Welcome to Pak Poly!',x:'Let\'s take a quick look around before your first game.'},
  {sel:'#lProfile',t:'🙂 Your profile',x:'This is you! Tap here to set your name and pick your pawn. Your games and wins show here too.'},
  {sel:'#lFriends',t:'👥 Friends',x:'Add friends with your friend code, see who is online right now and invite them to play.'},
  {sel:'#lMusic',t:'⚙️ Settings',x:'Pick from 4 music styles, set the music and rain volume separately, or turn sounds off.'},
@@ -2154,7 +2154,7 @@ async function trainBot(C,dice){G.cur=1;focusObj=C.obj;renderPlayers();renderBar
 async function trainBuy(Y,t,x){const s=G.sq[Y.pos];const pr=offerBuy(Y,s);await sleep(450);coach('#mcard .gbtn.green:not([disabled]),#mcard .gbtn:not([disabled])',t,x);await pr;coachHide();}
 async function runTraining(){const Y=G.players[0],C=G.players[1];
  await sleep(900);
- await coachOK(null,'🎓 Training match',`Welcome, ${esc(Y.name)}! Let's learn PolyStar in 2 minutes. Just follow the glowing buttons. You get Rs 30 Lac of training money.`);
+ await coachOK(null,'🎓 Training match',`Welcome, ${esc(Y.name)}! Let's learn Pak Poly in 2 minutes. Just follow the glowing buttons. You get Rs 30 Lac of training money.`);
  // 1. buy a plot
  await trainYou(Y,[1,2],'🎲 Your turn!','Tap ROLL to throw the dice and move your pawn.');
  await trainBuy(Y,'🏠 Buy your first plot!','Nobody owns Kot Lakhpat yet. Buy it, and anyone who lands here has to pay YOU rent.');
@@ -2344,7 +2344,7 @@ function netTeardown(){const r=NET.role;
 function showNetStart(){$('#netStart').hidden=false;$('#roomBox').hidden=true;}
 function showRoom(){$('#netStart').hidden=true;$('#roomBox').hidden=false;
  let base=location.href.split('#')[0].split('?')[0];const link=base+'?room='+NET.code;
- $('#roomCode').textContent=NET.code;$('#roomLink').value=link;$('#waBtn').href='https://wa.me/?text='+encodeURIComponent(`Join my PolyStar game and become a Raees of Lahore! Room ${NET.code}: ${link}`);renderRoom();}
+ $('#roomCode').textContent=NET.code;$('#roomLink').value=link;$('#waBtn').href='https://wa.me/?text='+encodeURIComponent(`Join my Pak Poly game and become a Raees of Lahore! Room ${NET.code}: ${link}`);renderRoom();}
 function renderRoom(){const host=NET.role==='host',mi=host?0:NET.me;
  $('#hostActs').hidden=!host;$('#roomFr').hidden=!host;
  $('#roomList').innerHTML=NET.lobby.map((e,i)=>{const tags=[e.kind==='host'?'HOST':e.kind==='cpu'?'CPU':'ONLINE'];if(i===mi)tags.unshift('YOU');
@@ -2369,7 +2369,7 @@ $('#netStartBtn').addEventListener('click',()=>{sfx('tap');hostStart();});
 $('#leaveBtn').addEventListener('click',()=>{sfx('tap');netTeardown();netMsg('');showNetStart();});
 
 /* ================= friends: friend codes, online status, invites (free PeerJS presence) ================= */
-const UPREFIX='polystar-u-';
+const UPREFIX='Pak Poly-u-';
 const cleanCode=s=>String(s||'').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,6);
 const FR={code:'',peer:null,ready:false,list:[],recent:[],conns:{},dialing:{},heard:{},stat:{},sent:{},lastSt:'',addOnStart:null,dup:false,invQ:[],invT:0};
 (function(){try{FR.code=cleanCode(localStorage.getItem('lm-fcode'));}catch(e){}
@@ -2392,7 +2392,7 @@ function presStart(){if(!window.Peer||FR.peer||document.hidden)return;let p;try{
  p.on('open',()=>{if(FR.peer!==p)return;FR.ready=true;FR.dup=false;FR.dupN=0;if(FR.addOnStart){const c=FR.addOnStart;FR.addOnStart=null;frAdd(c);}frPoll();renderFriends();});
  p.on('connection',c=>frWire(c,null));
  p.on('error',e=>{if(FR.peer!==p)return;const t=e&&e.type;
-  if(t==='peer-unavailable'){const m=/polystar-u-([A-Z0-9]{6})/.exec(String(e.message||''));if(m){delete FR.dialing[m[1]];renderFriends();}return;}
+  if(t==='peer-unavailable'){const m=/Pak Poly-u-([A-Z0-9]{6})/.exec(String(e.message||''));if(m){delete FR.dialing[m[1]];renderFriends();}return;}
   if(t==='unavailable-id'){FR.dupN=(FR.dupN||0)+1;FR.dup=FR.dupN>=3;presKill();setTimeout(presStart,FR.dup?20000:5000);renderFriends();return;}
   if(t==='network'||t==='server-error'||t==='socket-error'||t==='socket-closed'){presKill();setTimeout(presStart,8000);}});
  p.on('disconnected',()=>{setTimeout(()=>{if(FR.peer===p&&!p.destroyed)try{p.reconnect();}catch(e){}},2500);});}
@@ -2464,14 +2464,14 @@ function frJoin(room){hideInvite();$('#friends').hidden=true;
  if((me.name||'').trim())joinRoom(room);else{netMsg('Type your name and tap Join.');$('#netName').focus();}}
 function showInvite(f,room){if(!f||((NET.role==='host'||NET.role==='client')&&NET.code===room))return;
  const busy=G&&!G.over&&NET.role!=='local';const el=$('#invPop');
- el.innerHTML=`${imgT(f.p)}<div class="it"><b>${esc(f.n)}</b> invited you to play PolyStar!<small>${busy?'Finish this game first, then join from Friends.':'Room '+room}</small></div><div class="ib2">${busy?'':`<button class="gbtn small green" data-ij="${room}" type="button">Join</button>`}<button class="gbtn small" data-ix type="button">${busy?'OK':'Later'}</button></div>`;
+ el.innerHTML=`${imgT(f.p)}<div class="it"><b>${esc(f.n)}</b> invited you to play Pak Poly!<small>${busy?'Finish this game first, then join from Friends.':'Room '+room}</small></div><div class="ib2">${busy?'':`<button class="gbtn small green" data-ij="${room}" type="button">Join</button>`}<button class="gbtn small" data-ix type="button">${busy?'OK':'Later'}</button></div>`;
  el.hidden=false;sfxLocal('coin');buzz(80);clearTimeout(FR.invT);FR.invT=setTimeout(hideInvite,25000);}
 function hideInvite(){clearTimeout(FR.invT);$('#invPop').hidden=true;}
 $('#invPop').addEventListener('click',e=>{const j=e.target.closest('[data-ij]');if(j){sfx('tap');frJoin(j.dataset.ij);return;}if(e.target.closest('[data-ix]')){sfx('tap');hideInvite();}});
 
 /* friends panel */
 function frRow(f){const on=frOnline(f.c),st=FR.stat[f.c]||{s:'menu'},busy=G&&!G.over;let sub,btn='';
- if(!on)sub=f.pend&&!f.seen?'Waiting for them to open PolyStar':f.seen?'Last seen '+ago(f.seen):'Offline';
+ if(!on)sub=f.pend&&!f.seen?'Waiting for them to Open Pak Poly':f.seen?'Last seen '+ago(f.seen):'Offline';
  else sub=st.s==='game'?(st.m==='online'?`🎲 In an online match (${st.k||2} players)`:st.m==='train'?'🎓 Playing the training match':`🎲 In a match vs CPU`):st.s==='room'?`🏠 In a room (${st.k||1}/6)`:st.s==='inroom'?'🏠 In a friend\'s room':'Online';
  if(on&&!busy){const sent=Date.now()-(FR.sent[f.c]||0)<10000;
   if(NET.role==='host'&&st.s==='menu')btn=sent?'<button class="gbtn small" disabled type="button">Sent ✓</button>':`<button class="gbtn small green" data-finv="${f.c}" type="button">Invite</button>`;
@@ -2482,9 +2482,9 @@ function renderFriends(){const on=FR.list.filter(f=>frOnline(f.c)).length,b=$('#
  if($('#friends').hidden)return;
  $('#frCode').textContent=FR.code;
  const GAME_URL='https://qasimmughalceo-source.github.io/Lahore_Monopoly/';
- $('#frSelf').innerHTML=!window.Peer?`<span class="off">⚠️ You are offline here. Friends only work in your game link:</span><a class="gbtn small gold" href="${GAME_URL}" target="_blank" rel="noopener">Open PolyStar</a>`:FR.dup?'<span class="off">⚠️ PolyStar is open in another tab. Friends see you there.</span>':FR.ready?'<span class="on">🟢 You are online. Friends can see you.</span>':'<span class="wait">⏳ Connecting…</span>';
+ $('#frSelf').innerHTML=!window.Peer?`<span class="off">⚠️ You are offline here. Friends only work in your game link:</span><a class="gbtn small gold" href="${GAME_URL}" target="_blank" rel="noopener">Open Pak Poly</a>`:FR.dup?'<span class="off">⚠️ Pak Poly is open in another tab. Friends see you there.</span>':FR.ready?'<span class="on">🟢 You are online. Friends can see you.</span>':'<span class="wait">⏳ Connecting…</span>';
  const link=location.href.split('#')[0].split('?')[0]+'?friend='+FR.code;
- $('#frWa').href='https://wa.me/?text='+encodeURIComponent(`Add me on PolyStar and let's play! My friend code is ${FR.code}: ${link}`);
+ $('#frWa').href='https://wa.me/?text='+encodeURIComponent(`Add me on Pak Poly and let's play! My friend code is ${FR.code}: ${link}`);
  const list=[...FR.list].sort((a,b)=>(frOnline(b.c)-frOnline(a.c))||((b.seen||0)-(a.seen||0)));
  $('#frCount').textContent=FR.list.length?`${on} online`:'';
  $('#frList').innerHTML=list.length?list.map(frRow).join(''):'<div class="fempty">No friends yet. Share your code, type a friend\'s code above, or add people you play online with.</div>';
