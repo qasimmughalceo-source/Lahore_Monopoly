@@ -1,4 +1,4 @@
-# PakPoly
+# Pak Poly
 
 **Become a Raees of Lahore.**
 
@@ -55,10 +55,10 @@ Good to know:
 Tap the **people** button at the top of the menu.
 - **Your friend code:** 6 letters and numbers, shown at the top. Send it with **Copy** or **Share on WhatsApp**. A friend who opens your shared link adds you automatically.
 - **Add a friend:** type their code and tap **Add friend**. You appear in their list too. After an online game, people you played with show under **Played with recently** with a **+ Add** button. In a room, you can tap **+ Friend** next to a player.
-- **Who's online:** a green dot means the friend has PolyStar open right now. Their line says what they're doing (in the menu, in a room, playing a game). Otherwise it shows when they were last seen. The green number on the people button counts friends online.
+- **Who's online:** a green dot means the friend has Pak Poly open right now. Their line says what they're doing (in the menu, in a room, playing a game). Otherwise it shows when they were last seen. The green number on the people button counts friends online.
 - **Invite:** tap **Invite** next to an online friend. If you're not in a room yet, one is created for you. Your friend gets a pop-up with **Join**. If a friend is hosting a room, you'll see **Join** next to their name instead.
 
-Friends show as online only while PolyStar is open on their phone. If they close it or lock the screen, they appear offline after about 30 seconds.
+Friends show as online only while Pak Poly is open on their phone. If they close it or lock the screen, they appear offline after about 30 seconds.
 
 ## Money rules and turn timer
 
