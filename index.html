@@ -284,12 +284,17 @@ button:focus-visible,input:focus-visible{outline:3px solid #fff;outline-offset:2
 #chatList{overflow:auto;padding:2px 14px 6px;display:grid;gap:6px;align-content:start;flex:1;min-height:70px;user-select:text}
 .cm{font-weight:700;font-size:14.5px;line-height:1.35;color:#e9f3ef;overflow-wrap:anywhere}.cm b{font-weight:900}
 .cm.empty{color:var(--muted);font-weight:700}
-.qp{display:flex;gap:6px;overflow-x:auto;padding:8px 14px 4px;scrollbar-width:none}
-.qp::-webkit-scrollbar{display:none}
-.qp button{flex:none;background:rgba(0,0,0,.3);border:2px solid rgba(255,255,255,.16);color:#fff;border-radius:999px;padding:6px 12px 5px;font:800 13.5px var(--f-body);cursor:pointer;white-space:nowrap}
+.ctabs{display:flex;gap:6px;padding:8px 14px 0}
+.ctab{flex:1;background:rgba(0,0,0,.22);border:2px solid rgba(255,255,255,.12);border-bottom:0;color:rgba(255,255,255,.7);border-radius:12px 12px 0 0;padding:8px 8px 7px;font:900 13.5px var(--f-body);cursor:pointer}
+.ctab.on{background:rgba(0,0,0,.38);color:#ffe08a;border-color:rgba(255,224,138,.5)}
+.qp,.emo{margin:0 14px;background:rgba(0,0,0,.38);border:2px solid rgba(255,224,138,.5);border-radius:0 0 14px 14px;max-height:min(184px,28vh);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:rgba(255,224,138,.5) transparent}
+.qp{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:8px}
+.qp button{background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.16);color:#fff;border-radius:12px;padding:9px 8px 8px;min-height:44px;font:800 13.5px/1.2 var(--f-body);cursor:pointer;text-align:center}
+.qp button:hover,.qp button:focus-visible{border-color:rgba(255,224,138,.7);background:rgba(255,224,138,.12)}
 .qp button:active{transform:scale(.95)}
-.emo{display:flex;gap:2px;padding:2px 10px;flex-wrap:wrap;justify-content:space-between}
-.emo button{font-size:24px;line-height:1;background:none;border:0;padding:5px;cursor:pointer;border-radius:10px}
+.emo{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;padding:8px}
+.emo button{font-size:28px;line-height:1;background:rgba(255,255,255,.06);border:0;padding:8px 0;cursor:pointer;border-radius:12px}
+.emo button:hover,.emo button:focus-visible{background:rgba(255,224,138,.16)}
 .emo button:active{transform:scale(1.25)}
 #chatForm{display:flex;gap:8px;padding:8px 14px 14px}
 #chatIn{flex:1;min-width:0;background:rgba(0,0,0,.35);border:2px solid rgba(255,255,255,.2);color:#fff;border-radius:12px;padding:9px 12px;font:700 15px var(--f-body);user-select:text}
@@ -574,8 +579,9 @@ a.gbtn{text-decoration:none;display:inline-block}
   <section id="chat" class="sheet" hidden>
     <div class="sh-h"><h4>Chat</h4><button class="x" id="chatClose" aria-label="Close chat">×</button></div>
     <div id="chatList"><div class="cm empty">Say salaam! Messages pop up over your avatar for everyone.</div></div>
-    <div class="qp" id="quick"></div>
-    <div class="emo" id="emo"></div>
+    <div class="ctabs" role="tablist" aria-label="Quick chat"><button type="button" class="ctab on" data-t="quick" role="tab" aria-selected="true">💬 Messages</button><button type="button" class="ctab" data-t="emo" role="tab" aria-selected="false">😀 Emojis</button></div>
+    <div class="qp" id="quick" role="tabpanel" aria-label="Quick messages"></div>
+    <div class="emo" id="emo" role="tabpanel" aria-label="Emojis" hidden></div>
     <form id="chatForm" autocomplete="off"><input id="chatIn" maxlength="80" placeholder="Type a message…" aria-label="Chat message"><button class="gbtn small gold" type="submit">Send</button></form>
   </section>
   <section id="log" class="sheet"><div class="sh-h"><h4>Game log</h4><button class="x" id="logClose" aria-label="Close log">×</button></div><div id="logl"></div></section>
@@ -2546,6 +2552,7 @@ $('#quick').innerHTML=QUICK.map(q=>`<button type="button">${esc(q)}</button>`).j
 $('#emo').innerHTML=EMO.map(q=>`<button type="button" aria-label="Send ${q}">${q}</button>`).join('');
 $('#quick').addEventListener('click',e=>{const b=e.target.closest('button');if(b)sendChat(b.textContent);});
 $('#emo').addEventListener('click',e=>{const b=e.target.closest('button');if(b)sendChat(b.textContent);});
+document.querySelector('.ctabs').addEventListener('click',e=>{const t=e.target.closest('.ctab');if(!t)return;document.querySelectorAll('.ctab').forEach(x=>{const on=x===t;x.classList.toggle('on',on);x.setAttribute('aria-selected',on);});$('#quick').hidden=t.dataset.t!=='quick';$('#emo').hidden=t.dataset.t!=='emo';});
 $('#chatForm').addEventListener('submit',e=>{e.preventDefault();const v=$('#chatIn').value;if(cleanChat(v)){sendChat(v);$('#chatIn').value='';}});
 $('#cChat').addEventListener('click',()=>{sfx('tap');const c=$('#chat');c.hidden=!c.hidden;if(!c.hidden){chatUnread=0;updDot();$('#manage').hidden=true;$('#log').classList.remove('open');const l=$('#chatList');l.scrollTop=l.scrollHeight;}});
 $('#chatClose').addEventListener('click',()=>{$('#chat').hidden=true;});
