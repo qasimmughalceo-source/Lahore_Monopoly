@@ -22,7 +22,7 @@
       "purpose": "any"
     },
     {
-      "src": "pakpoly-icon-maskable-512.png",
+      "src": "pakpoly-icon-maskable-512.png.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
